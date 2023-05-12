@@ -15,8 +15,8 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Image.asset('assets/avatar.png', 
-            scale: 5),
+            // Image.asset('assets/avatar.png', 
+            // scale: 5),
             Row(
               children:[
               Text('Gender'),

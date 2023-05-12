@@ -24,16 +24,16 @@ class Splash extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const <Widget>[
             Text(
-              'Hypnos',
+              'HYPNOS',
               style: TextStyle(
-                  color: Color.fromARGB(255, 76, 54, 144),
-                  fontSize: 40,
+                  color: Color.fromARGB(255, 73, 45, 156),
+                  fontSize: 50,
                   fontWeight: FontWeight.bold),
             ),
             Center(
               child: CircularProgressIndicator(
                 strokeWidth: 4,
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF89453C)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 127, 60, 137)),
               ),
             ),
           ],
