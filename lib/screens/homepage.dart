@@ -1,12 +1,10 @@
-
 import 'package:hypnos/screens/profilepage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/screens/advices.dart';
+import 'package:hypnos/screens/infosleep.dart';
 import 'package:hypnos/widgets/custom_plot.dart';
 import 'package:hypnos/widgets/score_circular_progress.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,11 +16,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final aqi = 20;
   int _selIdx = 0;
 
-  void changePage(int index){
+  void changePage(int index) {
     setState(() {
       _selIdx = index;
     });
@@ -34,7 +31,7 @@ class _HomeState extends State<Home> {
 //       return Home();
 //     case 1:
 //       return Advices();
-//     default: 
+//     default:
 //       return Home();
 //   }
 // }
@@ -42,99 +39,129 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-          child: Column(
-            children: [
-              ListTile(
-                leading: Icon(MdiIcons.logout),
-                title: Text('Logout'),
-                onTap: (){},
-              ),
-              Text('About'),
-              ListTile(
-                leading: Icon(MdiIcons.imageFilterCenterFocus),
-                title: Text('Personal Exposure Info'),
-                onTap: (){},
-              ),
-              ListTile(
-                leading: Icon(MdiIcons.dotsCircle),
-                title: Text('Air Polution Info'),
-                onTap: (){},
-              ),
-            ],
+        drawer: Drawer( backgroundColor: Color.fromARGB(255, 106, 93, 161),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(MdiIcons.logout),
+                  title: Text('Logout'),
+                  onTap: () {},
+                ),
+                Text('About'),
+                ListTile(
+                  leading: Icon(MdiIcons.sleep),
+                  title: Text('About Hypnos'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(MdiIcons.bed),
+                  title: Text('Sleep facts'),
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      appBar: AppBar(
-        elevation: 0,
-          backgroundColor: const Color(0xFFE4DFD4),
-          iconTheme: const IconThemeData(color: Color(0xFF89453C)),
-          title: const Text('Hypnos', style: TextStyle(color: Colors.black)),        actions: [ IconButton(onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            fullscreenDialog: true,
-            builder: (context) => ProfilePage()));
-        }, icon: Icon(Icons.abc) ) ],  
-      ),
-      backgroundColor: const Color(0xFFE4DFD4),
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Color.fromARGB(255, 172, 143, 192),
+          iconTheme: const IconThemeData(color: Color.fromARGB(255, 144, 111, 160)),
+          title: const Text('Hypnos', style: TextStyle(color: Colors.black)),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      fullscreenDialog: true,
+                      builder: (context) => ProfilePage()));
+                },
+                icon: Icon(Icons.abc))
+          ],
+        ),
+        backgroundColor: const Color(0xFFE4DFD4),
         body: SafeArea(
           child: SingleChildScrollView(
               child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Air Pollution'),
-        Row(children: [Icon(MdiIcons.mapMarker), Text('Padua, Italy')]
-        ),
-        Text('Air Quality'),
-                    Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 150,
-                height: 150,
-                child: CustomPaint(
-                  painter: ScoreCircularProgress(
-                    backColor: const Color(0xFF89453C).withOpacity(0.4),
-                    frontColor: const Color(0xFF89453C),
-                    strokeWidth: 20,
-                    value: aqi / 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Air Pollution'),
+                Row(children: [Icon(MdiIcons.mapMarker), Text('Padua, Italy')]),
+                Text('Air Quality'),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: CustomPaint(
+                      painter: ScoreCircularProgress(
+                        backColor: const Color(0xFF89453C).withOpacity(0.4),
+                        frontColor: const Color(0xFF89453C),
+                        strokeWidth: 20,
+                        value: aqi / 100,
+                      ),
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 40.0),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '$aqi',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Color(0xFF89453C)),
+                                  ),
+                                  const Text(
+                                    ' Not good',
+                                    style: TextStyle(fontSize: 16),
+                                  )
+                                ]),
+                          ))),
+                    ),
                   ),
-                  child: Align(
-                      alignment: Alignment.center,
-                      child: Center(
-                          child: Padding(
-                        padding: const EdgeInsets.only(top: 40.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$aqi',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Color(0xFF89453C)),
-                              ),
-                              const Text(
-                                ' Not good',
-                                style: TextStyle(fontSize: 16),
-                              )
-                            ]),
-                      ))),
                 ),
-              ),
+                Text('Daily Trend'),
+                Text('PM2.5 Concentration'),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.keyboard_arrow_left)),
+                    Text('${DateFormat('dd MM yyyy').format(DateTime.now())}'),
+                    IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.keyboard_arrow_right)),
+                  ],
+                ),
+                CustomPlot(data: data),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) => infosleep(),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Know more'),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-        Text('Daily Trend'),
-        Text('PM2.5 Concentration'),
-        Row(
-          children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_arrow_left)),
-            Text('${DateFormat('dd MM yyyy').format(DateTime.now())}'),
-            IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_arrow_right)),
-          ],
-        ),
-      CustomPlot(data: data)
-      ],),
           )),
         ));
     //   body: selectPage(_selIdx) ,
@@ -149,7 +176,6 @@ class _HomeState extends State<Home> {
     // ]) ,
   }
 }
-
 
 List<Map<String, dynamic>> data = [
   {'date': '2021-10-01', 'points': 1468},
