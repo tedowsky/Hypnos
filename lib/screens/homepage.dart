@@ -39,25 +39,25 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer( backgroundColor: Color.fromARGB(255, 106, 93, 161),
+        drawer: Drawer( backgroundColor: const Color.fromARGB(255, 106, 93, 161),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(MdiIcons.logout),
-                  title: Text('Logout'),
+                  leading: const Icon(MdiIcons.logout),
+                  title: const Text('Logout'),
                   onTap: () {},
                 ),
-                Text('About'),
+                const Text('About'),
                 ListTile(
-                  leading: Icon(MdiIcons.sleep),
-                  title: Text('About Hypnos'),
+                  leading: const Icon(MdiIcons.sleep),
+                  title: const Text('About Hypnos'),
                   onTap: () {},
                 ),
                 ListTile(
-                  leading: Icon(MdiIcons.bed),
-                  title: Text('Sleep facts'),
+                  leading: const Icon(MdiIcons.bed),
+                  title: const Text('Sleep facts'),
                   onTap: () {},
                 ),
               ],
@@ -67,9 +67,9 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Color.fromARGB(255, 172, 143, 192),
+          backgroundColor:  const Color.fromARGB(255, 172, 143, 192),
           iconTheme: const IconThemeData(color: Color.fromARGB(255, 144, 111, 160)),
-          title: const Text('Hypnos', style: TextStyle(color: Colors.black)),
+          title: const Text('- Hypnos -', style: TextStyle(color: Colors.black)),
           actions: [
             IconButton(
                 onPressed: () {
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
                       fullscreenDialog: true,
                       builder: (context) => ProfilePage()));
                 },
-                icon: Icon(Icons.abc))
+                icon: const Icon(Icons.person_pin))
           ],
         ),
         backgroundColor: const Color(0xFFE4DFD4),
@@ -88,15 +88,50 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Air Pollution'),
-                Row(children: [Icon(MdiIcons.mapMarker), Text('Padua, Italy')]),
-                Text('Air Quality'),
+                Row(
+                  children: [ 
+                    const Icon(MdiIcons.mapMarker), 
+                    const Text('Padua, Italy'),
+                  ],
+                ),
+                const Text('Sleep Quality'),
+                const Padding(padding: EdgeInsets.all(25.0)),
+                Row(children: [
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: CustomPaint(
+                      painter: ScoreCircularProgress(
+                        backColor: const Color(0xFF89453C).withOpacity(0.4),
+                        frontColor: const Color(0xFF89453C),
+                        strokeWidth: 20,
+                        value: aqi / 100,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    height: 140,
+                  ),
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: CustomPaint(
+                      painter: ScoreCircularProgress(
+                        backColor: const Color(0xFF89453C).withOpacity(0.4),
+                        frontColor: const Color(0xFF89453C),
+                        strokeWidth: 20,
+                        value: aqi / 100,
+                      ),
+                    ),
+                  ),
+                ],),
                 Align(
                   alignment: Alignment.center,
                   child: SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: CustomPaint(
+                    width: 140,
+                    height: 140,
+                    child: CustomPaint(                   
                       painter: ScoreCircularProgress(
                         backColor: const Color(0xFF89453C).withOpacity(0.4),
                         frontColor: const Color(0xFF89453C),
@@ -112,13 +147,13 @@ class _HomeState extends State<Home> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '$aqi',
+                                    '$aqi %',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
                                         color: Color(0xFF89453C)),
                                   ),
-                                  const Text(
+                                  const Text(    // add if condition about the efficiency value
                                     ' Not good',
                                     style: TextStyle(fontSize: 16),
                                   )
@@ -127,9 +162,15 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                Text('Daily Trend'),
-                Text('PM2.5 Concentration'),
+                Column(
+                  children: [
+                    Center(child: const Text('Efficiency')),
+                    const  Icon(Icons.info_outline),
+                    // Center(child: Text('PM2.5 Concentration')),
+                  ],
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                         onPressed: () {},

@@ -10,7 +10,12 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('informations')),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Color.fromARGB(255, 172, 143, 192),
+          iconTheme: const IconThemeData(color: Color(0xFF89453C)),
+          title: const Text('Informations',
+          style: TextStyle(color: Colors.black))),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
