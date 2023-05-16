@@ -12,7 +12,7 @@ class Splash extends StatelessWidget {
   // Method for navigation SplashPage -> LoginPage
   void _toLoginPage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) =>  LoginPage()));
+        .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   } //_toLoginPage
 
   @override
