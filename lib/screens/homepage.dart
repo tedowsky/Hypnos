@@ -23,7 +23,7 @@ class _HomeState extends State<HomePage> {
   
 
   final aqi = 20;
-  final now = DateTime.now();
+  //final now = DateTime.now();
   //final hour = now.hour;
   //final image = _getImageForHour(hour);
 
@@ -210,21 +210,10 @@ class _HomeState extends State<HomePage> {
     Navigator.pop(context);
     //Then pop the HomePage
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  LoginPage()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   }//_toLoginPage
 
     void _toinfosleepage(BuildContext context){
     Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep()));
   }
-
-
-
-  String _getImageForHour(int hour) {
-    if (hour < 6 || hour >= 21) {
-      return 'assets/images/night.png';
-    } else {
-      return 'assets/images/morning.png';
-    }
-  }
-
 }

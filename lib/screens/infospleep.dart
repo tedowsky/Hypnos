@@ -77,8 +77,8 @@ class infosleep extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Expanded(
-                    child: const Text(
+                  const Expanded(
+                    child: Text(
                       'Chart 2 description',
                       textAlign: TextAlign.left,
                     ),
