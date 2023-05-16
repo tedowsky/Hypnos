@@ -1,30 +1,49 @@
-import 'package:hypnos/screens/profilepage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/screens/infosleep.dart';
-import 'package:hypnos/widgets/custom_plot.dart';
-import 'package:hypnos/widgets/score_circular_progress.dart';
+import 'package:flutter_application_3/widgets/score.dart';
+import 'package:flutter_application_3/screens/profilepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:flutter_application_3/screens/loginpage.dart';
+import 'package:flutter_application_3/screens/infospleep.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:flutter_application_3/screens/login_page.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   static const routeDisplayname = 'HomePage';
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<HomePage> {
+  
+
   final aqi = 20;
-  int _selIdx = 0;
+  final now = DateTime.now();
+  //final hour = now.hour;
+  //final image = _getImageForHour(hour);
 
-  void changePage(int index) {
-    setState(() {
-      _selIdx = index;
-    });
-  }
+ // int _selIdx = 0;
 
+  //void changePage(int index) {
+  //  setState(() {
+  //    _selIdx = index;
+  //  });
+  //}
+
+  List<BottomNavigationBarItem> navBarItems = [
+    const BottomNavigationBarItem(
+      icon: Icon(MdiIcons.gymnastics),
+      label: 'Suggested Tips'),
+      const BottomNavigationBarItem(
+      icon: Icon(MdiIcons.calendar),
+      label: 'Calendar'),
+  ];
+  
 // Widget selectPage(int index){
 //   switch(index){
 //     case 0:
@@ -47,7 +66,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                   leading: const Icon(MdiIcons.logout),
                   title: const Text('Logout'),
-                  onTap: () {},
+                  onTap: () => _toLoginPage(context),
                 ),
                 const Text('About'),
                 ListTile(
@@ -58,7 +77,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                   leading: const Icon(MdiIcons.bed),
                   title: const Text('Sleep facts'),
-                  onTap: () {},
+                  onTap: (){},
                 ),
               ],
             ),
@@ -67,15 +86,15 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor:  const Color.fromARGB(255, 172, 143, 192),
-          iconTheme: const IconThemeData(color: Color.fromARGB(255, 144, 111, 160)),
-          title: const Text('- Hypnos -', style: TextStyle(color: Colors.black)),
+          backgroundColor: const Color.fromARGB(255, 144, 111, 160),
+          iconTheme: const IconThemeData(color: Color.fromARGB(255, 204, 196, 208), size: 35,),
+          title: const Text('Hypnos', style: TextStyle(color: Colors.black)),
           actions: [
             IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       fullscreenDialog: true,
-                      builder: (context) => ProfilePage()));
+                      builder: (context) =>  ProfilePage()));
                 },
                 icon: const Icon(Icons.person_pin))
           ],
@@ -88,53 +107,29 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(children: const [Icon(MdiIcons.mapMarker), Text('Padua, Italy', selectionColor: Color.fromARGB(228, 183, 178, 178),)]),
                 Row(
-                  children: [ 
-                    const Icon(MdiIcons.mapMarker), 
-                    const Text('Padua, Italy'),
-                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  //children: [
+                    //Image.asset(name)
+                    //const Text(', username'),
+                  //],
                 ),
-                const Text('Sleep Quality'),
-                const Padding(padding: EdgeInsets.all(25.0)),
-                Row(children: [
-                  SizedBox(
-                    width: 140,
-                    height: 140,
-                    child: CustomPaint(
-                      painter: ScoreCircularProgress(
-                        backColor: const Color(0xFF89453C).withOpacity(0.4),
-                        frontColor: const Color(0xFF89453C),
-                        strokeWidth: 20,
-                        value: aqi / 100,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 120,
-                    height: 140,
-                  ),
-                  SizedBox(
-                    width: 140,
-                    height: 140,
-                    child: CustomPaint(
-                      painter: ScoreCircularProgress(
-                        backColor: const Color(0xFF89453C).withOpacity(0.4),
-                        frontColor: const Color(0xFF89453C),
-                        strokeWidth: 20,
-                        value: aqi / 100,
-                      ),
-                    ),
-                  ),
-                ],),
+                const Text('How did you sleep last night?'),
+                const SizedBox(
+                  width: 300,
+                  height: 150,
+                ),
                 Align(
-                  alignment: Alignment.center,
+                  alignment: const Alignment(0.7,0.0),
                   child: SizedBox(
-                    width: 140,
-                    height: 140,
-                    child: CustomPaint(                   
+                    width: 130,
+                    height: 130,
+                    child: CustomPaint(                     
                       painter: ScoreCircularProgress(
-                        backColor: const Color(0xFF89453C).withOpacity(0.4),
-                        frontColor: const Color(0xFF89453C),
+                        backColor: const Color.fromARGB(255, 166, 160, 195),
+                        frontColor: const Color.fromARGB(255, 106, 93, 161),
                         strokeWidth: 20,
                         value: aqi / 100,
                       ),
@@ -142,121 +137,94 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.center,
                           child: Center(
                               child: Padding(
-                            padding: const EdgeInsets.only(top: 40.0),
+                            padding: const EdgeInsets.only(top: 50.0),
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '$aqi %',
+                                    ' $aqi%',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        color: Color(0xFF89453C)),
+                                        color: Color.fromARGB(255, 106, 93, 161)),
                                   ),
-                                  const Text(    // add if condition about the efficiency value
-                                    ' Not good',
-                                    style: TextStyle(fontSize: 16),
-                                  )
-                                ]),
+                                  Column(children: const [Text('Not Good', selectionColor: Color.fromARGB(227, 152, 19, 19),), Icon(Icons.info_outline, color: Color.fromARGB(255, 106, 93, 161),),]),
+                                ]
+                              ),
                           ))),
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    Center(child: const Text('Efficiency')),
-                    const  Icon(Icons.info_outline),
-                    // Center(child: Text('PM2.5 Concentration')),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.keyboard_arrow_left)),
-                    Text('${DateFormat('dd MM yyyy').format(DateTime.now())}'),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.keyboard_arrow_right)),
-                  ],
-                ),
-                CustomPlot(data: data),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) => infosleep(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Know more'),
-                      ),
+                Align(
+                  alignment: const Alignment(-0.7,0.0),
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: CircularPercentIndicator(
+                      animation: true,
+                      animationDuration: 10000,
+                      radius: 130,
+                      lineWidth: 15,
+                      percent: 0.8,
+                      progressColor: Colors.deepPurple,
+                      backgroundColor: Colors.deepPurple.shade200,
+                      circularStrokeCap: CircularStrokeCap.round,
                     ),
-                  ],
-                )
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top:60.0)),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () => _toinfosleepage(context),
+                    child: const Text('Details'),)
+                ),
               ],
             ),
           )),
-        ));
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: const Color.fromARGB(255, 144, 111, 160),
+          selectedItemColor: const  Color.fromARGB(199, 31, 19, 41),
+          items: navBarItems,
+        ),
+      );
     //   body: selectPage(_selIdx) ,
     // bottomNavigationBar: BottomNavigationBar(
     //   currentIndex: _selIdx,
     //   onTap: ((value) => changePage(value)),
     //   items: [
     //     BottomNavigationBarItem(
-    //       icon: Icon(Icons.abc), label: 'Air Pollution'),
+    //       icon: Icon(Icons.abc), label: 'Suggested Tips'),
     //        BottomNavigationBarItem(
-    //       icon: Icon(Icons.abc), label: 'Personal exposure'),
+    //       icon: Icon(Icons.abc), label: 'Calendar'),
     // ]) ,
   }
-}
 
-List<Map<String, dynamic>> data = [
-  {'date': '2021-10-01', 'points': 1468},
-  {'date': '2021-10-01', 'points': 1487},
-  {'date': '2021-10-01', 'points': 1494},
-  {'date': '2021-10-02', 'points': 1526},
-  {'date': '2021-10-02', 'points': 1492},
-  {'date': '2021-10-02', 'points': 1470},
-  {'date': '2021-10-02', 'points': 1477},
-  {'date': '2021-10-03', 'points': 1466},
-  {'date': '2021-10-03', 'points': 1465},
-  {'date': '2021-10-03', 'points': 1524},
-  {'date': '2021-10-03', 'points': 1534},
-  {'date': '2021-10-04', 'points': 1504},
-  {'date': '2021-10-04', 'points': 1524},
-  {'date': '2021-10-05', 'points': 1534},
-  {'date': '2021-10-06', 'points': 1463},
-  {'date': '2021-10-07', 'points': 1502},
-  {'date': '2021-10-07', 'points': 1539},
-  {'date': '2021-10-08', 'points': 1476},
-  {'date': '2021-10-08', 'points': 1483},
-  {'date': '2021-10-08', 'points': 1534},
-  {'date': '2021-10-08', 'points': 1530},
-  {'date': '2021-10-09', 'points': 1519},
-  {'date': '2021-10-09', 'points': 1497},
-  {'date': '2021-10-09', 'points': 1460},
-  {'date': '2021-10-10', 'points': 1514},
-  {'date': '2021-10-10', 'points': 1518},
-  {'date': '2021-10-10', 'points': 1470},
-  {'date': '2021-10-10', 'points': 1526},
-  {'date': '2021-10-11', 'points': 1517},
-  {'date': '2021-10-11', 'points': 1478},
-  {'date': '2021-10-11', 'points': 1468},
-  {'date': '2021-10-11', 'points': 1487},
-  {'date': '2021-10-12', 'points': 1535},
-  {'date': '2021-10-12', 'points': 1537},
-  {'date': '2021-10-12', 'points': 1463},
-  {'date': '2021-10-12', 'points': 1478},
-  {'date': '2021-10-13', 'points': 1524},
-  {'date': '2021-10-13', 'points': 1496},
-  {'date': '2021-10-14', 'points': 1527},
-  {'date': '2021-10-14', 'points': 1527},
-];
+    void _toLoginPage(BuildContext context) async{
+
+    final sp= await SharedPreferences.getInstance();
+    sp.remove('username');
+    //Pop the drawer first 
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
+    //Then pop the HomePage
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  LoginPage()));
+  }//_toLoginPage
+
+    void _toinfosleepage(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep()));
+  }
+
+
+
+  String _getImageForHour(int hour) {
+    if (hour < 6 || hour >= 21) {
+      return 'assets/images/night.png';
+    } else {
+      return 'assets/images/morning.png';
+    }
+  }
+
+}
