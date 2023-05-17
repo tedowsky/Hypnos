@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:flutter_application_3/widgets/score.dart';
-import 'package:flutter_application_3/screens/profilepage.dart';
+import 'package:hypnos/widgets/score.dart';
+import 'package:hypnos/screens/profilepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:flutter_application_3/screens/loginpage.dart';
-import 'package:flutter_application_3/screens/infospleep.dart';
+import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:flutter_application_3/screens/login_page.dart';
+import 'package:hypnos/screens/login_page.dart';
 
 
 class HomePage extends StatefulWidget {

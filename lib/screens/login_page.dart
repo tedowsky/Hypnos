@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application_3/components/my_button.dart';
-import 'package:flutter_application_3/components/my_textfield.dart';
-import 'package:flutter_application_3/components/square_tile.dart';
-import 'package:flutter_application_3/screens/homepage.dart';
-import 'package:flutter_login/flutter_login.dart';
-
-
+import 'package:hypnos/components/my_button.dart';
+import 'package:hypnos/components/my_textfield.dart';
+import 'package:hypnos/components/square_tile.dart';
+import 'package:hypnos/screens/homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   static const routename = 'LoginPage';
-
+  // text editing controllers
+ 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  //final username = TextEditingController();
+  //final password = TextEditingController();
+
+  final usernameTextbox = MyTextField(
+                hintText: 'Username',
+                obscureText: false,
+              );
+  final passwordTextbox = MyTextField(
+                //controller: password,
+                hintText: 'Password',
+                obscureText: true,
+              );
 
   @override
   void initState() {
@@ -35,22 +46,34 @@ class _LoginPageState extends State<LoginPage> {
        _tohomepage(context);
     }//if
   }//_checkLogin
-
-  Future<String> _loginUser(LoginData data) async {
-  if(data.name == 'myapp@email.com' && data.password == 'target4.7'){
-
-    final sp = await SharedPreferences.getInstance();
-    sp.setString('username', data.name);
-    return '';
-  } else {
-     return 'Wrong credentials';
-   }
-  } 
- //
-
-  // text editing controllers
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  void login() {
+    // Check if the credentials are correct
+    if (usernameTextbox.controller.text == 'myapp@email.com' && passwordTextbox.controller.text == 'target4.7') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Authentication Error'),
+            content: const Text('Invalid email or password.'),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+  
 
   void _tohomepage(BuildContext context){
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage()));
@@ -82,20 +105,11 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 50),
 
               // username textfield
-              MyTextField(
-                controller: usernameController,
-                hintText: 'Username',
-                obscureText: false,
-              ),
-
+              usernameTextbox,
               const SizedBox(height: 10),
-
+          
               // password textfield
-              MyTextField(
-                controller: passwordController,
-                hintText: 'Password',
-                obscureText: true,
-              ),
+              passwordTextbox,
 
               const SizedBox(height: 10),
 
@@ -115,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               // sign in button
               MyButton(
-                onTap: () async =>_tohomepage(context),
+                onTap: login,//() async =>_tohomepage(context),
               ),
 
               const SizedBox(height: 50),

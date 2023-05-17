@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/screens/login_page.dart';
+import 'package:hypnos/screens/login_page.dart';
 
 
 
@@ -12,7 +12,7 @@ class Splash extends StatelessWidget {
   // Method for navigation SplashPage -> LoginPage
   void _toLoginPage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) =>  LoginPage()));
+        .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   } //_toLoginPage
 
   @override
