@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 // import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/widgets/score.dart';
 import 'package:hypnos/screens/profilepage.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:flutter_application_3/screens/loginpage.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:hypnos/screens/login_page.dart';
+import 'package:http/http.dart' as http;
+import '../models/db.dart';
+import '../services/impact.dart';
+import '../utils/server_impact.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -57,6 +66,7 @@ class _HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+ 
     return Scaffold(
         drawer: Drawer( backgroundColor: const Color.fromARGB(255, 106, 93, 161),
           child: Padding(
@@ -228,3 +238,5 @@ class _HomeState extends State<HomePage> {
   }
 
 }
+
+  
