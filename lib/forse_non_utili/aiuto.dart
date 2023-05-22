@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/db.dart';
 import '../utils/server_impact.dart';
 
-Future<int> _authorize() async {
+Future<int> authorize() async {
 
   final sp = await SharedPreferences.getInstance();
   final String? username = sp.getString('username');
@@ -19,7 +19,7 @@ Future<int> _authorize() async {
   final body = {'username': Impact.username, 'password': Impact.password};
 
   //Get the response
-  print('Calling: $url');
+  //print('Calling: $url');
   final response = await http.post(Uri.parse(url), body: body);
 
   
@@ -46,7 +46,7 @@ Future<int> _refreshTokens() async {
   final body = {'refresh': refresh};
 
   //Get the respone
-  print('Calling: $url');
+  // print('Calling: $url');
   final response = await http.post(Uri.parse(url), body: body);
 
   //If 200 set the tokens
@@ -61,7 +61,7 @@ Future<int> _refreshTokens() async {
   return response.statusCode;
 } //_refreshTokens
 
-Future<List<HR>?> _requestData() async {
+Future<List<HR>?> requestData() async {
 
   final sp = await SharedPreferences.getInstance();
   final String? username = sp.getString('username');

@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             Center(
               child: CircleAvatar(
-                radius: 70,child: Image.asset('lib/images/genderGeneral.png'))),
+                radius: 70,child: Image.asset('assets/genderGeneral.png'))),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(

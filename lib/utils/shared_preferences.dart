@@ -50,22 +50,18 @@ class Preferences {
   // Here we define all the keys we will need in the Preferences. We will then access the value with the getter as Preferences.key
   // The getter allows us to forget the specific string used as key in the SharedPreferences and get a list of all saved preferences as variables of the class
 
-  String? get impactRefreshToken => _getFromDisk('impactRT');
+  String? get impactRefreshToken => _getFromDisk('refresh');
   set impactRefreshToken(String? newImpactRefreshToken) =>
-      _saveToDisk("impactRT", newImpactRefreshToken);
+      _saveToDisk("refresh", newImpactRefreshToken);
 
-  String? get impactAccessToken => _getFromDisk('impactAccessToken');
+  String? get impactAccessToken => _getFromDisk('access');
   set impactAccessToken(String? newImpactAccessToken) =>
-      _saveToDisk("impactAccessToken", newImpactAccessToken);
+      _saveToDisk("access", newImpactAccessToken);
 
   String? get username => _getFromDisk('username');
   set username(String? newusername) => _saveToDisk("username", newusername);
 
-  String? get password => _getFromDisk('password');
-  set password(String? newpassword) => _saveToDisk("password", newpassword);
+  String? get password => _getFromDisk('codice');
+  set password(String? newpassword) => _saveToDisk("codice", newpassword);
   
-
-  String? get impactUsername => _getFromDisk('impactUsername');
-  set impactUsername(String? newImpactUsername) =>
-      _saveToDisk("impactUsername", newImpactUsername);
 }

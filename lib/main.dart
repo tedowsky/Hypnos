@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/screens/splash.dart';
+import 'package:hypnos/services/impact.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,21 +14,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Hypnos',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    // we use the Multiprovider to inject all the app-wide services to the whole app. This way we will always use the same instance of the services without the need to reauthenticate
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => Preferences()..init(),
+          // This creates the preferences when the provider is creater. With lazy = true (default), the preferences would be initialized when first accessed, but we need them for the other services
+          lazy: false,
+        ),
+        Provider(
+            create: (context) => ImpactService(
+                  // We pass the newly created preferences to the service
+                  Provider.of<Preferences>(context, listen: false),
+                )),
+      ],
+      child: MaterialApp(
+        title: 'Hypnos',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const Splash(),
       ),
-      home: const Splash(),
     );
   }
 }

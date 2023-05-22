@@ -26,17 +26,19 @@ class ImpactOnboardingPage extends StatefulWidget {
 }
 
 class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
-    static bool _passwordVisible = false;
-  final TextEditingController userController = TextEditingController();
-  final TextEditingController codiceController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  //final username = TextEditingController();
+  //final password = TextEditingController();
 
 
-  void _showPassword() {
-    setState(() {
-      _passwordVisible = !_passwordVisible;
-    });
-  }
+  final usernameTextbox = MyTextField(
+    hintText: 'Username',
+    obscureText: false,
+  );
+  final codiceTextbox = MyTextField(
+    //controller: password,
+    hintText: 'Password',
+    obscureText: true,
+  );
 
   @override
   void initState() {
@@ -55,21 +57,15 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
     } //if
   } //_checkLogin
 
-  Future<bool> _loginImpact(
-      String name, String password, BuildContext context) async {
-    ImpactService service = Provider.of<ImpactService>(context, listen: false);
-    bool logged = await service.getTokens(name, password);
-    return logged;
-  }
 
   void login() async{
     // Check if the credentials are correct
-    if (userController.text == Impact.username &&
-        codiceController.text == Impact.password) {
+    if (usernameTextbox.controller.text == Impact.username &&
+        codiceTextbox.controller.text == Impact.password) {
 
         final sp = await SharedPreferences.getInstance();
-        sp.setString('username', userController.text);
-        sp.setString('codice', codiceController.text);
+        sp.setString('username', usernameTextbox.controller.text);
+        sp.setString('codice', codiceTextbox.controller.text);
 
       Navigator.pushReplacement(
         context,
@@ -101,153 +97,83 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
         .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
   } //_toHomePage
 
-@override
+  @override
   Widget build(BuildContext context) {
-    _checkLogin();
     return Scaffold(
-      backgroundColor: const Color(0xFFE4DFD4),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Image.asset('assets/impact_logo.png'),
-              const Text('Please authorize to use our app',
+      backgroundColor: Color.fromARGB(255, 141, 131, 146),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 25),
+                // logo
+                Container(
+                    height: 300,
+                    width: 350,
+                    child: Image.asset('assets/impact_logo.png')),
+                // welcome back, you've been missed!
+                const Text(
+                  'Requested authorization',
                   style: TextStyle(
-                    fontSize: 16,
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text('Username',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              TextFormField(
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Username is required';
-                  }
-                  return null;
-                },
-                controller: userController,
-                cursorColor: const Color(0xFF83AA99),
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
-                    ),
-                  ),
-                  border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  prefixIcon: const Icon(
-                    Icons.person,
-                    color: Color(0xFF89453C),
-                  ),
-                  hintText: 'Username',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text('Password',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              TextFormField(
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Password is required';
-                  }
-                  return null;
-                },
-                controller: codiceController,
-                cursorColor: const Color(0xFF83AA99),
-                obscureText: !_passwordVisible,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
-                    ),
-                  ),
-                  border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  prefixIcon: const Icon(
-                    Icons.lock,
-                    color: Color(0xFF89453C),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Based on passwordVisible state choose the icon
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      _showPassword();
-                    },
-                  ),
-                  hintText: 'Password',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
-                ),
-              ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      bool? validation = await _loginImpact(userController.text,
-                          codiceController.text, context);
-                      if (!validation) {
-                        // if not correct show message
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.all(8),
-                          content: Text('Wrong Credentials'),
-                          duration: Duration(seconds: 2),
-                        ));
-                      } else {
-                        await Provider.of<ImpactService>(context, listen: false)
-                            .getPatient();
-                        login();
-                      }
-                    },
-                    style: ButtonStyle(
-                        //maximumSize: const MaterialStatePropertyAll(Size(50, 20)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        elevation: MaterialStateProperty.all(0),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 12)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF89453C))),
-                    child: const Text('Authorize'),
+                    color: Colors.black87,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 25),
+
+                // username textfield
+                usernameTextbox,
+                const SizedBox(height: 10),
+
+                // password textfield
+                codiceTextbox,
+
+                const SizedBox(height: 15),
+                // sign in button
+                ElevatedButton(
+                  onPressed: () async {
+                    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+                    final result_auto = await service.authorize();
+                    final message_auto =
+                        result_auto == 200 ? 'Authorization successful' : 'Authorization failed';
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(SnackBar(content: Text(message_auto)));
+                  //     final result = await service.requestData();
+                  //     final message =
+                  //     result == null ? 'DataRetrival successful' : 'DataRetrival failed';
+                  // ScaffoldMessenger.of(context)
+                  //   ..removeCurrentSnackBar()
+                  //   ..showSnackBar(SnackBar(content: Text(message)));
+                    
+                    login();
+                  },
+                  style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 141, 131, 146)),),
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.symmetric(horizontal: 70),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Authorize",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

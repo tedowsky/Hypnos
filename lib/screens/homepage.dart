@@ -3,13 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-// import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/widgets/score.dart';
 import 'package:hypnos/screens/profilepage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:flutter_application_3/screens/loginpage.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:hypnos/screens/login_page.dart';
@@ -23,14 +20,32 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const routeDisplayname = 'HomePage';
-
   @override
   State<HomePage> createState() => _HomeState();
 }
 
 class _HomeState extends State<HomePage> {
-  
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+  
+  void _fetchData() async {
+  await Future.delayed(Duration.zero); // Aggiungi questo per garantire che il context sia disponibile
+
+  ImpactService service = Provider.of<ImpactService>(context, listen: false);
+  final result = await service.requestData();
+  final message =
+      result != null ? 'DataRetrieval successful' : 'DataRetrieval failed';
+
+  ScaffoldMessenger.of(context)
+    ..removeCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(message)));
+}
+
+  
   final aqi = 20;
   final now = DateTime.now();
   //final hour = now.hour;
@@ -66,7 +81,8 @@ class _HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
- 
+    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+
     return Scaffold(
         drawer: Drawer( backgroundColor: const Color.fromARGB(255, 106, 93, 161),
           child: Padding(
@@ -131,58 +147,6 @@ class _HomeState extends State<HomePage> {
                   width: 300,
                   height: 150,
                 ),
-                Align(
-                  alignment: const Alignment(0.7,0.0),
-                  child: SizedBox(
-                    width: 130,
-                    height: 130,
-                    child: CustomPaint(                     
-                      painter: ScoreCircularProgress(
-                        backColor: const Color.fromARGB(255, 166, 160, 195),
-                        frontColor: const Color.fromARGB(255, 106, 93, 161),
-                        strokeWidth: 20,
-                        value: aqi / 100,
-                      ),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Center(
-                              child: Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    ' $aqi%',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 106, 93, 161)),
-                                  ),
-                                  Column(children: const [Text('Not Good', selectionColor: Color.fromARGB(227, 152, 19, 19),), Icon(Icons.info_outline, color: Color.fromARGB(255, 106, 93, 161),),]),
-                                ]
-                              ),
-                          ))),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: const Alignment(-0.7,0.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: CircularPercentIndicator(
-                      animation: true,
-                      animationDuration: 10000,
-                      radius: 130,
-                      lineWidth: 15,
-                      percent: 0.8,
-                      progressColor: Colors.deepPurple,
-                      backgroundColor: Colors.deepPurple.shade200,
-                      circularStrokeCap: CircularStrokeCap.round,
-                    ),
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(top:60.0)),
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
