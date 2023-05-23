@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hypnos/forse_non_utili/aiuto.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/profilepage.dart';
@@ -29,7 +30,6 @@ class _HomeState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
   }
   
   void _fetchData() async {
@@ -147,11 +147,16 @@ class _HomeState extends State<HomePage> {
                   width: 300,
                   height: 150,
                 ),
+                
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    onPressed: () => _toinfosleepage(context),
-                    child: const Text('Details'),)
+                     onPressed: () async
+                    {List<HR>? result = await requestData();
+                     print('ciao');},
+
+                    // _toinfosleepage(context),
+                    child: const Text('Details')),
                 ),
               ],
             ),
@@ -171,7 +176,7 @@ class _HomeState extends State<HomePage> {
     //     BottomNavigationBarItem(
     //       icon: Icon(Icons.abc), label: 'Suggested Tips'),
     //        BottomNavigationBarItem(
-    //       icon: Icon(Icons.abc), label: 'Calendar'),
+    //       icon: Icon(Icons.abc), label: 'Caledar'),
     // ]) ,
   }
 

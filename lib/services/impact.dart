@@ -160,6 +160,7 @@ Future<List<HR>?> requestData() async {
   final sp = await SharedPreferences.getInstance();
   final String? username = sp.getString('username');
   final String? password= sp.getString('password');
+  
 
   if (username == Impact.username || password == Impact.password){
     //Initialize the result
@@ -176,7 +177,7 @@ Future<List<HR>?> requestData() async {
     }//if
 
     //Create the (representative) request
-    final day = '2023-05-04';
+    const day = '2023-05-04';
     final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$day/';
     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
 
