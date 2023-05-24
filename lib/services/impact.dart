@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:hypnos/services/server_strings.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:intl/intl.dart';
 import 'package:hypnos/utils/server_impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:hypnos/models/db.dart';
@@ -177,7 +176,7 @@ Future<List<HR>?> requestData() async {
     }//if
 
     //Create the (representative) request
-    const day = '2023-05-04';
+    final day = DateTime.now();
     final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$day/';
     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
 

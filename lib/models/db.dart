@@ -7,10 +7,15 @@ class HR {
 
   HR({required this.timestamp, required this.value});
 
-   HR.fromJson(String date, Map<String, dynamic> json) :
+  HR.fromJson(String date, Map<String, dynamic> json) :
   timestamp = DateFormat('yyyy-MM-dd HH:mm:ss').parse('$date ${json["time"]}'),
 
   value = json["value"];
+
+  @override
+  String toString() {
+    return 'HR(time: $timestamp, value: $value)';
+  }//toString
 
 }
 

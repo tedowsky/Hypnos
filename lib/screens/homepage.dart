@@ -1,211 +1,197 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:hypnos/forse_non_utili/aiuto.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+//import 'package:hypnos/screens/calendar.dart';
+//import 'package:hypnos/screens/tips.dart';
+//import 'package:hypnos/widgets/score.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/screens/profilepage.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hypnos/screens/infospleep.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:hypnos/screens/login_page.dart';
-import 'package:http/http.dart' as http;
-import '../models/db.dart';
-import '../services/impact.dart';
-import '../utils/server_impact.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+
 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const routeDisplayname = 'HomePage';
+
   @override
   State<HomePage> createState() => _HomeState();
 }
 
 class _HomeState extends State<HomePage> {
 
-  @override
-  void initState() {
-    super.initState();
-  }
-  
-  void _fetchData() async {
-  await Future.delayed(Duration.zero); // Aggiungi questo per garantire che il context sia disponibile
+  int eff = 85;
 
-  ImpactService service = Provider.of<ImpactService>(context, listen: false);
-  final result = await service.requestData();
-  final message =
-      result != null ? 'DataRetrieval successful' : 'DataRetrieval failed';
-
-  ScaffoldMessenger.of(context)
-    ..removeCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(message)));
-}
-
-  
-  final aqi = 20;
-  final now = DateTime.now();
-  //final hour = now.hour;
-  //final image = _getImageForHour(hour);
-
- // int _selIdx = 0;
-
-  //void changePage(int index) {
-  //  setState(() {
-  //    _selIdx = index;
-  //  });
-  //}
-
-  List<BottomNavigationBarItem> navBarItems = [
-    const BottomNavigationBarItem(
-      icon: Icon(MdiIcons.gymnastics),
-      label: 'Suggested Tips'),
-      const BottomNavigationBarItem(
-      icon: Icon(MdiIcons.calendar),
-      label: 'Calendar'),
-  ];
-  
-// Widget selectPage(int index){
-//   switch(index){
-//     case 0:
-//       return Home();
-//     case 1:
-//       return Advices();
-//     default:
-//       return Home();
-//   }
-// }
 
   @override
   Widget build(BuildContext context) {
-    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+
+    var now = DateTime.now();
+    var hour = DateFormat('H').format(now);
+    // ignore: unused_local_variable
+    var imagePath = _getImagePath(int.parse(hour));
+    var commentPath = _comment(int.parse(hour));
+
 
     return Scaffold(
-        drawer: Drawer( backgroundColor: const Color.fromARGB(255, 106, 93, 161),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(MdiIcons.logout),
-                  title: const Text('Logout'),
-                  onTap: () => _toLoginPage(context),
+
+      // --- COLORE_SFONDO ---
+      backgroundColor: const Color(0xFFE4DFD4),  
+
+      // --- BODY ---
+      body: ListView(
+            children: [
+              const Row(
+                children: [
+                  Icon(MdiIcons.mapMarker),
+                  Text('Padua, Italy', selectionColor: Color.fromARGB(255, 160, 158, 158),),
+                ],
+              ),
+              SizedBox(
+                height: 85,
+                child: Column(
+                  children: [
+                  Image.asset(imagePath),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(commentPath,),
+                  ),
+                  ],
                 ),
-                const Text('About'),
-                ListTile(
-                  leading: const Icon(MdiIcons.sleep),
-                  title: const Text('About Hypnos'),
-                  onTap: () {},
+              ),
+              Card(
+                borderOnForeground: true,
+                margin: const EdgeInsets.all(30.0),
+                elevation: 50,
+                shadowColor: Colors.grey[850] ,
+                color: const Color.fromARGB(255, 144, 111, 160),
+                child:  Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
+                    height: 420,
+                    width: 190,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                       children :   [
+                        const ListTile(
+                          title: Text('TEMPO DI SONNO EFFETTIVO'),
+                          leading: Icon(Icons.bedtime, color: Colors.black87),
+                          subtitle: Text('Il tempo di sonno effettivo è il tempo totale che hai trascorso a dormire durante la notte',
+                            selectionColor: Color(0xFFE4DFD4),
+                          ),
+                        ),
+                        const ListTile(
+                          title: Text('TEMPO TRASCORSO A LETTO'),
+                          leading: Icon(Icons.bed,color: Colors.black87,),
+                          subtitle: Text('Il tempo trascorso a letto è il periodo complessivo in cui sei rimasto a letto incluso il tempo impiegato per addormentarti', 
+                            selectionColor: Color(0xFFE4DFD4),
+                          ),
+                        ),                        
+                        Align (
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.all(40.0),
+                          child: Column(
+                            children: [
+                              LinearPercentIndicator(
+                                animation: true,
+                                animationDuration: 1000,
+                                lineHeight: 20.0,
+                                progressColor: Colors.amber,
+                                percent: 0.85, 
+                                center: const Text("80.0%"),
+                                width: 210,
+                                barRadius: const Radius.elliptical(10, 10) ,
+                              ),
+                              const Text(
+                                'EFFICIENCY', 
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 106, 93, 161)
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                   Text(
+                                    _eff(eff),
+                                    selectionColor: const Color.fromARGB(227, 152, 19, 19),
+                                  ),
+                                  IconButton(
+                                    onPressed: (){
+                                      showDialog(
+                                        context: context, 
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('L\'EFFICIENCY'),
+                                            content: const Text('Invalid email or password.'),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 228, 223, 20),),
+                                  ), 
+                                ],
+                              ),        
+                            ],
+                           ),
+                        ),
+                      ),
+                     ],
+                    ),
+                  ),
                 ),
-                ListTile(
-                  leading: const Icon(MdiIcons.bed),
-                  title: const Text('Sleep facts'),
-                  onTap: (){},
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: const Color.fromARGB(255, 144, 111, 160),
-          iconTheme: const IconThemeData(color: Color.fromARGB(255, 204, 196, 208), size: 35,),
-          title: const Text('Hypnos', style: TextStyle(color: Colors.black)),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) =>  ProfilePage()));
-                },
-                icon: const Icon(Icons.person_pin))
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep())),
+                child: const Text('Details'),
+              )
+            ),
           ],
         ),
-        backgroundColor: const Color(0xFFE4DFD4),
-        body: SafeArea(
-          child: SingleChildScrollView(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: const [Icon(MdiIcons.mapMarker), Text('Padua, Italy', selectionColor: Color.fromARGB(228, 183, 178, 178),)]),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  //children: [
-                    //Image.asset(name)
-                    //const Text(', username'),
-                  //],
-                ),
-                const Text('How did you sleep last night?'),
-                const SizedBox(
-                  width: 300,
-                  height: 150,
-                ),
-                
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                     onPressed: () async
-                    {List<HR>? result = await requestData();
-                     print('ciao');},
-
-                    // _toinfosleepage(context),
-                    child: const Text('Details')),
-                ),
-              ],
-            ),
-          )),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 144, 111, 160),
-          selectedItemColor: const  Color.fromARGB(199, 31, 19, 41),
-          items: navBarItems,
-        ),
       );
-    //   body: selectPage(_selIdx) ,
-    // bottomNavigationBar: BottomNavigationBar(
-    //   currentIndex: _selIdx,
-    //   onTap: ((value) => changePage(value)),
-    //   items: [
-    //     BottomNavigationBarItem(
-    //       icon: Icon(Icons.abc), label: 'Suggested Tips'),
-    //        BottomNavigationBarItem(
-    //       icon: Icon(Icons.abc), label: 'Caledar'),
-    // ]) ,
-  }
-
-    void _toLoginPage(BuildContext context) async{
-
-    final sp= await SharedPreferences.getInstance();
-    sp.remove('username');
-    //Pop the drawer first 
-    // ignore: use_build_context_synchronously
-    Navigator.pop(context);
-    //Then pop the HomePage
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  LoginPage()));
-  }//_toLoginPage
-
-    void _toinfosleepage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep()));
-  }
-
-
-
-  String _getImageForHour(int hour) {
-    if (hour < 6 || hour >= 21) {
-      return 'assets/images/night.png';
-    } else {
-      return 'assets/images/morning.png';
     }
+  
+  
+  // --- SWITCH_IMAGES ---
+  String _getImagePath(int hour) {
+    if (hour >= 6 && hour < 21) {
+      return 'lib/images/morning.png';
+    }  
+    else {
+      return 'lib/images/night.png';
+    }
+  }
+  // --- SWITCH_SCRIPT ---
+  String _comment (int hour) {
+    if (hour >= 6 && hour < 21) {
+      return 'GOOD MORNING , It\'s time to start your day !';
+    }
+    else {
+      return 'It\'s time to go to sleep, GOOD NIGHT !';
+    }
+  }
+    String _eff (int eff) {
+    if (eff/100 >= 0.85) {
+      return '- Good -';
+    }
+    else {
+      return '- Not Good -';
+    }
+
   }
 
 }
-
-  

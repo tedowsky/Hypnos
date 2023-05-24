@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hypnos/screens/impact_ob.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hypnos/components/my_button.dart';
 import 'package:hypnos/components/my_textfield.dart';
 import 'package:hypnos/components/square_tile.dart';
-import 'package:hypnos/screens/homepage.dart';
-
-import '../utils/shared_preferences.dart';
+import 'package:hypnos/screens/impact_ob.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hypnos/screens/info.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   static const routename = 'LoginPage';
   // text editing controllers
-  
+ 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
 
-  //final username = TextEditingController();
-  //final password = TextEditingController();
 
   final emailTextbox = MyTextField(
                 hintText: 'Email',
@@ -34,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               );
 
-
   @override
   void initState() {
     super.initState();
@@ -45,18 +39,19 @@ class _LoginPageState extends State<LoginPage> {
   void _checkLogin() async {
     //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
     final sp = await SharedPreferences.getInstance();
-    if(sp.getString('username') != null){
+    if(sp.getString('Email') != null){
       //If 'username is set, push the HomePage
        // ignore: use_build_context_synchronously        
-       _toimpacton(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
     }//if
   }//_checkLogin
   void login() {
     // Check if the credentials are correct
     if (emailTextbox.controller.text == 'myapp@email.com' && passwordTextbox.controller.text == 'target4.7') {
+      
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ImpactOnboardingPage()),
+        MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()),
       );
     } else {
       showDialog(
@@ -78,13 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
-
-
   
-
-  void _toimpacton(BuildContext context){
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ImpactOnboardingPage()));
-  }//_toHomePage
 
   @override
   Widget build(BuildContext context) {
@@ -121,11 +110,11 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
 
               // forgot password?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
                     Text(
                       'Forgot Password?',
                       style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold,),
@@ -135,34 +124,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               // sign in button
-              ElevatedButton(
-                  onPressed: () async {
-                    login();
-                  },
-                  style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 144, 111, 160)),),
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    margin: const EdgeInsets.symmetric(horizontal: 70),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Authorize",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
+              MyButton(
+                onTap: login,// InfoPage()
+              ),
               const SizedBox(height: 50),
-              // or continue with
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
@@ -192,25 +157,22 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
 
               // google + apple sign in buttons
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   // google button
-                  SquareTile(imagePath: 'assets/google.png'),
+                  SquareTile(imagePath: 'lib/images/google.png'),
 
                   SizedBox(width: 20),
 
                   // apple button
-                  SquareTile(imagePath: 'assets/apple.png')
+                  SquareTile(imagePath: 'lib/images/apple.png')
                 ],
               ),
-
               const SizedBox(height: 20),
-
-              // not a member? register now
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     'Not a member?',
                     style: TextStyle(color: Colors.black87),
@@ -232,9 +194,4 @@ class _LoginPageState extends State<LoginPage> {
      ),
     );
   }
-
 }
-
-
-
-

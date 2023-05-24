@@ -37,7 +37,7 @@ class _infosleepState extends State<infosleep> {
               height: 80,
               width: 300,
               child: MyBarGraph(
-                sleepstages: sleepstages,
+               sleepstages: sleepstages,
               ),
             ),
             SizedBox(
@@ -48,7 +48,7 @@ class _infosleepState extends State<infosleep> {
               height: 300,
               width: 800,
               // Aggiungi qui il tuo widget o contenuto desiderato
-              child: LineChartWidget(),
+              //child: LineChartWidget(),
             ),
             // Aggiungi altri widget o contenuto
           ],
