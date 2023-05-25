@@ -74,10 +74,10 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 25),
-                SizedBox(
-                    height: 300,
-                    width: 350,
-                    child: Image.asset('lib/images/impact_logo.png')),
+                // SizedBox(
+                //     height: 200,
+                //     width: 200,
+                //     child: Image.asset('lib/images/impact_logo.png')),
                 const Text(
                   'Requested authorization',
                   style: TextStyle(

@@ -58,7 +58,7 @@ class _InfoPage extends State<InfoPage> {
   }
   @override
   Widget build(BuildContext context) {
-
+    ImpactService service = Provider.of<ImpactService>(context, listen: false);
     return Scaffold(
 
       // --- DRAWER --- 
@@ -114,26 +114,26 @@ class _InfoPage extends State<InfoPage> {
           IconButton(
             onPressed: () async {
 
-              final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
 
-              ImpactService service = Provider.of<ImpactService>(context, listen: false);
+              
               final sp = await SharedPreferences.getInstance();
               final String? token = sp.getString('access');
               if (token != null) 
               {
+              List<HR>? result = await service.requestData();
+              final message = 'DataRetrieval successful';
+              ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(message)));
+              print('Ciao');
+              }
+              else {
               final message = 'DataRetrieval failed: re-do Login';
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
               ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text(message)));
-              }
-              else {
-              List<HR>? result = await service.requestData();
-              final message =
-              result != null ? 'DataRetrieval successful' : 'DataRetrieval failed';
-              ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(message)));
+
               }
           
               
@@ -141,15 +141,14 @@ class _InfoPage extends State<InfoPage> {
               
 
 
-               final dbRepository = Provider.of<DatabaseRepository>(context, listen: false);
+              //  final dbRepository = Provider.of<DatabaseRepository>(context, listen: false);
               //   final List<HeartRate>? heartRateList = result!.cast<HeartRate>(); // La tua lista di istanze di HeartRate
 
               // for (final heartRate in heartRateList!) {
               // await dbRepository.insertHR(heartRate);
               // }
 
-              print('Ciao');
-
+              
 
             }, 
             icon: const Icon(Icons.token),),

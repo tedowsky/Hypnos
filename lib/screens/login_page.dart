@@ -161,12 +161,18 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // google button
-                  SquareTile(imagePath: 'lib/images/google.png'),
+                  // SizedBox(
+                  //   width: 20,
+                  //   height: 20,
+                  //   child: SquareTile(imagePath: 'lib/images/google.png')),
 
                   SizedBox(width: 20),
 
                   // apple button
-                  SquareTile(imagePath: 'lib/images/apple.png')
+                  // SizedBox(
+                  //   width: 20,
+                  //   height: 20,
+                  //   child: SquareTile(imagePath: 'lib/images/apple.png'))
                 ],
               ),
               const SizedBox(height: 20),

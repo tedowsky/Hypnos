@@ -52,7 +52,10 @@ class _HomeState extends State<HomePage> {
                 height: 85,
                 child: Column(
                   children: [
-                  Image.asset(imagePath),
+                  // SizedBox(
+                  //   height: 20,
+                  //   width: 20,
+                  //   child: Image.asset(imagePath)),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(commentPath,),
@@ -166,7 +169,7 @@ class _HomeState extends State<HomePage> {
     }
   
   
-  // --- SWITCH_IMAGES ---
+  // --- SWITCH_IM<AGES ---
   String _getImagePath(int hour) {
     if (hour >= 6 && hour < 21) {
       return 'lib/images/morning.png';
