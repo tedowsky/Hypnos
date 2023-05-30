@@ -1,18 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:hypnos/services/server_strings.dart';
+import 'package:dio/dio.dart';
+import 'package:hypnos/databases/entities/heartrate.dart';
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:hypnos/utils/server_impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
-import 'package:hypnos/models/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ImpactService {
-  ImpactService(this.prefs);
+  ImpactService(this.prefs) {
+    updateBearer();
+  }
 
   Preferences prefs;
+
+  final Dio _dio = Dio(BaseOptions(baseUrl: Impact.baseUrl));
 
 
   String? retrieveSavedToken(bool refresh) {
@@ -49,7 +53,7 @@ class ImpactService {
     if (decodedToken['iss'] == null) {
       return false;
     } else {
-      if (decodedToken['iss'] != ServerStrings.issClaim) {
+      if (decodedToken['iss'] != Impact.issClaim) {
         return false;
       } //else
     } //if-else
@@ -58,13 +62,116 @@ class ImpactService {
     if (decodedToken['role'] == null) {
       return false;
     } else {
-      if (decodedToken['role'] != ServerStrings.researcherRoleIdentifier) {
+      if (decodedToken['role'] != Impact.researcherRoleIdentifier) {
         return false;
       } //else
     } //if-else
 
     return true;
   } //checkToken
+
+  // make the call to get the tokens
+  Future<bool> getTokens(String username, String password) async {
+    try {
+      Response response = await _dio.post(
+          '${Impact.authServerUrl}token/',
+          data: {'username': username, 'password': password},
+          options: Options(
+              contentType: 'application/json',
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: {"Accept": "application/json"}));
+
+      if (ImpactService.checkToken(response.data['access']) &&
+          ImpactService.checkToken(response.data['refresh'])) {
+        prefs.impactRefreshToken = response.data['refresh'];
+        prefs.impactAccessToken = response.data['access'];
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> refreshTokens() async {
+    String? refToken = await retrieveSavedToken(true);
+    try {
+      Response response = await _dio.post(
+          '${Impact.authServerUrl}refresh/',
+          data: {'refresh': refToken},
+          options: Options(
+              contentType: 'application/json',
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: {"Accept": "application/json"}));
+
+      if (ImpactService.checkToken(response.data['access']) &&
+          ImpactService.checkToken(response.data['refresh'])) {
+        prefs.impactRefreshToken = response.data['refresh'];
+        prefs.impactAccessToken = response.data['access'];
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updateBearer() async {
+    if (!await checkSavedToken()) {
+      await refreshTokens();
+    }
+    String? token = await prefs.impactAccessToken;
+    if (token != null) {
+      _dio.options.headers = {'Authorization': 'Bearer $token'};
+    }
+  }
+
+  Future<void> getPatient() async {
+    await updateBearer();
+    Response r = await _dio.get('study/v1/patients/active');
+    prefs.impactUsername = r.data['data'][0]['username'];
+    return r.data['data'][0]['username'];
+  }
+
+  Future<List<HR>> getDataFromDay(DateTime startTime) async {
+    await updateBearer();
+    Response r = await _dio.get(
+        'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+    List<dynamic> data = r.data['data'];
+    List<HR> hr = [];
+    for (var daydata in data) {
+      String day = daydata['date'];
+      for (var dataday in daydata['data']) {
+        String hour = dataday['time'];
+        String datetime = '${day}T$hour';
+        DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));
+        HR hrnew = HR(null, dataday['value'], timestamp);
+        if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
+          hr.add(hrnew);
+        }
+      }
+    }
+    var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    return hrlist;
+  }
+
+  DateTime _truncateSeconds(DateTime input) {
+    return DateTime(
+        input.year, input.month, input.day, input.hour, input.minute);
+  }
+
+
+
+
+
+
+
 
 
 
@@ -102,179 +209,56 @@ Future<int> authorize() async {
 
 
 
-  // make the call to get the tokens
-  // Future<bool> getTokens(String username, String password) async {
-  //   try {
-  //     Response response = await _dio.post(
-  //         '${ServerStrings.authServerUrl}token/',
-  //         data: {'username': username, 'password': password},
-  //         options: Options(
-  //             contentType: 'application/json',
-  //             followRedirects: false,
-  //             validateStatus: (status) => true,
-  //             headers: {"Accept": "application/json"}));
-
-  //     if (ImpactService.checkToken(response.data['access']) &&
-  //         ImpactService.checkToken(response.data['refresh'])) {
-  //       prefs.impactRefreshToken = response.data['refresh'];
-  //       prefs.impactAccessToken = response.data['access'];
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     return false;
-  //   }
-  // }
-
-  Future<int> refreshTokens() async {
-  //Create the request
-  final url = Impact.baseUrl + Impact.refreshEndpoint;
-  final sp = await SharedPreferences.getInstance();
-  final refresh = sp.getString('refresh');
-  final body = {'refresh': refresh};
-
-  //Get the respone
-  print('Calling: $url');
-  final response = await http.post(Uri.parse(url), body: body);
-
-  //If 200 set the tokens
-  if (response.statusCode == 200) {
-    final decodedResponse = jsonDecode(response.body);
-    final sp = await SharedPreferences.getInstance();
-    sp.setString('access', decodedResponse['access']);
-    sp.setString('refresh', decodedResponse['refresh']);
-  } //if
-
-  //Return just the status code
-  return response.statusCode;
-} //_refreshTokens
 
 
 
+// Future<List<HR>?> requestData() async {
 
-Future<List<HR>?> requestData() async {
-
-  final sp = await SharedPreferences.getInstance();
-  final String? username = sp.getString('username');
-  final String? password= sp.getString('password');
+//   final sp = await SharedPreferences.getInstance();
+//   final String? username = sp.getString('username');
+//   final String? password= sp.getString('password');
   
 
-  if (username == Impact.username || password == Impact.password){
-    //Initialize the result
-    List<HR>? result;
+//   if (username == Impact.username || password == Impact.password){
+//     //Initialize the result
+//     List<HR>? result;
 
-    //Get the stored access token (Note that this code does not work if the tokens are null)
-    final sp = await SharedPreferences.getInstance();
-    var access = sp.getString('access');
+//     //Get the stored access token (Note that this code does not work if the tokens are null)
+//     final sp = await SharedPreferences.getInstance();
+//     var access = sp.getString('access');
 
-    //If access token is expired, refresh it
-    if(JwtDecoder.isExpired(access!)){
-      await refreshTokens();
-      access = sp.getString('access');
-    }//if
-
-    //Create the (representative) request
-    final day = DateTime.now();
-    final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$day/';
-    final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
-
-    //Get the response
-    print('Calling: $url');
-    final response = await http.get(Uri.parse(url), headers: headers);
-    
-    //if OK parse the response, otherwise return null
-    if (response.statusCode == 200) {
-      final decodedResponse = jsonDecode(response.body);
-      result = [];      
-        for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-          result.add(HR.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
-        }//for
-    } //if
-    else{
-      result = null;
-    }//else
-
-    //Return the result
-    return result;
-    
-
-  } //_requestData
-}
-
-//   Future<bool> refreshTokens() async {
-//     String? refToken = await retrieveSavedToken(true);
-//     try {
-//       Response response = await _dio.post(
-//           '${ServerStrings.authServerUrl}refresh/',
-//           data: {'refresh': refToken},
-//           options: Options(
-//               contentType: 'application/json',
-//               followRedirects: false,
-//               validateStatus: (status) => true,
-//               headers: {"Accept": "application/json"}));
-
-//       if (ImpactService.checkToken(response.data['access']) &&
-//           ImpactService.checkToken(response.data['refresh'])) {
-//         prefs.impactRefreshToken = response.data['refresh'];
-//         prefs.impactAccessToken = response.data['access'];
-//         return true;
-//       } else {
-//         return false;
-//       }
-//     } catch (e) {
-//       print(e);
-//       return false;
-//     }
-//   }
-
-//   Future<void> updateBearer() async {
-//     if (!await checkSavedToken()) {
+//     //If access token is expired, refresh it
+//     if(JwtDecoder.isExpired(access!)){
 //       await refreshTokens();
-//     }
-//     String? token = await prefs.impactAccessToken;
-//     if (token != null) {
-//       _dio.options.headers = {'Authorization': 'Bearer $token'};
-//     }
-//   }
+//       access = sp.getString('access');
+//     }//if
 
-//   Future<void> getPatient() async {
-//     await updateBearer();
-//     Response r = await _dio.get('study/v1/patients/active');
-//     prefs.impactUsername = r.data['data'][0]['username'];
-//     return r.data['data'][0]['username'];
-//   }
+//     //Create the (representative) request
+//     final day = DateTime.now();
+//     final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$day/';
+//     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
+  
+//     //Get the response
+//     print('Calling: $url');
+//     final response = await http.get(Uri.parse(url), headers: headers);
+    
+//     //if OK parse the response, otherwise return null
+//     if (response.statusCode == 200) {
+//       final decodedResponse = jsonDecode(response.body);
+//       result = [];      
+//         for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
+//           result.add(HR.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
+//         }//for
+//     } //if
+//     else{
+//       result = null;
+//     }//else
 
-//   Future<List<HR>> getDataFromDay(DateTime startTime) async {
-//     await updateBearer();
-//     Response r = await _dio.get(
-//         'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
-//     List<dynamic> data = r.data['data'];
-//     List<HR> hr = [];
-//     for (var daydata in data) {
-//       String day = daydata['date'];
-//       for (var dataday in daydata['data']) {
-//         String hour = dataday['time'];
-//         String datetime = '${day}T$hour';
-//         DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));
-//         HR hrnew = HR(timestamp: timestamp, value: dataday['value']);
-//         if (!hr.any((e) => e.timestamp.isAtSameMomentAs(hrnew.timestamp))) {
-//           hr.add(hrnew);
-//         }
-//       }
-//     }
-//     var hrlist = hr.toList()
-//       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-//     return hrlist;
-//   }
+//     //Return the result
+//     return result;
+    
 
-//   DateTime _truncateSeconds(DateTime input) {
-//     return DateTime(
-//         input.year, input.month, input.day, input.hour, input.minute);
-//   }
-
-
+//   } //_requestData
 // }
 
 

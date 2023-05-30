@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:hypnos/screens/calendar.dart';
-//import 'package:hypnos/screens/tips.dart';
-//import 'package:hypnos/widgets/score.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hypnos/databases/db.dart';
+import 'package:hypnos/provider/provider.dart';
+import 'package:hypnos/services/impact.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -24,6 +24,7 @@ class _HomeState extends State<HomePage> {
   int eff = 85;
 
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -33,8 +34,9 @@ class _HomeState extends State<HomePage> {
     var imagePath = _getImagePath(int.parse(hour));
     var commentPath = _comment(int.parse(hour));
 
-
     return Scaffold(
+
+        
 
       // --- COLORE_SFONDO ---
       backgroundColor: const Color(0xFFE4DFD4),  

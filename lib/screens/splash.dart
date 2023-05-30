@@ -21,46 +21,45 @@ class Splash extends StatelessWidget {
         .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   } //_toLoginPage
 
-  // void _toHomePage(BuildContext context) {
-  //   Navigator.of(context)
-  //       .pushReplacement(MaterialPageRoute(builder: ((context) => HomePage())));
-  // } //_toHomePage
+  void _toHomePage(BuildContext context) {
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: ((context) => HomePage())));
+  } //_toHomePage
 
-  // void _toImpactPage(BuildContext context) {
-  //   Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(builder: ((context) => ImpactOnboardingPage())));
-  // }
+  void _toImpactPage(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: ((context) => ImpactOnboardingPage())));
+  }
 
-  //  void _checkAuth(BuildContext context) async {
-  //   var prefs = Provider.of<Preferences>(context, listen: false);
-  //   String? username = prefs.username;
-  //   String? password = prefs.password;
+   void _checkAuth(BuildContext context) async {
+    var prefs = Provider.of<Preferences>(context, listen: false);
+    String? username = prefs.username;
+    String? password = prefs.password;
 
-  //   // no user logged in the app
-  //   if (username == null || password == null) {
-  //     Future.delayed(const Duration(seconds: 1), () => _toLoginPage(context));
-  //   } else {
-  //     ImpactService service =
-  //         Provider.of<ImpactService>(context, listen: false);
-  //     bool responseAccessToken =  service.checkSavedToken();
-  //     bool refreshAccessToken = service.checkSavedToken(refresh: true);
+    // no user logged in the app
+    if (username == null || password == null) {
+      Future.delayed(const Duration(seconds: 1), () => _toLoginPage(context));
+    } else {
+      ImpactService service =
+          Provider.of<ImpactService>(context, listen: false);
+      bool responseAccessToken =  service.checkSavedToken();
+      bool refreshAccessToken = service.checkSavedToken(refresh: true);
 
-  //     // if we have a valid token for impact, proceed
-  //     if (responseAccessToken || refreshAccessToken) {
-  //       // check if we have saved an api key for purpleair
-  //       Future.delayed(
-  //             const Duration(seconds: 1), () => _toHomePage(context));
-  //     } else {
-  //       Future.delayed(
-  //           const Duration(seconds: 1), () => _toImpactPage(context));
-  //     }
-  //   }
-  // }
+      // if we have a valid token for impact, proceed
+      if (responseAccessToken || refreshAccessToken) {
+        
+        Future.delayed(
+              const Duration(seconds: 1), () => _toHomePage(context));
+      } else {
+        Future.delayed(
+            const Duration(seconds: 1), () => _toImpactPage(context));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 1), () => _checkAuth(context));
-    Future.delayed(const Duration(seconds: 3), () => _toLoginPage(context));
+    Future.delayed(const Duration(seconds: 1), () => _checkAuth(context));
     return Material(
       child: Container(
         color: const Color.fromARGB(255, 166, 160, 195),

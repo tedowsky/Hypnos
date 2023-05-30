@@ -1,5 +1,9 @@
 class Impact{
 
+  static const issClaim = 'backend-impact';
+  static const researcherRoleIdentifier = 'researcher';
+  static const authServerUrl = 'gate/v1/';
+  
   static String baseUrl = 'https://impact.dei.unipd.it/bwthw/';
   static String pingEndpoint = 'gate/v1/ping/';
   static String tokenEndpoint = 'gate/v1/token/';

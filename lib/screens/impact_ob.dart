@@ -1,134 +1,231 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/components/my_textfield.dart';
+import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/info.dart';
 import 'package:hypnos/utils/server_impact.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hypnos/services/Impact.dart';
 
-class ImpactOnboardingPage extends StatefulWidget {
-  const ImpactOnboardingPage({Key? key}) : super(key: key);
 
-  static const routename = 'ImpactOnboardingPage';
-  // text editing controllers
+
+class ImpactOnboardingPage extends StatefulWidget {
+  ImpactOnboardingPage({Key? key}) : super(key: key);
+  
+    static const routename = 'ImpactOnboardingPage';
 
   @override
   State<ImpactOnboardingPage> createState() => _ImpactOnboardingState();
 }
 
 class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
+  static bool _passwordVisible = false;
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  final usernameTextbox = MyTextField(
-    hintText: 'Username',
-    obscureText: false,
-  );
-  final codiceTextbox = MyTextField(
-    hintText: 'Password',
-    obscureText: true,
-  );
-  void _toInfo(BuildContext context) {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
-  } //_toHomePage
-
-  @override
-  void initState() {
-    super.initState();
-  } //initState
-  
-  void login() async{
-    // Check if the credentials are correct
-    if (usernameTextbox.controller.text == Impact.username && codiceTextbox.controller.text == Impact.password) {
-      final sp = await SharedPreferences.getInstance();
-      sp.setString('username', usernameTextbox.controller.text);
-      sp.setString('codice', codiceTextbox.controller.text);
-      _toInfo(context);
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Authentication Error'),
-            content: const Text('Invalid username or password.'),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+  void _showPassword() {
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
   }
+
+  Future<bool> _loginImpact(
+      String name, String password, BuildContext context) async {
+    ImpactService service = Provider.of<ImpactService>(context, listen: false);
+    bool logged = await service.getTokens(name, password);
+    return logged;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 141, 131, 146),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 25),
-                // SizedBox(
-                //     height: 200,
-                //     width: 200,
-                //     child: Image.asset('lib/images/impact_logo.png')),
-                const Text(
-                  'Requested authorization',
+      backgroundColor: const Color(0xFFE4DFD4),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Image.asset('assets/impact_logo.png'),
+              const Text('Please authorize to use our app',
                   style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text('Username',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              TextFormField(
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Username is required';
+                  }
+                  return null;
+                },
+                controller: userController,
+                cursorColor: const Color(0xFF83AA99),
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF89453C),
+                    ),
                   ),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    color: Color(0xFF89453C),
+                  ),
+                  hintText: 'Username',
+                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
                 ),
-                const SizedBox(height: 25),
-                usernameTextbox,
-                const SizedBox(height: 10),
-                codiceTextbox,
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () async {
-                    ImpactService service = Provider.of<ImpactService>(context, listen: false);
-                    final resultAuto = await service.authorize();
-                    final messageAuto = resultAuto == 200 
-                    ? 'Authorization successful' 
-                    : 'Authorization failed';
-                    ScaffoldMessenger.of(context)
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text('Password',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              TextFormField(
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+                  return null;
+                },
+                controller: passwordController,
+                cursorColor: const Color(0xFF83AA99),
+                obscureText: !_passwordVisible,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF89453C),
+                    ),
+                  ),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  prefixIcon: const Icon(
+                    Icons.lock,
+                    color: Color(0xFF89453C),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      _showPassword();
+                    },
+                  ),
+                  hintText: 'Password',
+                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      bool? validation = await _loginImpact(userController.text,
+                          passwordController.text, context);
+                      if (!validation) {
+                        // if not correct show message
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(8),
+                          content: Text('Wrong Credentials'),
+                          duration: Duration(seconds: 2),
+                        ));
+                      } else {
+                        await Provider.of<ImpactService>(context, listen: false)
+                            .getPatient();
+
+                            ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
-                      ..showSnackBar(SnackBar(content: Text(messageAuto)));   
-                    login();
-                  },
-                  style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 141, 131, 146)),),
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    margin: const EdgeInsets.symmetric(horizontal: 70),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Authorize",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
+                      ..showSnackBar(SnackBar(content: Text('Authorization successful')));
+
+                         Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () => Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const InfoPage())));
+                      }
+                    },
+                    style: ButtonStyle(
+                        //maximumSize: const MaterialStatePropertyAll(Size(50, 20)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        elevation: MaterialStateProperty.all(0),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            const EdgeInsets.symmetric(
+                                horizontal: 80, vertical: 12)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFF89453C))),
+                    child: const Text('Authorize'),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
+
+  // void login() async{
+  //   // Check if the credentials are correct
+  //   if (usernameTextbox.controller.text == Impact.username && codiceTextbox.controller.text == Impact.password) {
+  //     final sp = await SharedPreferences.getInstance();
+  //     sp.setString('username', usernameTextbox.controller.text);
+  //     sp.setString('codice', codiceTextbox.controller.text);
+  //     _toInfo(context);
+  //   } else {
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: const Text('Authentication Error'),
+  //           content: const Text('Invalid username or password.'),
+  //           actions: [
+  //             TextButton(
+  //               child: const Text('OK'),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
+ 

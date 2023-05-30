@@ -63,5 +63,9 @@ class Preferences {
 
   String? get password => _getFromDisk('codice');
   set password(String? newpassword) => _saveToDisk("codice", newpassword);
+
+  String? get impactUsername => _getFromDisk('impactUsername');
+  set impactUsername(String? newImpactUsername) =>
+      _saveToDisk("impactUsername", newImpactUsername);
   
 }
