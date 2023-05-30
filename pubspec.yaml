@@ -46,7 +46,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   dio: ^5.0.0
   http: 
-  provider:
+  provider: ^6.0.5
   fl_chart:
 
   

@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hypnos/components/my_textfield.dart';
-import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/info.dart';
-import 'package:hypnos/utils/server_impact.dart';
-import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:hypnos/services/Impact.dart';
+import 'package:hypnos/services/impact.dart';
 
 
 
@@ -24,7 +19,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  
   void _showPassword() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -171,9 +166,9 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
 
                          Future.delayed(
                               const Duration(milliseconds: 300),
-                              () => Navigator.of(context).pushReplacement(
+                              () => Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => const InfoPage())));
+                                      builder: (_) => const InfoPage())));
                       }
                     },
                     style: ButtonStyle(
