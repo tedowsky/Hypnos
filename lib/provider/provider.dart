@@ -1,11 +1,8 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/services/impact.dart';
-import 'package:hypnos/utils/shared_preferences.dart';
-import 'package:hypnos/utils/server_impact.dart';
 
 
 
@@ -23,7 +20,7 @@ class HomeProvider extends ChangeNotifier {
   // selected day of data to be shown
   DateTime showDate = DateTime.now().subtract(const Duration(days: 2));
 
-  DateTime lastFetch = DateTime.now().subtract(Duration(days: 3));
+  DateTime lastFetch = DateTime.now().subtract(const Duration(days: 3));
   final ImpactService impactService;
 
   bool doneInit = false;

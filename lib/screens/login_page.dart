@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/components/my_button.dart';
 import 'package:hypnos/components/my_textfield.dart';
-import 'package:hypnos/components/square_tile.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hypnos/screens/info.dart';
@@ -51,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  ImpactOnboardingPage()),
+        MaterialPageRoute(builder: (context) =>  const ImpactOnboardingPage()),
       );
     } else {
       showDialog(

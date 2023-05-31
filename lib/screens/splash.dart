@@ -3,9 +3,8 @@ import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:hypnos/screens/login_page.dart';
 import 'package:provider/provider.dart';
-
-import '../services/impact.dart';
-import '../utils/shared_preferences.dart';
+import 'package:hypnos/services/impact.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 
 
 
@@ -23,12 +22,12 @@ class Splash extends StatelessWidget {
 
   void _toHomePage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: ((context) => HomePage())));
+        .pushReplacement(MaterialPageRoute(builder: ((context) => const HomePage())));
   } //_toHomePage
 
   void _toImpactPage(BuildContext context) {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => ImpactOnboardingPage())));
+        MaterialPageRoute(builder: ((context) => const ImpactOnboardingPage())));
   }
 
    void _checkAuth(BuildContext context) async {
@@ -59,13 +58,13 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 1), () => _checkAuth(context));
+    Future.delayed(const Duration(seconds: 3), () => _checkAuth(context));
     return Material(
       child: Container(
         color: const Color.fromARGB(255, 166, 160, 195),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
+          children: <Widget>[
             Text(
               'HYPNOS',
               style: TextStyle(

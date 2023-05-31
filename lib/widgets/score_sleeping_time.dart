@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
-import 'package:vector_math/vector_math.dart';
 
 
 class ScoreSleepingTime extends CustomPainter {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hypnos/screens/splash.dart';
 import 'package:hypnos/services/impact.dart';
@@ -13,7 +12,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override

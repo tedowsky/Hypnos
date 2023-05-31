@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hypnos/databases/db.dart';
-import 'package:hypnos/provider/provider.dart';
-import 'package:hypnos/services/impact.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:provider/provider.dart';
 
 
 

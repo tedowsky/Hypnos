@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:hypnos/utils/server_impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ImpactService {
   ImpactService(this.prefs) {
@@ -16,7 +12,7 @@ class ImpactService {
 
   Preferences prefs;
 
-  final Dio _dio = Dio(BaseOptions(baseUrl: Impact.baseUrl));
+  final Dio _dio = Dio(BaseOptions(baseUrl: ServerImpact.backendBaseUrl));
 
 
   String? retrieveSavedToken(bool refresh) {
@@ -53,7 +49,7 @@ class ImpactService {
     if (decodedToken['iss'] == null) {
       return false;
     } else {
-      if (decodedToken['iss'] != Impact.issClaim) {
+      if (decodedToken['iss'] != ServerImpact.issClaim) {
         return false;
       } //else
     } //if-else
@@ -62,7 +58,7 @@ class ImpactService {
     if (decodedToken['role'] == null) {
       return false;
     } else {
-      if (decodedToken['role'] != Impact.researcherRoleIdentifier) {
+      if (decodedToken['role'] != ServerImpact.researcherRoleIdentifier) {
         return false;
       } //else
     } //if-else
@@ -74,7 +70,7 @@ class ImpactService {
   Future<bool> getTokens(String username, String password) async {
     try {
       Response response = await _dio.post(
-          '${Impact.authServerUrl}token/',
+          '${ServerImpact.authServerUrl}token/',
           data: {'username': username, 'password': password},
           options: Options(
               contentType: 'application/json',
@@ -97,10 +93,10 @@ class ImpactService {
   }
 
   Future<bool> refreshTokens() async {
-    String? refToken = await retrieveSavedToken(true);
+    String? refToken = retrieveSavedToken(true);
     try {
       Response response = await _dio.post(
-          '${Impact.authServerUrl}refresh/',
+          '${ServerImpact.authServerUrl}refresh/',
           data: {'refresh': refToken},
           options: Options(
               contentType: 'application/json',
@@ -123,10 +119,10 @@ class ImpactService {
   }
 
   Future<void> updateBearer() async {
-    if (!await checkSavedToken()) {
+    if (!checkSavedToken()) {
       await refreshTokens();
     }
-    String? token = await prefs.impactAccessToken;
+    String? token = prefs.impactAccessToken;
     if (token != null) {
       _dio.options.headers = {'Authorization': 'Bearer $token'};
     }
@@ -176,35 +172,35 @@ class ImpactService {
 
 
 
-Future<int> authorize() async {
-  final sp = await SharedPreferences.getInstance();
-  final String? username = sp.getString('username');
-  final String? codice = sp.getString('codice');
+// Future<int> authorize() async {
+//   final sp = await SharedPreferences.getInstance();
+//   final String? username = sp.getString('username');
+//   final String? codice = sp.getString('codice');
 
-  if (username == Impact.username || codice == Impact.password){
-  //Create the request
-  final url = Impact.baseUrl + Impact.tokenEndpoint;
-  final body = {'username': Impact.username, 'password': Impact.password};
+//   if (username == Impact.username || codice == Impact.password){
+//   //Create the request
+//   final url = Impact.baseUrl + Impact.tokenEndpoint;
+//   final body = {'username': Impact.username, 'password': Impact.password};
 
-  //Get the response
-  print('Calling: $url');
-  final response = await http.post(Uri.parse(url), body: body);
+//   //Get the response
+//   print('Calling: $url');
+//   final response = await http.post(Uri.parse(url), body: body);
 
   
-  //If response is OK, decode it and store the tokens. Otherwise do nothing.
-  if (response.statusCode == 200) {
-    final decodedResponse = jsonDecode(response.body);
-    final sp = await SharedPreferences.getInstance();
-    await sp.setString('access', decodedResponse['access']);
-    await sp.setString('refresh', decodedResponse['refresh']);
-  } //if
+//   //If response is OK, decode it and store the tokens. Otherwise do nothing.
+//   if (response.statusCode == 200) {
+//     final decodedResponse = jsonDecode(response.body);
+//     final sp = await SharedPreferences.getInstance();
+//     await sp.setString('access', decodedResponse['access']);
+//     await sp.setString('refresh', decodedResponse['refresh']);
+//   } //if
 
-  //Just return the status code
-  return response.statusCode;} 
-  else{
-    return 400;
-  }
-} //_getAndStoreTokens
+//   //Just return the status code
+//   return response.statusCode;} 
+//   else{
+//     return 400;
+//   }
+// } //_getAndStoreTokens
 
 
 

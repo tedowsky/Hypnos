@@ -12,6 +12,7 @@ import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
 import '../databases/db.dart';
 
+
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
 
@@ -120,7 +121,8 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              Provider.of<HomeProvider>(context, listen: false).refresh();
+              await Provider.of<ImpactService>(context, listen: false)
+                            .getPatient();
               print('ciao');
             },
 
@@ -214,6 +216,6 @@ class _InfoPage extends State<InfoPage> {
     Navigator.pop(context);
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => ImpactOnboardingPage()));
+        MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()));
   }
 }

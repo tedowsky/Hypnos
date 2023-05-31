@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/widgets/bargraph/bar_graph.dart';
 
-import '../widgets/line_chart_widget.dart';
 
 class infosleep extends StatefulWidget {
   const infosleep({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class _infosleepState extends State<infosleep> {
         appBar: AppBar(
             centerTitle: true,
             elevation: 0,
-            backgroundColor: Color.fromARGB(255, 172, 143, 192),
+            backgroundColor: const Color.fromARGB(255, 172, 143, 192),
             iconTheme: const IconThemeData(color: Color(0xFF89453C)),
             title: const Text('Know More About Your Sleep',
                 style: TextStyle(color: Colors.black))),
@@ -40,11 +39,11 @@ class _infosleepState extends State<infosleep> {
                sleepstages: sleepstages,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             
-            SizedBox(
+            const SizedBox(
               height: 300,
               width: 800,
               // Aggiungi qui il tuo widget o contenuto desiderato

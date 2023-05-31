@@ -6,7 +6,7 @@ import 'package:hypnos/services/impact.dart';
 
 
 class ImpactOnboardingPage extends StatefulWidget {
-  ImpactOnboardingPage({Key? key}) : super(key: key);
+  const ImpactOnboardingPage({Key? key}) : super(key: key);
   
     static const routename = 'ImpactOnboardingPage';
 
@@ -157,18 +157,15 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                           duration: Duration(seconds: 2),
                         ));
                       } else {
-                        await Provider.of<ImpactService>(context, listen: false)
-                            .getPatient();
-
                             ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
-                      ..showSnackBar(SnackBar(content: Text('Authorization successful')));
+                      ..showSnackBar(const SnackBar(content: Text('Authorization successful')));
 
                          Future.delayed(
                               const Duration(milliseconds: 300),
-                              () => Navigator.of(context).push(
+                              () => Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (_) => const InfoPage())));
+                                      builder: (context) => const InfoPage())));
                       }
                     },
                     style: ButtonStyle(
