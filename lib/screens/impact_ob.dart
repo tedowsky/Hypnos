@@ -148,6 +148,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                           passwordController.text, context);
                       if (!validation) {
                         // if not correct show message
+                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           backgroundColor: Colors.red,
@@ -157,6 +158,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                           duration: Duration(seconds: 2),
                         ));
                       } else {
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
                       ..showSnackBar(const SnackBar(content: Text('Authorization successful')));

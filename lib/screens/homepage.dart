@@ -157,7 +157,7 @@ class _HomeState extends State<HomePage> {
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep())),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Infosleep())),
                 child: const Text('Details'),
               )
             ),

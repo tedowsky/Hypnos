@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hypnos/widgets/bargraph/bar_graph.dart';
 
 
-class infosleep extends StatefulWidget {
-  const infosleep({Key? key}) : super(key: key);
+class Infosleep extends StatefulWidget {
+  const Infosleep({Key? key}) : super(key: key);
 
   @override
-  State<infosleep> createState() => _infosleepState();
+  State<Infosleep> createState() => _InfosleepState();
 }
 
-class _infosleepState extends State<infosleep> {
+class _InfosleepState extends State<Infosleep> {
 
   List<double> sleepstages = [
     13,

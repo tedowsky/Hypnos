@@ -1,7 +1,7 @@
-import 'package:dio/dio.dart';
-import 'package:hypnos/databases/entities/heartrate.dart';
-import 'package:intl/intl.dart';
+import 'package:hypnos/databases/entities/entities.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
 import 'package:hypnos/utils/server_impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 
@@ -13,7 +13,6 @@ class ImpactService {
   Preferences prefs;
 
   final Dio _dio = Dio(BaseOptions(baseUrl: ServerImpact.backendBaseUrl));
-
 
   String? retrieveSavedToken(bool refresh) {
     if (refresh) {
@@ -93,7 +92,7 @@ class ImpactService {
   }
 
   Future<bool> refreshTokens() async {
-    String? refToken = retrieveSavedToken(true);
+    String? refToken = await retrieveSavedToken(true);
     try {
       Response response = await _dio.post(
           '${ServerImpact.authServerUrl}refresh/',
@@ -119,10 +118,10 @@ class ImpactService {
   }
 
   Future<void> updateBearer() async {
-    if (!checkSavedToken()) {
+    if (!await checkSavedToken()) {
       await refreshTokens();
     }
-    String? token = prefs.impactAccessToken;
+    String? token = await prefs.impactAccessToken;
     if (token != null) {
       _dio.options.headers = {'Authorization': 'Bearer $token'};
     }
@@ -138,7 +137,7 @@ class ImpactService {
   Future<List<HR>> getDataFromDay(DateTime startTime) async {
     await updateBearer();
     Response r = await _dio.get(
-        'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+        'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
     List<dynamic> data = r.data['data'];
     List<HR> hr = [];
     for (var daydata in data) {
@@ -161,101 +160,4 @@ class ImpactService {
     return DateTime(
         input.year, input.month, input.day, input.hour, input.minute);
   }
-
-
-
-
-
-
-
-
-
-
-
-// Future<int> authorize() async {
-//   final sp = await SharedPreferences.getInstance();
-//   final String? username = sp.getString('username');
-//   final String? codice = sp.getString('codice');
-
-//   if (username == Impact.username || codice == Impact.password){
-//   //Create the request
-//   final url = Impact.baseUrl + Impact.tokenEndpoint;
-//   final body = {'username': Impact.username, 'password': Impact.password};
-
-//   //Get the response
-//   print('Calling: $url');
-//   final response = await http.post(Uri.parse(url), body: body);
-
-  
-//   //If response is OK, decode it and store the tokens. Otherwise do nothing.
-//   if (response.statusCode == 200) {
-//     final decodedResponse = jsonDecode(response.body);
-//     final sp = await SharedPreferences.getInstance();
-//     await sp.setString('access', decodedResponse['access']);
-//     await sp.setString('refresh', decodedResponse['refresh']);
-//   } //if
-
-//   //Just return the status code
-//   return response.statusCode;} 
-//   else{
-//     return 400;
-//   }
-// } //_getAndStoreTokens
-
-
-
-
-
-
-
-// Future<List<HR>?> requestData() async {
-
-//   final sp = await SharedPreferences.getInstance();
-//   final String? username = sp.getString('username');
-//   final String? password= sp.getString('password');
-  
-
-//   if (username == Impact.username || password == Impact.password){
-//     //Initialize the result
-//     List<HR>? result;
-
-//     //Get the stored access token (Note that this code does not work if the tokens are null)
-//     final sp = await SharedPreferences.getInstance();
-//     var access = sp.getString('access');
-
-//     //If access token is expired, refresh it
-//     if(JwtDecoder.isExpired(access!)){
-//       await refreshTokens();
-//       access = sp.getString('access');
-//     }//if
-
-//     //Create the (representative) request
-//     final day = DateTime.now();
-//     final url = Impact.baseUrl + Impact.heartrateEndpoint + Impact.patientUsername + '/day/$day/';
-//     final headers = {HttpHeaders.authorizationHeader: 'Bearer $access'};
-  
-//     //Get the response
-//     print('Calling: $url');
-//     final response = await http.get(Uri.parse(url), headers: headers);
-    
-//     //if OK parse the response, otherwise return null
-//     if (response.statusCode == 200) {
-//       final decodedResponse = jsonDecode(response.body);
-//       result = [];      
-//         for (var i = 0; i < decodedResponse['data']['data'].length; i++) {
-//           result.add(HR.fromJson(decodedResponse['data']['date'], decodedResponse['data']['data'][i]));
-//         }//for
-//     } //if
-//     else{
-//       result = null;
-//     }//else
-
-//     //Return the result
-//     return result;
-    
-
-//   } //_requestData
-// }
-
-
 }
