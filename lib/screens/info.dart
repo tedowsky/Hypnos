@@ -11,6 +11,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
 import '../databases/db.dart';
+import 'package:hypnos/databases/entities/entities.dart';
 
 
 class InfoPage extends StatefulWidget {
@@ -29,6 +30,8 @@ class _InfoPage extends State<InfoPage> {
   }
 
   int _selIdx = 0;
+  List<HR> hr = [];
+  List<dynamic> sleep = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -123,6 +126,10 @@ class _InfoPage extends State<InfoPage> {
             onPressed: () async {
               await Provider.of<ImpactService>(context, listen: false)
                             .getPatient();
+              hr = await Provider.of<ImpactService>(context, listen: false)
+                            .getDataFromDay(DateTime.now());
+              sleep = await Provider.of<ImpactService>(context, listen: false)
+                            .getSleepData(DateTime.now());
               print('ciao');
             },
 
