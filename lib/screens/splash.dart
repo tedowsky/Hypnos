@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/screens/login_page.dart';
+import 'package:hypnos/screens/homepage.dart';
+import 'package:hypnos/screens/impact_ob.dart';
+import 'package:hypnos/screens/login_page.dart';
+import 'package:provider/provider.dart';
+import 'package:hypnos/services/impact.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 
 
 
@@ -9,21 +14,57 @@ class Splash extends StatelessWidget {
 
   const Splash({Key? key}) : super(key: key);
 
-  // Method for navigation SplashPage -> LoginPage
+  // // Method for navigation SplashPage -> LoginPage
   void _toLoginPage(BuildContext context) {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   } //_toLoginPage
 
+  void _toHomePage(BuildContext context) {
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: ((context) => const HomePage())));
+  } //_toHomePage
+
+  void _toImpactPage(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: ((context) => const ImpactOnboardingPage())));
+  }
+
+   void _checkAuth(BuildContext context) async {
+    var prefs = Provider.of<Preferences>(context, listen: false);
+    String? username = prefs.username;
+    String? password = prefs.password;
+
+    // no user logged in the app
+    if (username == null || password == null) {
+      Future.delayed(const Duration(seconds: 1), () => _toLoginPage(context));
+    } else {
+      ImpactService service =
+          Provider.of<ImpactService>(context, listen: false);
+      bool responseAccessToken =  service.checkSavedToken();
+      bool refreshAccessToken = service.checkSavedToken(refresh: true);
+
+      // if we have a valid token for impact, proceed
+      if (responseAccessToken || refreshAccessToken) {
+        
+        Future.delayed(
+              const Duration(seconds: 1), () => _toHomePage(context));
+      } else {
+        Future.delayed(
+            const Duration(seconds: 1), () => _toImpactPage(context));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3), () => _toLoginPage(context));
+    Future.delayed(const Duration(seconds: 3), () => _checkAuth(context));
     return Material(
       child: Container(
         color: const Color.fromARGB(255, 166, 160, 195),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
+          children: <Widget>[
             Text(
               'HYPNOS',
               style: TextStyle(
