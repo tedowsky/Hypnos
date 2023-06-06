@@ -137,12 +137,15 @@ class ImpactService {
   Future<List<HR>> getDataFromDay(DateTime startTime) async {
     await updateBearer();
     Response r = await _dio.get(
-        'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
-    List<dynamic> data = r.data['data'];
+      '/data/v1/heart_rate/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+      // 'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+    Map<String, dynamic> responseData = r.data['data'];
+    List<dynamic> dataList = responseData['data'];
+
     List<HR> hr = [];
-    for (var daydata in data) {
-      String day = daydata['date'];
-      for (var dataday in daydata['data']) {
+    for (var daydata in dataList) {
+      String day = responseData['date'];
+      for (var dataday in responseData['data']) {
         String hour = dataday['time'];
         String datetime = '${day}T$hour';
         DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));
@@ -153,7 +156,7 @@ class ImpactService {
       }
     }
     var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
-    return hrlist;
+     return hrlist;
   }
 
   DateTime _truncateSeconds(DateTime input) {
