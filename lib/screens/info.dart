@@ -31,7 +31,8 @@ class _InfoPage extends State<InfoPage> {
 
   int _selIdx = 0;
   List<HR> hr = [];
-  List<dynamic> sleep = [];
+  List<dynamic> basesleep = [];
+  Map<String, dynamic> summarylevelsleep = {};
 
   void _onItemTapped(int index) {
     setState(() {
@@ -128,8 +129,10 @@ class _InfoPage extends State<InfoPage> {
                             .getPatient();
               hr = await Provider.of<ImpactService>(context, listen: false)
                             .getDataFromDay(DateTime.now());
-              sleep = await Provider.of<ImpactService>(context, listen: false)
-                            .getSleepData(DateTime.now());
+              basesleep = await Provider.of<ImpactService>(context, listen: false)
+                            .getbaseSleepData(DateTime.now().subtract(const Duration(days: 1)));
+              summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
+                            .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
               print('ciao');
             },
 

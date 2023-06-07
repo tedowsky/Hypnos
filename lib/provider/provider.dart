@@ -12,6 +12,7 @@ class HomeProvider extends ChangeNotifier {
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
+  late List<Sleep> sleep;
 
 
   // data fetched from external services or db
