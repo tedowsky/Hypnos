@@ -20,10 +20,6 @@ class _ProfileState extends State<ProfilePage>{
   final TextEditingController weightController = TextEditingController();
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +36,7 @@ class _ProfileState extends State<ProfilePage>{
             const SizedBox(height: 45,),
             Center(
               child: CircleAvatar(
-                radius: 70,child: Image.asset('lib/images/genderGeneral.png'))),
+                radius: 70,child: Image.asset('assets/info/genderGeneral.png'))),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(

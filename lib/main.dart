@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
               Provider.of<Preferences>(context, listen: false),
             ),
           ),
+/*           Provider(
+            create: (context) => const InfoPage(),
+          ), */
         ],
         child:  MaterialApp(
           title: 'Hypnos',

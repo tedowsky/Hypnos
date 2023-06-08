@@ -1,4 +1,6 @@
 
+//import 'dart:io';
+import 'package:hypnos/screens/info.dart';
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
@@ -9,10 +11,15 @@ import 'package:hypnos/services/impact.dart';
 // this is the change notifier. it will manage all the logic of the home page: fetching the correct data from the database
 // and on startup fetching the data from the online services
 class HomeProvider extends ChangeNotifier {
+  // double eff = 0;
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
-
+  
+  // void aggiornaValori(double neweff) {
+  //   eff = neweff;
+  //   notifyListeners();
+  // }
 
   // data fetched from external services or db
   late List<HR> _heartRates;
@@ -45,7 +52,7 @@ class HomeProvider extends ChangeNotifier {
     return data.last.dateTime;
   }
 
-  // method to fetch all data and calculate the exposure
+  // method to fetch all data and calculate 
   Future<void> _fetchAndCalculate() async {
     lastFetch = await _getLastFetch() ??
         DateTime.now().subtract(const Duration(days: 3));
@@ -70,8 +77,8 @@ class HomeProvider extends ChangeNotifier {
     // check if the day we want to show has data
     var firstDay = await db.sleepDao.findFirstDayInDb();
     var lastDay = await db.sleepDao.findLastDayInDb();
-    if (showDate.isAfter(lastDay!.dateTime) ||
-        showDate.isBefore(firstDay!.dateTime)) return;
+    if (lastDay?.dateTime != null && showDate.isAfter(lastDay!.dateTime) ||
+        firstDay?.dateTime != null && showDate.isBefore(firstDay!.dateTime)) return;
         
     this.showDate = showDate;
     heartRates = await db.heartRatesDao.findHeartRatesbyDate(

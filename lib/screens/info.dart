@@ -27,9 +27,21 @@ class _InfoPage extends State<InfoPage> {
   void initState() {
     super.initState();
   }
-
+ 
   int _selIdx = 0;
   List<HR> hr = [] ;
+  List<dynamic> sleep = [];
+
+ /*  void passaValore () {
+  // Codice per ottenere i dati dal server
+    late  double eff = sleep[5]/sleep[8]*100;
+    print('ciao');
+
+  // Aggiorna i dati nella pagina del provider
+    HomeProvider provider = Provider.of<HomeProvider>(context, listen: false);
+    provider.aggiornaValori(eff);
+
+  } */
 
   void _onItemTapped(int index) {
     setState(() {
@@ -118,7 +130,7 @@ class _InfoPage extends State<InfoPage> {
         ),
         title: const Text('Hypnos',
             style:
-                TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+                 TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             onPressed: () async {
@@ -126,38 +138,17 @@ class _InfoPage extends State<InfoPage> {
                             .getPatient();
               hr = await Provider.of<ImpactService>(context, listen: false)
                             .getDataFromDay(DateTime.now().subtract(const Duration(days: 1)));
+
+              sleep = await Provider.of<ImpactService>(context, listen: false)
+                            .getSleepData(DateTime.now());
+              
+              // print((sleep[5]/sleep[8]*100).toString());
+            
+              //passaValore();
               // ignore: avoid_print
               print('ciao');
             },
-
-            //   final sp = await SharedPreferences.getInstance();
-            //   final String? token = sp.getString('access');
-            //   if (token == null)
-            //   {
-            //     final message = 'DataRetrieval failed: re-do Login';
-            //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
-            //   ScaffoldMessenger.of(context)
-            //   ..removeCurrentSnackBar()
-            //   ..showSnackBar(SnackBar(content: Text(message)));
-            //   }
-            //   else {
-            //     List<HR>? result = await service.requestData();
-            //   final message = 'DataRetrieval successful';
-            //   ScaffoldMessenger.of(context)
-            //   ..removeCurrentSnackBar()
-            //   ..showSnackBar(SnackBar(content: Text(message)));
-            //   print('Ciao');
-            //   }
-
-            //   //  final dbRepository = Provider.of<DatabaseRepository>(context, listen: false);
-            //   //   final List<HeartRate>? heartRateList = result!.cast<HeartRate>(); // La tua lista di istanze di HeartRate
-
-            //   // for (final heartRate in heartRateList!) {
-            //   // await dbRepository.insertHR(heartRate);
-            //   // }
-
-            // },
-            icon: const Icon(Icons.token),
+            icon: const Icon(Icons.refresh),
           ),
           IconButton(
             onPressed: () {
@@ -170,7 +161,7 @@ class _InfoPage extends State<InfoPage> {
           ),
         ],
       ),
-
+      
       // --- COLORE_SFONDO ---
       backgroundColor: const Color(0xFFE4DFD4),
 
@@ -211,7 +202,7 @@ class _InfoPage extends State<InfoPage> {
     ),
     );
   }
-
+  
   // ---  _toLoginPage  ---
   void _toLoginPage(BuildContext context) async {
     final sp = await SharedPreferences.getInstance();
@@ -222,4 +213,5 @@ class _InfoPage extends State<InfoPage> {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()));
   }
+  
 }

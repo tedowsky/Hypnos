@@ -4,6 +4,7 @@ import 'package:hypnos/components/my_textfield.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hypnos/screens/info.dart';
+import 'package:hypnos/components/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 50),
               // logo
-              const Icon(Icons.lock,size: 100,),
+              const Icon(Icons.lock,size: 90,),
               const SizedBox(height: 15),
               // welcome back, you've been missed!
               const Text(
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 40),
 
               // username textfield
               emailTextbox,
@@ -156,22 +157,16 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
 
               // google + apple sign in buttons
-              const Row(
+             const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // google button
-                  // SizedBox(
-                  //   width: 20,
-                  //   height: 20,
-                  //   child: SquareTile(imagePath: 'lib/images/google.png')),
+                  SquareTile(imagePath: 'assets/login/google.png'),
 
                   SizedBox(width: 20),
 
                   // apple button
-                  // SizedBox(
-                  //   width: 20,
-                  //   height: 20,
-                  //   child: SquareTile(imagePath: 'lib/images/apple.png'))
+                  SquareTile(imagePath: 'assets/login/apple.png')
                 ],
               ),
               const SizedBox(height: 20),

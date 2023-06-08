@@ -86,6 +86,7 @@ class ImpactService {
         return false;
       }
     } catch (e) {
+      // ignore: avoid_print
       print(e);
       return false;
     }
@@ -143,21 +144,36 @@ class ImpactService {
     List<dynamic> dataList = responseData['data'];
 
     List<HR> hr = [];
-    for (var daydata in dataList) {
-      String day = responseData['date'];
-      for (var dataday in responseData['data']) {
-        String hour = dataday['time'];
-        String datetime = '${day}T$hour';
-        DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));
-        HR hrnew = HR(null, dataday['value'], timestamp);
-        if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
-          hr.add(hrnew);
-        }
+    String? day = responseData['date'];
+    for (var dataday in dataList) {
+      String? hour = dataday['time'];
+      String? datetime = '${day}T$hour';
+      DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));        HR hrnew = HR(null, dataday['value'], timestamp);
+      if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
+        hr.add(hrnew);
       }
     }
+    
     var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
      return hrlist;
   }
+  
+  Future<List<dynamic>> getSleepData(DateTime startTime) async {
+    await updateBearer();
+    Response rSleep = await _dio.get(
+      '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+    print('ciao');
+
+    Map<String, dynamic> respsleep = rSleep.data['data'];
+    List<dynamic> quasisleep = respsleep['data'];
+    Map<String, dynamic> Listsleep = quasisleep[0];
+    List<dynamic> firstNineElements = Listsleep.values.take(10).toList();
+    //List<Sleep> sleepList = firstNineElements.map((element) => element as Sleep).toList();
+    
+
+    print('ciao');
+    return firstNineElements;
+    }
 
   DateTime _truncateSeconds(DateTime input) {
     return DateTime(

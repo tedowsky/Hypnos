@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+//import 'package:hypnos/provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
+//import 'package:provider/provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,20 +18,19 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends State<HomePage> {
 
-  int eff = 85;
-
-
-
   @override
   Widget build(BuildContext context) {
-
-    var now = DateTime.now();
-    var hour = DateFormat('H').format(now);
+    /* return Consumer<HomeProvider>(
+      builder: (context, provider, _) { */
+       // double eff = provider.eff;
+        int eff = 80;
+        var now = DateTime.now();
+        var hour = DateFormat('H').format(now);
     // ignore: unused_local_variable
-    var imagePath = _getImagePath(int.parse(hour));
-    var commentPath = _comment(int.parse(hour));
+        var imagePath = _getImagePath(int.parse(hour));
+        var commentPath = _comment(int.parse(hour));
 
-    return Scaffold(
+        return Scaffold(
 
         
 
@@ -101,8 +101,8 @@ class _HomeState extends State<HomePage> {
                                 animationDuration: 1000,
                                 lineHeight: 20.0,
                                 progressColor: Colors.amber,
-                                percent: 0.85, 
-                                center: const Text("80.0%"),
+                                percent: 0.80, 
+                                center: const Text('80%'),
                                 width: 210,
                                 barRadius: const Radius.elliptical(10, 10) ,
                               ),
@@ -164,6 +164,8 @@ class _HomeState extends State<HomePage> {
           ],
         ),
       );
+     // }
+   // );
     }
   
   
@@ -186,7 +188,7 @@ class _HomeState extends State<HomePage> {
     }
   }
     String _eff (int eff) {
-    if (eff/100 >= 0.85) {
+    if (eff >= 0.85) {
       return '- Good -';
     }
     else {
