@@ -20,38 +20,37 @@ class _HomeState extends State<HomePage> {
 
   List sleep = [];
   bool isSleepAvailable = false;
- 
+  late String duration;  // questo dato è in millisecondi, attenzione!
+
   @override
   Widget build(BuildContext context) {
     var dataProvider = Provider.of<HomeProvider>(context);
-     if (!isSleepAvailable) {
-    sleep = dataProvider.dataList;
-    if (sleep.isNotEmpty) {
-      isSleepAvailable = true;
+    if (!isSleepAvailable) {
+      sleep = dataProvider.dataList;
+      duration = dataProvider.millisecondsToTime(dataProvider.dataList[3]);
+      if (sleep.isNotEmpty) {
+        isSleepAvailable = true;
+      }
     }
-  }
-      double eff = sleep.isNotEmpty?  sleep[5]/sleep[8]*100 : 0;
+    double eff = sleep.isNotEmpty?  sleep[5]/sleep[8]*100 : 0;
 
       
-        var now = DateTime.now();
-        var hour = DateFormat('H').format(now);
+    var now = DateTime.now();
+    var hour = DateFormat('H').format(now);
     // ignore: unused_local_variable
-        var imagePath = _getImagePath(int.parse(hour));
-        var commentPath = _comment(int.parse(hour)); 
+    var imagePath = _getImagePath(int.parse(hour));
+    var commentPath = _comment(int.parse(hour)); 
         
     return Scaffold (
-
-   
-
       // --- COLORE_SFONDO ---
       backgroundColor: const Color(0xFFE4DFD4),  
 
       // --- BODY ---
       body: ListView(
+        children: [
+          const Row(
             children: [
-              const Row(
-                children: [
-                  Icon(MdiIcons.mapMarker),
+              Icon(MdiIcons.mapMarker),
                   Text('Padua, Italy', selectionColor: Color.fromARGB(255, 160, 158, 158),),
                 ],
               ),
@@ -59,10 +58,11 @@ class _HomeState extends State<HomePage> {
                 height: 85,
                 child: Column(
                   children: [
-                  // SizedBox(
-                  //   height: 20,
-                  //   width: 20,
-                  //   child: Image.asset(imagePath)),
+                  SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: Image.asset(imagePath)
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(commentPath,),
@@ -79,7 +79,7 @@ class _HomeState extends State<HomePage> {
                 child:  Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SizedBox(
-                    height: 420,
+                    height: 400,
                     width: 190,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -102,7 +102,7 @@ class _HomeState extends State<HomePage> {
                         Align (
                         alignment: Alignment.center,
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.all(40.0),
+                          padding: const EdgeInsetsDirectional.all(34.0),
                           child: Column(
                             children: [
                               LinearPercentIndicator(
@@ -111,7 +111,7 @@ class _HomeState extends State<HomePage> {
                                 lineHeight: 20.0,
                                 progressColor: Colors.amber,
                                 percent: eff/100 , 
-                                center: Text('$eff'),
+                                center: Text('${double.parse(eff.toStringAsFixed(2))}%'),
                                 width: 210,
                                 barRadius: const Radius.elliptical(10, 10) ,
                               ),
@@ -163,6 +163,32 @@ class _HomeState extends State<HomePage> {
                 ),
               ),
             ),
+            Card(
+                borderOnForeground: true,
+                margin: const EdgeInsets.all(30.0),
+                elevation: 50,
+                shadowColor: Colors.grey[850] ,
+                color: const Color.fromARGB(255, 144, 111, 160),
+                child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircularPercentIndicator(
+                        radius: 60.0,
+                        lineWidth: 10.0,
+                        percent: 0.7,
+                        animation: true,
+                        animationDuration: 1200,
+                        center: Text(duration, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15.0),),
+                        progressColor: Colors.green,
+                      ),
+                    ],
+                  ),
+                ),
+            ),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
@@ -179,10 +205,10 @@ class _HomeState extends State<HomePage> {
   // --- SWITCH_IM<AGES ---
   String _getImagePath(int hour) {
     if (hour >= 6 && hour < 21) {
-      return 'lib/images/morning.png';
+      return 'assets/info/morning.png';
     }  
     else {
-      return 'lib/images/night.png';
+      return 'assets/info/night.png';
     }
   }
   // --- SWITCH_SCRIPT ---

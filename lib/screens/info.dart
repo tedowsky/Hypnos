@@ -56,22 +56,10 @@ class _InfoPageState extends State<InfoPage> {
     }
   }
 
-  // Widget build(BuildContext context) {
-  //   return Provider<Example>(
-  //     create: (_) => Example(),
-  //     // we use `builder` to obtain a new `BuildContext` that has access to the provider
-  //     builder: (context, child) {
-  //       // No longer throws
-  //       return Text(context.watch<Example>().toString());
-  //     }
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
 
     var dataProvider = Provider.of<HomeProvider>(context, listen: false);
-    
 
     return  Scaffold(
       // --- DRAWER ---
@@ -135,8 +123,10 @@ class _InfoPageState extends State<InfoPage> {
           IconButton(
             onPressed: () async {
               await Provider.of<ImpactService>(context, listen: false).getPatient();
+              // ignore: use_build_context_synchronously
               List newSleep = await Provider.of<ImpactService>(context, listen: false).getSleepData(DateTime.now());
               dataProvider.updateDataList(newSleep);
+              // hr = await Provider.of<ImpactService>(context, listen: false).getDataFromDay(DateTime.now().subtract(const Duration(days: 1)));
               // ignore: avoid_print
               print('ciao');
             },

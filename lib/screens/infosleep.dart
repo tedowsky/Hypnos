@@ -25,7 +25,7 @@ class _infosleepState extends State<infosleep> {
         appBar: AppBar(
             centerTitle: true,
             elevation: 0,
-            backgroundColor: Color.fromARGB(255, 172, 143, 192),
+            backgroundColor: const Color.fromARGB(255, 172, 143, 192),
             iconTheme: const IconThemeData(color: Color(0xFF89453C)),
             title: const Text('Know More About Your Sleep',
                 style: TextStyle(color: Colors.black))),
@@ -40,7 +40,7 @@ class _infosleepState extends State<infosleep> {
                 sleepstages: sleepstages,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             

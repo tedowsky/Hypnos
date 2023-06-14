@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:floor/floor.dart';
+// ignore: depend_on_referenced_packages
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'package:hypnos/databases/daos/dao.dart';
