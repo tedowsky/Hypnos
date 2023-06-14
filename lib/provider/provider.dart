@@ -1,6 +1,3 @@
-
-//import 'dart:io';
-import 'package:hypnos/screens/info.dart';
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
@@ -11,15 +8,13 @@ import 'package:hypnos/services/impact.dart';
 // this is the change notifier. it will manage all the logic of the home page: fetching the correct data from the database
 // and on startup fetching the data from the online services
 class HomeProvider extends ChangeNotifier {
-  // double eff = 0;
+
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
   
-  // void aggiornaValori(double neweff) {
-  //   eff = neweff;
-  //   notifyListeners();
-  // }
+  List _sleep = []; // Dati ottenuti dalle richieste
+  List get dataList => _sleep;
 
   // data fetched from external services or db
   late List<HR> _heartRates;
@@ -35,7 +30,8 @@ class HomeProvider extends ChangeNotifier {
   HomeProvider(this.impactService, this.db) {
     _init();
   }
-
+  
+  
   //constructor of provider which manages the fetching of all data from the servers and then notifies the ui to build
   Future<void> _init() async {
     await _fetchAndCalculate();
@@ -65,6 +61,12 @@ class HomeProvider extends ChangeNotifier {
       db.heartRatesDao.insertHeartRate(element);
     } // db add to the table
 
+     List sleepData = await impactService.getSleepData(DateTime.now());
+
+    // Update _sleep with the new data
+     _sleep = sleepData;
+     notifyListeners();
+
   }
 
    Future<void> refresh() async {
@@ -87,6 +89,20 @@ class HomeProvider extends ChangeNotifier {
 
     // after selecting all data we notify all consumers to rebuild
     notifyListeners();
+  }
+
+//  Future<void> getValues(double eff) async {
+//    await impactService.getPatient();
+//    List sleep = await impactService.getSleepData(DateTime.now());
+//    notifyListeners();
+//  }
+
+// we need to update data every time we refresh with the last values
+void updateDataList(List newSleep) {
+    _sleep = newSleep;
+    notifyListeners();
+    print('ciao');
+    
   }
 
 }

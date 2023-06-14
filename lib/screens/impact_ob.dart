@@ -36,7 +36,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE4DFD4),
+      backgroundColor: const Color.fromARGB(255, 144, 111, 160),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -50,7 +50,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                 ),
                 const Text('Please authorize to use our app',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   )
@@ -62,7 +62,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Username',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
@@ -76,12 +76,12 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                     return null;
                   },
                   controller: userController,
-                  cursorColor: const Color(0xFF83AA99),
+                  cursorColor: const Color.fromARGB(255, 255, 255, 255),
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(
-                        color: Color(0xFF89453C),
+                        color: Colors.black87,
                       ),
                     ),
                     border: const OutlineInputBorder(
@@ -89,10 +89,10 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                     ),
                     prefixIcon: const Icon(
                       Icons.person,
-                      color: Color(0xFF89453C),
+                      color: Colors.black87,
                     ),
                     hintText: 'Username',
-                    hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                    hintStyle: const TextStyle(color: Colors.black87),
                   ),
                 ),
                 const SizedBox(
@@ -101,7 +101,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                 const Align(
                   alignment: Alignment.topLeft,
                   child: Text('Password',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 5,),
@@ -113,13 +113,13 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                     return null;
                   },
                   controller: passwordController,
-                  cursorColor: const Color(0xFF83AA99),
+                  cursorColor: const Color.fromARGB(255, 255, 255, 255),
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(
-                        color: Color(0xFF89453C),
+                        color: Colors.black87,
                       ),
                     ),
                     border: const OutlineInputBorder(
@@ -127,7 +127,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                     ),
                     prefixIcon: const Icon(
                       Icons.lock,
-                      color: Color(0xFF89453C),
+                      color: Colors.black87,
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -135,14 +135,14 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                         _passwordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: Colors.grey,
+                        color: Colors.black87,
                       ),
                       onPressed: () {
                         _showPassword();
                       },
                     ),
                     hintText: 'Password',
-                    hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                    hintStyle: const TextStyle(color: Colors.black87),
                   ),
                 ),
                 const SizedBox(height: 30,),
@@ -187,9 +187,9 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                             const EdgeInsets.symmetric(
                                 horizontal: 80, vertical: 12)),
                         foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
+                            MaterialStateProperty.all<Color>(Colors.black87,),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF89453C))),
+                            const Color.fromARGB(255, 129, 56, 56))),
                     child: const Text('Authorize'),
                   ),
                 ),

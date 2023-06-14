@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-//import 'package:hypnos/provider/provider.dart';
+import 'package:hypnos/provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/infospleep.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-//import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -18,21 +18,30 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends State<HomePage> {
 
+  List sleep = [];
+  bool isSleepAvailable = false;
+ 
   @override
   Widget build(BuildContext context) {
-    /* return Consumer<HomeProvider>(
-      builder: (context, provider, _) { */
-       // double eff = provider.eff;
-        int eff = 80;
+    var dataProvider = Provider.of<HomeProvider>(context);
+     if (!isSleepAvailable) {
+    sleep = dataProvider.dataList;
+    if (sleep.isNotEmpty) {
+      isSleepAvailable = true;
+    }
+  }
+      double eff = sleep.isNotEmpty?  sleep[5]/sleep[8]*100 : 0;
+
+      
         var now = DateTime.now();
         var hour = DateFormat('H').format(now);
     // ignore: unused_local_variable
         var imagePath = _getImagePath(int.parse(hour));
-        var commentPath = _comment(int.parse(hour));
-
-        return Scaffold(
-
+        var commentPath = _comment(int.parse(hour)); 
         
+    return Scaffold (
+
+   
 
       // --- COLORE_SFONDO ---
       backgroundColor: const Color(0xFFE4DFD4),  
@@ -101,8 +110,8 @@ class _HomeState extends State<HomePage> {
                                 animationDuration: 1000,
                                 lineHeight: 20.0,
                                 progressColor: Colors.amber,
-                                percent: 0.80, 
-                                center: const Text('80%'),
+                                percent: eff/100 , 
+                                center: Text('$eff'),
                                 width: 210,
                                 barRadius: const Radius.elliptical(10, 10) ,
                               ),
@@ -163,9 +172,7 @@ class _HomeState extends State<HomePage> {
             ),
           ],
         ),
-      );
-     // }
-   // );
+        );
     }
   
   
@@ -187,8 +194,8 @@ class _HomeState extends State<HomePage> {
       return 'It\'s time to go to sleep, GOOD NIGHT !';
     }
   }
-    String _eff (int eff) {
-    if (eff >= 0.85) {
+    String _eff (double eff) {
+    if (eff/100 >= 0.85) {
       return '- Good -';
     }
     else {

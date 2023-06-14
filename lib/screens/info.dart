@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/calendar.dart';
 import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
-import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
-import '../databases/db.dart';
 import 'package:hypnos/databases/entities/heartrate.dart';
 
-class InfoPage extends StatefulWidget {
-  const InfoPage({super.key});
 
-  static const routeDisplayname = 'InfoPage';
+
+class InfoPage extends StatefulWidget {
+  const InfoPage({Key? key}) : super(key: key);
+
+  static const routeDisplayName = 'InfoPage';
 
   @override
-  State<InfoPage> createState() => _InfoPage();
+  State<InfoPage> createState() => _InfoPageState();
 }
 
-class _InfoPage extends State<InfoPage> {
+class _InfoPageState extends State<InfoPage> {
   @override
   void initState() {
     super.initState();
@@ -31,17 +32,6 @@ class _InfoPage extends State<InfoPage> {
   int _selIdx = 0;
   List<HR> hr = [] ;
   List<dynamic> sleep = [];
-
- /*  void passaValore () {
-  // Codice per ottenere i dati dal server
-    late  double eff = sleep[5]/sleep[8]*100;
-    print('ciao');
-
-  // Aggiorna i dati nella pagina del provider
-    HomeProvider provider = Provider.of<HomeProvider>(context, listen: false);
-    provider.aggiornaValori(eff);
-
-  } */
 
   void _onItemTapped(int index) {
     setState(() {
@@ -66,14 +56,24 @@ class _InfoPage extends State<InfoPage> {
     }
   }
 
+  // Widget build(BuildContext context) {
+  //   return Provider<Example>(
+  //     create: (_) => Example(),
+  //     // we use `builder` to obtain a new `BuildContext` that has access to the provider
+  //     builder: (context, child) {
+  //       // No longer throws
+  //       return Text(context.watch<Example>().toString());
+  //     }
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeProvider>(
-      create: (context) => HomeProvider(
-          ImpactService(Provider.of<Preferences>(context, listen: false)),
-          Provider.of<AppDatabase>(context, listen: false)),
-      lazy: false,
-      builder: (context, child) => Scaffold(
+
+    var dataProvider = Provider.of<HomeProvider>(context, listen: false);
+    
+
+    return  Scaffold(
       // --- DRAWER ---
       drawer: Drawer(
         backgroundColor: const Color.fromARGB(255, 144, 111, 160),
@@ -134,17 +134,9 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              await Provider.of<ImpactService>(context, listen: false)
-                            .getPatient();
-              hr = await Provider.of<ImpactService>(context, listen: false)
-                            .getDataFromDay(DateTime.now().subtract(const Duration(days: 1)));
-
-              sleep = await Provider.of<ImpactService>(context, listen: false)
-                            .getSleepData(DateTime.now());
-              
-              // print((sleep[5]/sleep[8]*100).toString());
-            
-              //passaValore();
+              await Provider.of<ImpactService>(context, listen: false).getPatient();
+              List newSleep = await Provider.of<ImpactService>(context, listen: false).getSleepData(DateTime.now());
+              dataProvider.updateDataList(newSleep);
               // ignore: avoid_print
               print('ciao');
             },
@@ -199,7 +191,6 @@ class _InfoPage extends State<InfoPage> {
           ),
         ),
       ),
-    ),
     );
   }
   
