@@ -141,10 +141,13 @@ class _InfoPage extends State<InfoPage> {
 
               basesleep = await Provider.of<ImpactService>(context, listen: false)
                             .getbaseSleepData(DateTime.now().subtract(const Duration(days: 1)));
+                            
+              dataProvider.updateDataListsleep(basesleep);
+
               summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
                             .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
 
-              dataProvider.updateDataListsleep(basesleep);
+              
 
               for(var element in hr){
                await Provider.of<AppDatabase>(context, listen: false)

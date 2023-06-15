@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:hypnos/provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class LineChartWidget extends StatefulWidget {
@@ -26,10 +27,18 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           return CircularProgressIndicator(); // Mostra un indicatore di caricamento o un widget alternativo mentre si attendono i dati
 
         }
+        DateTime minX = hert.first.dateTime;
+        DateTime maxX = hert.last.dateTime;
 
         // Trova il valore minimo e massimo per l'asse X (DateTime)
-        DateTime minX = sleep[1];
-        DateTime maxX = sleep[2];
+        // String sleepDatamin = sleep[1];
+        // DateFormat formatmax = DateFormat('MM-dd HH:mm:ss');
+        // DateTime minX = formatmax.parse(sleepDatamin);
+
+        
+        // String sleepDatamax = sleep[2];
+        // DateFormat formatmin = DateFormat('MM-dd HH:mm:ss');
+        // DateTime maxX = formatmin.parse(sleepDatamax);
 
         // Trova il valore minimo e massimo per l'asse Y (frequenza cardiaca)
         int minY = hert.map((hr) => hr.value).reduce((min, value) => min < value ? min : value);

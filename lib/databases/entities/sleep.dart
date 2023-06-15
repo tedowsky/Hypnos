@@ -14,8 +14,12 @@ class Sleep {
 
   final DateTime endTime;
 
-  final int efficency;
+  final int rem;
+
+  final int deep;
+
+  final int light;
 
   //Default constructor
-  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.efficency);
-} //Exposure
+  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light);
+} //Sleep

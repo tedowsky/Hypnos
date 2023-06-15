@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
+import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
@@ -27,6 +28,8 @@ class _InfosleepState extends State<Infosleep> {
   var rem = [];
   List sleepstages = [];
   
+  Future<List<HR>>? result;
+
   @override
   Widget build(BuildContext context) {
     // return ChangeNotifierProvider<HomeProvider>(
@@ -35,11 +38,24 @@ class _InfosleepState extends State<Infosleep> {
     //       Provider.of<AppDatabase>(context, listen: false)),
     //   lazy: false,
     //   builder: (context, child) => 
+     return Consumer<HomeProvider>(
+          builder: (context, dataProvider, child) {
+            List sleep = dataProvider.dataListsleep;
+
+            String sleepDatamin = sleep[1];
+            DateFormat formatmin = DateFormat('MM-dd HH:mm:ss');
+            DateTime start = formatmin.parse(sleepDatamin);
+
+            String sleepDatamax = sleep[1];
+            DateFormat formatmax = DateFormat('MM-dd HH:mm:ss');
+            DateTime end = formatmax.parse(sleepDatamax);
       return 
       Scaffold(
       
         backgroundColor: Colors.grey[300],
-        appBar: AppBar(
+        appBar: 
+        
+        AppBar(
             centerTitle: true,
             elevation: 0,
             backgroundColor: const Color.fromARGB(255, 172, 143, 192),
@@ -47,12 +63,19 @@ class _InfosleepState extends State<Infosleep> {
             title: const Text('Know More About Your Sleep',
                 style: TextStyle(color: Colors.black)),
                 actions: [
+                  Consumer<AppDatabase>(
+          builder: (context, db, child) {
+            return
           IconButton(
-            onPressed: () async {
 
-              //setState(() {});
+            
+            onPressed: () async {
+            result = db.heartRatesDao.findHeartRatesbyDate(start, end);
+              
             },
-            icon: const Icon(MdiIcons.databaseRefreshOutline)),
+            icon: const Icon(MdiIcons.databaseRefreshOutline));
+                  }
+                  )
             ],),
         body: Padding(
         padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
@@ -94,7 +117,8 @@ class _InfosleepState extends State<Infosleep> {
           ],
         ),
       ),
-    );    
+    );
+          });  
   }
 
 
