@@ -18,6 +18,12 @@ class HomeProvider extends ChangeNotifier {
   // data fetched from external services or db
   late List<HR> _heartRates;
 
+  List<HR> line_hr = [];
+  List<HR> get dataListhr => line_hr;
+
+   List _sleep = []; // Dati ottenuti dalle richieste
+  List get dataListsleep => _sleep; 
+
   // selected day of data to be shown
   DateTime showDate = DateTime.now().subtract(const Duration(days: 2));
 
@@ -48,7 +54,7 @@ class HomeProvider extends ChangeNotifier {
 
   // method to fetch all data and calculate the exposure
   Future<void> _fetchAndCalculate() async {
-    lastFetch = await _getLastFetch() ??
+   // lastFetch = await _getLastFetch() ??
         DateTime.now().subtract(const Duration(days: 3));
     // do nothing if already fetched
     if (lastFetch.day == DateTime.now().subtract(const Duration(days: 2)).day) {
@@ -61,6 +67,20 @@ class HomeProvider extends ChangeNotifier {
 
   }
 
+    Future<void> Mettili(hr) async {
+    for (var element in hr) {
+      db.heartRatesDao.insertHeartRate(element);
+      notifyListeners();
+      print('ciao');
+
+    } // db add to the table
+
+  }
+
+
+
+
+
    Future<void> refresh() async {
     await _fetchAndCalculate();
     await getDataOfDay(showDate);
@@ -71,8 +91,8 @@ class HomeProvider extends ChangeNotifier {
     // check if the day we want to show has data
     var firstDay = await db.sleepDao.findFirstDayInDb();
     var lastDay = await db.sleepDao.findLastDayInDb();
-    if (showDate.isAfter(lastDay!.dateTime) ||
-        showDate.isBefore(firstDay!.dateTime)) return;
+    if (lastDay?.dateTime != null && showDate.isAfter(lastDay!.dateTime) ||
+        firstDay?.dateTime != null && showDate.isBefore(firstDay!.dateTime)) return;
         
     this.showDate = showDate;
     heartRates = await db.heartRatesDao.findHeartRatesbyDate(
@@ -81,6 +101,20 @@ class HomeProvider extends ChangeNotifier {
 
     // after selecting all data we notify all consumers to rebuild
     notifyListeners();
+  }
+
+  void updateDataListhr(List<HR> newhr) {
+    line_hr = newhr;
+    notifyListeners();
+    print('ciao');
+    
+  }
+
+  void updateDataListsleep(List newsleep) {
+    _sleep = newsleep;
+    notifyListeners();
+    print('ciao');
+    
   }
 
 }

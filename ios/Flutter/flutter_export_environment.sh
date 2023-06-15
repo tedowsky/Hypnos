@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=C:\src\flutter_windows_3.7.6-stable"
-export "FLUTTER_APPLICATION_PATH=C:\Users\User\Desktop\Hypnos-ted-master\Hypnos-ted-master"
+export "FLUTTER_APPLICATION_PATH=C:\Users\User\Desktop\Hypnos-ted-master\Hypnos- Copia"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"

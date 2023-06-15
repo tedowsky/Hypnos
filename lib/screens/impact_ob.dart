@@ -58,7 +58,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(
-                height: 7,
+                height: 5,
               ),
               TextFormField(
                 validator: (String? value) {
@@ -96,7 +96,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(
-                height: 7,
+                height: 5,
               ),
               TextFormField(
                 validator: (String? value) {

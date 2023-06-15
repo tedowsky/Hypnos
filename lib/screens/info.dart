@@ -10,12 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
-import '../databases/db.dart';
+import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
+import 'package:hypnos/provider/provider.dart';
 
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
+
 
   static const routeDisplayname = 'InfoPage';
 
@@ -59,12 +61,17 @@ class _InfoPage extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeProvider>(
-      create: (context) => HomeProvider(
-          ImpactService(Provider.of<Preferences>(context, listen: false)),
-          Provider.of<AppDatabase>(context, listen: false)),
-      lazy: false,
-      builder: (context, child) => Scaffold(
+
+    var dataProvider = Provider.of<HomeProvider>(context, listen: false);
+
+    // return ChangeNotifierProvider<HomeProvider>(
+    //   create: (context) => HomeProvider(
+    //       ImpactService(Provider.of<Preferences>(context, listen: false)),
+    //       Provider.of<AppDatabase>(context, listen: false)),
+    //   lazy: false,
+    //   builder: (context, child)
+    return 
+      Scaffold(
       // --- DRAWER ---
       drawer: Drawer(
         backgroundColor: const Color.fromARGB(255, 144, 111, 160),
@@ -127,13 +134,29 @@ class _InfoPage extends State<InfoPage> {
             onPressed: () async {
               await Provider.of<ImpactService>(context, listen: false)
                             .getPatient();
-              hr = await Provider.of<ImpactService>(context, listen: false)
+              List<HR> hr = await Provider.of<ImpactService>(context, listen: false)
                             .getDataFromDay(DateTime.now());
+
+              dataProvider.updateDataListhr(hr);
+
               basesleep = await Provider.of<ImpactService>(context, listen: false)
                             .getbaseSleepData(DateTime.now().subtract(const Duration(days: 1)));
               summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
                             .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
+
+              dataProvider.updateDataListsleep(basesleep);
+
+              for(var element in hr){
+               await Provider.of<AppDatabase>(context, listen: false)
+               .heartRatesDao
+               .insertHeartRate(
+                element);}
+
+               await Provider.of<HomeProvider>(context, listen: false).Mettili;
+
               print('ciao');
+
+
             },
 
             //   final sp = await SharedPreferences.getInstance();
@@ -214,7 +237,6 @@ class _InfoPage extends State<InfoPage> {
           ),
         ),
       ),
-    ),
     );
   }
 

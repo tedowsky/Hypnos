@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/splash.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
@@ -28,6 +29,10 @@ class MyApp extends StatelessWidget {
               Provider.of<Preferences>(context, listen: false),
             ),
           ),
+          ChangeNotifierProvider<HomeProvider>(create: (context) => HomeProvider(
+            Provider.of<ImpactService>(context, listen: false),
+            Provider.of<AppDatabase>(context, listen: false),
+          )),
         ],
         child:  MaterialApp(
           title: 'Hypnos',

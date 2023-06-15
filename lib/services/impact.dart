@@ -7,10 +7,14 @@ import 'package:hypnos/utils/shared_preferences.dart';
 
 class ImpactService {
   ImpactService(this.prefs) {
+
+    
     updateBearer();
+
   }
 
   Preferences prefs;
+  
 
   final Dio _dio = Dio(BaseOptions(baseUrl: ServerImpact.backendBaseUrl));
 
@@ -155,10 +159,13 @@ class ImpactService {
         }
       }
    // }
+    
     var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
      return hrlist;
+
     
   }
+
 
     Future<List<dynamic>> getbaseSleepData(DateTime startTime) async {
     await updateBearer();
@@ -172,12 +179,6 @@ class ImpactService {
     //List<Sleep> sleepList = firstNineElements.map((element) => element as Sleep).toList();
   // L'elemento 11 esiste nella mappa Listleep
   // Puoi procedere ad accedere ai suoi valori
-  List<dynamic> levels = Listsleep['levels']['data'];
-  Map<String, dynamic> levelsummary = Listsleep['levels']['summary'];
-  Map<String, dynamic> deep_summary = levelsummary['deep'];
-  Map<String, dynamic> wake_summary = levelsummary['wake'];
-  Map<String, dynamic> light_summary = levelsummary['light'];
-  Map<String, dynamic> rem_summary = levelsummary['rem'];
 
     print('ciao');
     return firstNineElements;
@@ -207,12 +208,6 @@ class ImpactService {
     'rem_summary': rem_summary,
   };
 }
-
-
-
-
-
-  
 
   DateTime _truncateSeconds(DateTime input) {
     return DateTime(
