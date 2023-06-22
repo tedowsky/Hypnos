@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+
+enum Gender { male, female }
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage ({Key? key}): super(key: key);
@@ -11,39 +16,39 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfilePage>{
- 
-  int? radioValue;
-
   final _formKey = GlobalKey<FormState>();
+
+  Gender? selectedGender;
   
   final TextEditingController ageController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    loadSavedData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color(0xFFE4DFD4),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor:const Color.fromARGB(255, 144, 111, 160),
-        iconTheme: const IconThemeData(color: Colors.black87),
-        title: const Text('Information',  style: TextStyle(color: Colors.black)),
-      ),
+
+      backgroundColor: const Color(0xFFE4DFD4),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 45,),
+            const SizedBox(height: 35,),
             Center(
               child: CircleAvatar(
-                radius: 70,child: Image.asset('assets/info/genderGeneral.png'))),
+                radius: 60,child: Image.asset("assets/info/genderGeneral.png"))),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[ 
@@ -51,10 +56,12 @@ class _ProfileState extends State<ProfilePage>{
                         const Text('Gender:', style: TextStyle(color: Colors.black87, fontSize: 17)),
                         Radio(
                           fillColor: MaterialStateColor.resolveWith((states) => Colors.black87),
-                          value: 0, groupValue: radioValue, onChanged: (val) {
+                          value: Gender.male, groupValue: selectedGender, onChanged: (val) async {
                             setState(() {
-                              radioValue = val;
+                              selectedGender = val;                              
                             });
+                            final sharedPreferences = await SharedPreferences.getInstance();
+                            sharedPreferences.setInt('gender', selectedGender!.index);
                           }
                         ),
                         const Text(
@@ -63,11 +70,12 @@ class _ProfileState extends State<ProfilePage>{
                           ),
                         Radio(
                           fillColor: MaterialStateColor.resolveWith((states) => Colors.black87),
-                          value: 1, groupValue: radioValue, onChanged: (val) {
+                          value: Gender.female, groupValue: selectedGender, onChanged: (val) async {
                             setState(() {
-                              radioValue = val;
-                              
+                              selectedGender = val;                                  
                             });
+                            final sharedPreferences = await SharedPreferences.getInstance();
+                            sharedPreferences.setInt('gender', selectedGender!.index); 
                           }
                         ),
                         const Text(
@@ -76,8 +84,7 @@ class _ProfileState extends State<ProfilePage>{
                           ),
                       ],
                     ),
-                    
-                    const SizedBox(height:20,),
+                    const SizedBox(height:30,),
                     SizedBox(
                       width: 400,
                       child: TextFormField(
@@ -108,7 +115,13 @@ class _ProfileState extends State<ProfilePage>{
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {}
+                            if (_formKey.currentState!.validate()) {
+                              final sharedPreferences = await SharedPreferences.getInstance();
+                              sharedPreferences.setInt('age', int.parse(ageController.text));
+                              // ignore: use_build_context_synchronously
+                              final ageProvider = Provider.of<HomeProvider>(context, listen: false);
+                              ageProvider.setAge(int.parse(ageController.text));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF83AA99),
@@ -123,10 +136,10 @@ class _ProfileState extends State<ProfilePage>{
                     SizedBox(
                       width: 400,
                       child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty){
+                        validator: (value2) {
+                          if (value2 == null || value2.isEmpty){
                             return 'Please enter your weight';
-                          } else if (int.tryParse(value) == null){
+                          } else if (int.tryParse(value2) == null){
                             return 'Please enter an integer valid number';
                           }
                           return null;
@@ -150,7 +163,10 @@ class _ProfileState extends State<ProfilePage>{
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {}
+                            if (_formKey.currentState!.validate()) {
+                              final sharedPreferences = await SharedPreferences.getInstance();
+                              sharedPreferences.setInt('weight', int.parse(weightController.text));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF83AA99),
@@ -167,5 +183,27 @@ class _ProfileState extends State<ProfilePage>{
           ]
         )
       ));
-  } 
+  }
+  Future<void> loadSavedData() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final savedAge = sharedPreferences.getInt('age');
+    final savedWeight = sharedPreferences.getInt('weight');
+    final savedGender = sharedPreferences.getInt('gender');
+    if (savedAge != null) {
+      setState(() {
+        ageController.text = savedAge.toString();
+      });
+    }
+    if (savedWeight != null) {
+      setState(() {
+        weightController.text = savedWeight.toString();
+      });
+    }
+    if (savedGender != null) {
+      setState(() {
+        selectedGender = Gender.values[savedGender];
+      });
+    }
+  }
+
 }

@@ -9,6 +9,15 @@ import 'package:hypnos/services/impact.dart';
 // and on startup fetching the data from the online services
 class HomeProvider extends ChangeNotifier {
 
+  int _age = 0;
+
+  int get age => _age;
+
+  void setAge(int newAge) {
+    _age = newAge;
+    notifyListeners();
+  }
+
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
@@ -29,6 +38,7 @@ class HomeProvider extends ChangeNotifier {
 
   HomeProvider(this.impactService, this.db) {
     _init();
+    print('ciao');
   }
   
   //constructor of provider which manages the fetching of all data from the servers and then notifies the ui to build

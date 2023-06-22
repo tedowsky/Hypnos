@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/provider/provider.dart';
+import 'package:hypnos/repository/databaseRepository.dart';
 import 'package:hypnos/screens/calendar.dart';
 import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
+import 'package:hypnos/screens/login_page.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
@@ -32,6 +37,8 @@ class _InfoPageState extends State<InfoPage> {
   int _selIdx = 0;
   List<HR> hr = [] ;
   List<dynamic> sleep = [];
+  int cacca= 10;
+  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,13 +51,13 @@ class _InfoPageState extends State<InfoPage> {
   }) {
     switch (index) {
       case 0:
-        return const TipsPage();
-      case 1:
         return const HomePage();
+      case 1:
+        return const ProfilePage();
       case 2:
-        return const CalendarPage(
-          title: '',
-        );
+        return const TipsPage();
+      case 3:
+        return const CalendarPage(title: 'Calendar schedule',);
       default:
         return const HomePage();
     }
@@ -80,10 +87,15 @@ class _InfoPageState extends State<InfoPage> {
                 color: Colors.black87,
               ),
               ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () => _toLoginPage(context),
-              ),
+                    leading: const Icon(MdiIcons.logout),
+                    title: const Text('Logout'),
+                    // delete all data from the preferences
+                    onTap: () async {
+                      bool reset = await Preferences().resetSettings();
+                      if (reset) {
+                        Navigator.of(context).pushReplacementNamed(LoginPage.routename);
+                      }
+                    }),
               ListTile(
                   leading: const Icon(Icons.bed),
                   title: const Text("Sleeping Information"),
@@ -128,18 +140,18 @@ class _InfoPageState extends State<InfoPage> {
               dataProvider.updateDataList(newSleep);
               // hr = await Provider.of<ImpactService>(context, listen: false).getDataFromDay(DateTime.now().subtract(const Duration(days: 1)));
               // ignore: avoid_print
+              await Provider.of<DatabaseRepository>(context, listen: false).insertSleep(
+                Sleep(
+                  null, 
+                  DateFormat('MM-dd').parse(dataProvider.dataList[0]),
+                  DateFormat('MM-dd HH:mm:ss').parse(dataProvider.dataList[1]),
+                  DateFormat('MM-dd HH:mm:ss').parse(dataProvider.dataList[2]),
+                  cacca
+                )
+              );
               print('ciao');
             },
             icon: const Icon(Icons.refresh),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (context) => const ProfilePage()));
-            },
-            icon: const Icon(Icons.account_circle),
-            iconSize: 35,
           ),
         ],
       ),
@@ -164,12 +176,16 @@ class _InfoPageState extends State<InfoPage> {
             padding: const EdgeInsets.all(10),
             tabs: const [
               GButton(
-                icon: Icons.sports_gymnastics,
-                text: 'Suggested Tips',
-              ),
-              GButton(
                 icon: Icons.home,
                 text: 'Home',
+              ),
+              GButton(
+                icon: Icons.account_circle,
+                text: 'User Profile',
+              ),
+              GButton(
+                icon: Icons.sports_gymnastics,
+                text: 'Suggested Tips',
               ),
               GButton(
                 icon: Icons.calendar_month,

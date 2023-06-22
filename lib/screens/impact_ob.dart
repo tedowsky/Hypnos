@@ -166,6 +166,10 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                             duration: Duration(seconds: 2),
                           ));
                         } else {
+                          // ignore: use_build_context_synchronously
+                          await Provider.of<ImpactService>(context, listen: false).getPatient();
+
+                          print('ciao');
                             // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context)
                         ..removeCurrentSnackBar()

@@ -24,16 +24,20 @@ class _HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final ageProvider = Provider.of<HomeProvider>(context);
+    final age = ageProvider.age;
     var dataProvider = Provider.of<HomeProvider>(context);
     if (!isSleepAvailable) {
       sleep = dataProvider.dataList;
       duration = dataProvider.millisecondsToTime(dataProvider.dataList[3]);
+      print('ciao');
+      
       if (sleep.isNotEmpty) {
         isSleepAvailable = true;
       }
     }
     double eff = sleep.isNotEmpty?  sleep[5]/sleep[8]*100 : 0;
-
+    
       
     var now = DateTime.now();
     var hour = DateFormat('H').format(now);
@@ -51,7 +55,7 @@ class _HomeState extends State<HomePage> {
           const Row(
             children: [
               Icon(MdiIcons.mapMarker),
-                  Text('Padua, Italy', selectionColor: Color.fromARGB(255, 160, 158, 158),),
+                  Text('Padua, Italy', selectionColor: Color.fromARGB(255, 144, 144, 144),),
                 ],
               ),
               SizedBox(
@@ -72,123 +76,198 @@ class _HomeState extends State<HomePage> {
               ),
               Card(
                 borderOnForeground: true,
-                margin: const EdgeInsets.all(30.0),
+                margin: const EdgeInsets.only(top: 10.0,left:40.0, right: 40.0,),
                 elevation: 50,
                 shadowColor: Colors.grey[850] ,
                 color: const Color.fromARGB(255, 144, 111, 160),
-                child:  Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SizedBox(
-                    height: 400,
-                    width: 190,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                       children :   [
-                        const ListTile(
-                          title: Text('TEMPO DI SONNO EFFETTIVO'),
-                          leading: Icon(Icons.bedtime, color: Colors.black87),
-                          subtitle: Text('Il tempo di sonno effettivo è il tempo totale che hai trascorso a dormire durante la notte',
-                            selectionColor: Color(0xFFE4DFD4),
-                          ),
-                        ),
-                        const ListTile(
-                          title: Text('TEMPO TRASCORSO A LETTO'),
-                          leading: Icon(Icons.bed,color: Colors.black87,),
-                          subtitle: Text('Il tempo trascorso a letto è il periodo complessivo in cui sei rimasto a letto incluso il tempo impiegato per addormentarti', 
-                            selectionColor: Color(0xFFE4DFD4),
-                          ),
-                        ),                        
-                        Align (
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.all(34.0),
-                          child: Column(
-                            children: [
-                              LinearPercentIndicator(
-                                animation: true,
-                                animationDuration: 1000,
-                                lineHeight: 20.0,
-                                progressColor: Colors.amber,
-                                percent: eff/100 , 
-                                center: Text('${double.parse(eff.toStringAsFixed(2))}%'),
-                                width: 210,
-                                barRadius: const Radius.elliptical(10, 10) ,
-                              ),
-                              const Text(
-                                'EFFICIENCY', 
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Color.fromARGB(255, 106, 93, 161)
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                   Text(
-                                    _eff(eff),
-                                    selectionColor: const Color.fromARGB(227, 152, 19, 19),
-                                  ),
-                                  IconButton(
+                child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                        children : [
+                              ListTile(
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 0, 0, 0),), 
                                     onPressed: (){
-                                      showDialog(
-                                        context: context, 
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('L\'EFFICIENCY'),
-                                            content: const Text('Invalid email or password.'),
-                                            actions: [
-                                              TextButton(
-                                                child: const Text('OK'),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
+                                    showDialog(
+                                    context: context, 
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text('Il tempo di sonno effettivo è il tempo totale che hai trascorso a dormire durante la notte',
+                                          selectionColor: Color(0xFFE4DFD4),  
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                          ),
+                                        ],
                                       );
                                     },
-                                    icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 228, 223, 20),),
-                                  ), 
-                                ],
-                              ),        
-                            ],
-                           ),
-                        ),
-                      ),
-                     ],
+                                  );
+                                },      
+                              ),
+                              titleTextStyle: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.black),
+                              title: const Text('TEMPO DI SONNO EFFETTIVO',),
+                              leading: const Icon(Icons.bedtime, color: Colors.black87,size: 25,),
+                            ),
+                            ListTile(
+                              trailing: IconButton(
+                                icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 0, 0, 0),), 
+                                onPressed: (){
+                                  showDialog(
+                                    context: context, 
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text('Il tempo trascorso a letto è il periodo complessivo in cui sei rimasto a letto, incluso il tempo impiegato per addormentarti', 
+                                          selectionColor: Color(0xFFE4DFD4),  
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },      
+                              ),
+                              titleTextStyle: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.black),
+                              title: const Text('TEMPO TRASCORSO A LETTO'),
+                              leading: const Icon(Icons.bed,color: Colors.black87,size: 25,)
+                            ),
+                            const SizedBox(height: 20,),
+                            const Divider(color: Colors.black, indent: 20, endIndent: 25,),
+                            const SizedBox(height: 15,),
+                            const Text(
+                                    'EFFICIENCY', 
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 0, 0, 0)
+                                      ),
+                                ),
+                            const SizedBox(height: 10,),
+                            LinearPercentIndicator(
+                              alignment: MainAxisAlignment.center,
+                              animation: true,
+                              animationDuration: 1000,
+                              lineHeight: 20.0,
+                              progressColor: const Color.fromARGB(255, 211, 116, 116),
+                              percent: eff/100 , 
+                              center: Text('${double.parse(eff.toStringAsFixed(2))}%'),
+                              width: 210,
+                              barRadius: const Radius.elliptical(10, 10) ,
+                            ), 
+                            Column(
+                                    children: [
+                                      const SizedBox(height: 5,),
+                                       Text(
+                                        _eff(eff),
+                                        selectionColor: const Color.fromARGB(226, 117, 9, 9),
+                                      ),
+                                      IconButton(
+                                        onPressed: (){
+                                          showDialog(
+                                            context: context, 
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('L\'EFFICIENCY'),
+                                                content: const Text('Invalid email or password.'),
+                                                actions: [
+                                                  TextButton(
+                                                    child: const Text('OK'),
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 0, 0, 0),),
+                                      ),],),
+                         ],
                     ),
                   ),
-                ),
-              ),
             ),
             Card(
                 borderOnForeground: true,
-                margin: const EdgeInsets.all(30.0),
+                margin: const EdgeInsets.only(top: 30.0,left:40.0, right: 40.0,),
                 elevation: 50,
                 shadowColor: Colors.grey[850] ,
                 color: const Color.fromARGB(255, 144, 111, 160),
                 child: SizedBox(
-                  width: 200,
-                  height: 200,
+                  height: 230,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircularPercentIndicator(
-                        radius: 60.0,
-                        lineWidth: 10.0,
-                        percent: 0.7,
-                        animation: true,
-                        animationDuration: 1200,
-                        center: Text(duration, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15.0),),
-                        progressColor: Colors.green,
+                      const Text('SLEEP\'S HOURS', 
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
                       ),
-                    ],
+                      const SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text('Age: $age'),
+                              const SizedBox(height: 10,),
+                              const Row(children: [Icon(Icons.access_alarm),Text('Awake:')],),
+                              const SizedBox(height: 10,),
+                              const Row(children: [Icon(Icons.snooze_rounded),Text('Fall to sleep:'),],),
+                              const SizedBox(height: 35,),
+                              Text('GOAL: ${_goal(age)}'),
+                            ],
+                          ), 
+                          const SizedBox(width: 40,),
+                          CircularPercentIndicator(
+                            radius: 60.0,
+                            lineWidth: 10.0,
+                            percent: 0.7,
+                            animation: true,
+                            animationDuration: 1200,
+                            center: Text(duration, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15.0),),
+                            progressColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: (){
+                          showDialog(
+                            context: context, 
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('L\'EFFICIENCY'),
+                                content: const Text('Invalid email or password.'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.info_outline, color: Color.fromARGB(255, 0, 0, 0),),
+                      ),
+                    ],),
                   ),
                 ),
-            ),
+                const SizedBox(height: 30,),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
@@ -197,7 +276,7 @@ class _HomeState extends State<HomePage> {
               )
             ),
           ],
-        ),
+        )
         );
     }
   
@@ -220,7 +299,7 @@ class _HomeState extends State<HomePage> {
       return 'It\'s time to go to sleep, GOOD NIGHT !';
     }
   }
-    String _eff (double eff) {
+  String _eff (double eff) {
     if (eff/100 >= 0.85) {
       return '- Good -';
     }
@@ -229,5 +308,28 @@ class _HomeState extends State<HomePage> {
     }
 
   }
+
+  String _goal (int age) {
+    if (age >= 65) {
+    return '7 ore';
+  } else if (age >= 51 && age <= 64) {
+    return '8 ore';
+  } else if (age >= 26 && age <=50) {
+    return '9 ore';
+  } else if (age >= 18 && age <=25) {
+    return '10 ore';
+  } else if (age >= 11 && age <=17) {
+    return '11 ore';
+  } else if (age >= 6 && age <=10) {
+    return '12 ore';
+  } else if (age >= 2 && age <=5) {
+    return '13 ore';
+  } else if (age <= 1) {
+    return '14 ore';
+  } else {
+    return 'Intervallo di sonno non determinato per questa età.';
+  }
+}
+
 
 }
