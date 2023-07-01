@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
+    Future<List<HR>>? result;
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +34,13 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         DateTime maxX = hert.last.dateTime;
 
         // Trova il valore minimo e massimo per l'asse X (DateTime)
-        // String sleepDatamin = sleep[1];
-        // DateFormat formatmax = DateFormat('MM-dd HH:mm:ss');
-        // DateTime minX = formatmax.parse(sleepDatamin);
+            // String sleepDatamin = sleep[1];
+            // DateFormat formatmin = DateFormat('MM-dd HH:mm:ss');
+            // DateTime start = formatmin.parse(sleepDatamin);
 
-        
-        // String sleepDatamax = sleep[2];
-        // DateFormat formatmin = DateFormat('MM-dd HH:mm:ss');
-        // DateTime maxX = formatmin.parse(sleepDatamax);
+            // String sleepDatamax = sleep[1];
+            // DateFormat formatmax = DateFormat('MM-dd HH:mm:ss');
+            // DateTime end = formatmax.parse(sleepDatamax);
 
         // Trova il valore minimo e massimo per l'asse Y (frequenza cardiaca)
         int minY = hert.map((hr) => hr.value).reduce((min, value) => min < value ? min : value);
@@ -46,7 +48,9 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 
 
         List<FlSpot> flSpots = convertToFlSpots(hert);
-
+        // Consumer<AppDatabase>(
+        //   builder: (context, db, child) {
+        //     result = db.heartRatesDao.findHeartRatesbyDate(start, end);
         return LineChart(
           LineChartData(
             minX: minX.millisecondsSinceEpoch.toDouble(),
@@ -60,7 +64,9 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             ],
           ),
         );
-      },
+          }
+      //  );
+      //},
     );
   }
 }

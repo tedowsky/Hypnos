@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/services/impact.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -12,11 +13,14 @@ class HomeProvider extends ChangeNotifier {
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
-  late List<Sleep> sleep;
-
+  late List<dynamic> sleep;
+  late Sleep sleepdb;
+  
 
   // data fetched from external services or db
   late List<HR> _heartRates;
+  late Sleep _sleepdb;
+  Sleep get datasleep => _sleepdb;
 
   List<HR> line_hr = [];
   List<HR> get dataListhr => line_hr;
@@ -75,6 +79,10 @@ class HomeProvider extends ChangeNotifier {
 
     } // db add to the table
 
+    Future<void> insertSleep() async{
+      db.sleepDao.insertSleep(sleep as Sleep);
+    }
+
   }
 
 
@@ -113,8 +121,19 @@ class HomeProvider extends ChangeNotifier {
   void updateDataListsleep(List newsleep) {
     _sleep = newsleep;
     notifyListeners();
+    
     print('ciao');
+  }
+
+  void updateSleep(Sleep newsleep) {
+    _sleepdb = newsleep;
+    notifyListeners();  
+    db.sleepDao.insertSleep(_sleepdb);
     
   }
 
 }
+DateTime _truncateSeconds(DateTime input) {
+    return DateTime(
+        input.year, input.month, input.day, input.hour, input.minute);
+  }

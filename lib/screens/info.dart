@@ -6,6 +6,7 @@ import 'package:hypnos/screens/impact_ob.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
@@ -35,6 +36,7 @@ class _InfoPage extends State<InfoPage> {
   List<HR> hr = [];
   List<dynamic> basesleep = [];
   Map<String, dynamic> summarylevelsleep = {};
+  List<dynamic> levelsleep = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -146,7 +148,25 @@ class _InfoPage extends State<InfoPage> {
 
               summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
                             .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
+              
+              levelsleep = await Provider.of<ImpactService>(context, listen: false)
+                            .getlevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
 
+              //  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light);
+              // basesleep[0] = this.dateTime; //basesleep[1] This.startTime; //basesleep[2] = this.endTime;
+              // basesleep[4] = minutestofallAsleep; // basesleep[7] = minutesAfterWakeup (minutes spent in bed after Wakeup)
+              // basesleep[6] = minutes awake during the sleep entry
+              // summarysleep["rem_summary"]["count"] = this.rem
+              // summarysleep["deep_summary"]["count"] = this.deep
+              // summarysleep["light_summary"]["count"] = this.light
+              // summarysleep["wake_summary"]["count"] = this.wake
+
+              Sleep sleepfordb = await getSleepData();
+              dataProvider.updateSleep(sleepfordb);
+
+              dataProvider.updateDataListsleep(levelsleep);
+
+              print('ciao');
               
 
               for(var element in hr){
@@ -253,4 +273,49 @@ class _InfoPage extends State<InfoPage> {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()));
   }
+
+ Future<Sleep> getSleepData() async{ 
+
+              String dateTimeStr = basesleep[0];
+              String startTimeStr = basesleep[1];
+              String endTimeStr = basesleep[2];
+              int remCount = summarylevelsleep["rem_summary"]["minutes"];
+              int deepCount = summarylevelsleep["deep_summary"]["minutes"];
+              int lightCount = summarylevelsleep["light_summary"]["minutes"];
+              int wakeCount = summarylevelsleep["wake_summary"]["minutes"];
+
+              DateFormat format = DateFormat("MM-dd");
+              DateFormat hourformat = DateFormat("MM-dd HH:mm:ss");
+
+
+
+              DateTime dateTime = format.parse(dateTimeStr);
+              //dateTime = DateTime(dateTime.year + (DateTime.now().year - 1970), dateTime.month, dateTime.day);
+              DateTime startTime = hourformat.parse(startTimeStr);
+              DateTime endTime = hourformat.parse(endTimeStr);
+              print('ciao');
+               // Converti la stringa in un oggetto TimeOfDay
+               final int? id = null;
+               Sleep sleep = Sleep(
+                 id, // Inserisci l'id appropriato
+                 dateTime,
+                 startTime,
+                 endTime,
+                 remCount,
+                 deepCount,
+                 lightCount,
+                 wakeCount
+               );
+ return sleep;
+ }
+
+
+
+
+
+
+
+
 }
+
+

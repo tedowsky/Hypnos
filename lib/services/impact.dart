@@ -193,7 +193,6 @@ class ImpactService {
     List<dynamic> quasisleep = respsleep['data'];
     Map<String, dynamic> Listsleep = quasisleep[0];
     
-  List<dynamic> levels = Listsleep['levels']['data'];
   Map<String, dynamic> levelsummary = Listsleep['levels']['summary'];
   Map<String, dynamic> deep_summary = levelsummary['deep'];
   Map<String, dynamic> wake_summary = levelsummary['wake'];
@@ -208,6 +207,21 @@ class ImpactService {
     'rem_summary': rem_summary,
   };
 }
+
+Future<List<dynamic>> getlevelsSleepData(DateTime startTime) async {
+    await updateBearer();
+    Response r_sleep = await _dio.get(
+      '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+
+    Map<String, dynamic> respsleep = r_sleep.data['data'];
+    List<dynamic> quasisleep = respsleep['data'];
+    Map<String, dynamic> Listsleep = quasisleep[0];
+    
+  List<dynamic> levels = Listsleep['levels']['data']; 
+  
+  return levels;
+  }
+
 
   DateTime _truncateSeconds(DateTime input) {
     return DateTime(

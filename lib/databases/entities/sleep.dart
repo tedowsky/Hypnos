@@ -20,6 +20,8 @@ class Sleep {
 
   final int light;
 
+  final int wake;
+
   //Default constructor
-  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light);
+  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light, this.wake);
 } //Sleep

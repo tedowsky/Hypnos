@@ -89,7 +89,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `HR` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `value` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `rem` INTEGER NOT NULL, `deep` INTEGER NOT NULL, `light` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `rem` INTEGER NOT NULL, `deep` INTEGER NOT NULL, `light` INTEGER NOT NULL, `wake` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -206,7 +206,8 @@ class _$SleepDao extends SleepDao {
                   'endTime': _dateTimeConverter.encode(item.endTime),
                   'rem': item.rem,
                   'deep': item.deep,
-                  'light': item.light
+                  'light': item.light,
+                  'wake': item.wake
                 }),
         _sleepUpdateAdapter = UpdateAdapter(
             database,
@@ -219,7 +220,8 @@ class _$SleepDao extends SleepDao {
                   'endTime': _dateTimeConverter.encode(item.endTime),
                   'rem': item.rem,
                   'deep': item.deep,
-                  'light': item.light
+                  'light': item.light,
+                  'wake': item.wake
                 }),
         _sleepDeletionAdapter = DeletionAdapter(
             database,
@@ -232,7 +234,8 @@ class _$SleepDao extends SleepDao {
                   'endTime': _dateTimeConverter.encode(item.endTime),
                   'rem': item.rem,
                   'deep': item.deep,
-                  'light': item.light
+                  'light': item.light,
+                  'wake': item.wake
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -254,7 +257,7 @@ class _$SleepDao extends SleepDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['rem'] as int, row['deep'] as int, row['light'] as int),
+        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['rem'] as int, row['deep'] as int, row['light'] as int, row['wake'] as int),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -271,7 +274,8 @@ class _$SleepDao extends SleepDao {
             _dateTimeConverter.decode(row['endTime'] as int),
             row['rem'] as int,
             row['deep'] as int,
-            row['light'] as int));
+            row['light'] as int,
+            row['wake'] as int));
   }
 
   @override
@@ -285,7 +289,8 @@ class _$SleepDao extends SleepDao {
             _dateTimeConverter.decode(row['endTime'] as int),
             row['rem'] as int,
             row['deep'] as int,
-            row['light'] as int));
+            row['light'] as int,
+            row['wake'] as int));
   }
 
   @override
@@ -299,7 +304,8 @@ class _$SleepDao extends SleepDao {
             _dateTimeConverter.decode(row['endTime'] as int),
             row['rem'] as int,
             row['deep'] as int,
-            row['light'] as int));
+            row['light'] as int,
+            row['wake'] as int));
   }
 
   @override
