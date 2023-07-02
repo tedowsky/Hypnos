@@ -71,13 +71,25 @@ class _InfosleepState extends State<Infosleep> {
         int seconds = data['seconds'] as int;
         String level = data['level'] as String;
 
+        // Mappatura tra fase di sonno e numero
+        Map<String, int> phaseMap = {
+          'rem': 2,
+          'wake': 1,
+          'light': 3,
+          'deep': 4,
+        };
+
+        // Ottieni il numero corrispondente alla fase di sonno
+        int phaseNumber = phaseMap[level] ?? 0;
+
         // Restituisci una nuova mappa contenente le informazioni desiderate
         return {
           'dateTime': dateTime,
           'seconds': seconds,
-          'level': level,
+          'level': phaseNumber,
         };
       }).toList();
+
 
     print('ciao');
 
@@ -126,12 +138,13 @@ class _InfosleepState extends State<Infosleep> {
 
               Text('Your Sleep'),
 
-              Container(
-                child: Column(
-                  children: [
-                    SleepChartWidget(
+              SizedBox(
+                height: 450,
+                width: 1000,
+                   
+                child: SleepChartWidget(
                       sleepData: mappedData,
-                    ),
+                    ),),
                     // SleepChartWidget(
                     //   faseName: 'Deep',
                     //   faseDuration: 90,
@@ -150,9 +163,9 @@ class _InfosleepState extends State<Infosleep> {
                     //   maximumValue: 100,
                     //   color: _getFaseColor('Wake'),
                     // ),
-                  ],
-                ),
-              ),
+                  
+                
+              
 
               const SizedBox(
                 height: 25,

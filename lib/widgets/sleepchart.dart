@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SleepChartWidget extends StatelessWidget {
@@ -11,13 +12,20 @@ class SleepChartWidget extends StatelessWidget {
     return Container(
       height: 300,
       child: SfCartesianChart(
-        primaryXAxis: DateTimeAxis(),
-        primaryYAxis: CategoryAxis(),
-        series: <BarSeries<Map<String, dynamic>, DateTime>>[
-          BarSeries<Map<String, dynamic>, DateTime>(
+        crosshairBehavior: CrosshairBehavior(
+          enable: true
+        ),
+        
+        legend: Legend(isVisible: true),
+        primaryXAxis: DateTimeAxis(dateFormat: DateFormat.Hm(), edgeLabelPlacement: EdgeLabelPlacement.shift),
+        primaryYAxis: CategoryAxis(edgeLabelPlacement: EdgeLabelPlacement.shift,
+        ),
+        series: <LineSeries<Map<String, dynamic>, DateTime>>[
+          LineSeries<Map<String, dynamic>, DateTime>(
             dataSource: sleepData,
             xValueMapper: (data, _) => (data['dateTime']),
             yValueMapper: (data, _) => data['level'],
+            dataLabelSettings: DataLabelSettings(isVisible: true, alignment: ChartAlignment.near),
           ),
         ],
       ),
