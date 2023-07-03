@@ -121,9 +121,10 @@ class _InfosleepState extends State<Infosleep> {
             })
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
-          child: ListView(
+        body: //Padding(
+          //padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
+          //child: 
+          ListView(
             children: [
               // SizedBox(
               //   height: 80,
@@ -174,7 +175,7 @@ class _InfosleepState extends State<Infosleep> {
               Text('Your Sleep'),
               SizedBox(
                 height: 450,
-                width: 1000,
+                width: 1200,
                 child: SfCircularChart(
                   tooltipBehavior: TooltipBehavior(
                     enable: true,
@@ -183,9 +184,11 @@ class _InfosleepState extends State<Infosleep> {
                   title:
                       ChartTitle(text: 'Yesterday, you slept \n $hours hours and $remainingMinutes minutes, \n of which:'),
                   legend: Legend(
+                    position: LegendPosition.top,
                       isVisible: true,
                       overflowMode: LegendItemOverflowMode.wrap,
-                      textStyle: TextStyle(fontSize: 20),),
+                      textStyle: TextStyle(fontSize: 20),
+                       ),
                     series: <CircularSeries>[
                     DoughnutSeries<sleepfases, String>(
                         dataSource: chartData,
@@ -251,7 +254,7 @@ class _InfosleepState extends State<Infosleep> {
               //         // Aggiungi altri widget o contenuto
             ],
           ),
-        ),
+       // ),
       );
     });
   }

@@ -12,21 +12,59 @@ class SleepChartWidget extends StatelessWidget {
     return Container(
       height: 300,
       child: SfCartesianChart(
-        crosshairBehavior: CrosshairBehavior(
-          enable: true
+        crosshairBehavior: CrosshairBehavior(enable: true),
+        zoomPanBehavior: ZoomPanBehavior(
+            enableDoubleTapZooming: true,
+            enablePanning: true,
+            zoomMode: ZoomMode.x),
+        legend: Legend(isVisible: true, title: LegendTitle(text: 'Your Sleep')),
+        primaryXAxis: DateTimeAxis(
+          dateFormat: DateFormat.Hm(),
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
+          majorTickLines: const MajorTickLines(width: 0),
         ),
-        
-        legend: Legend(isVisible: true),
-        primaryXAxis: DateTimeAxis(dateFormat: DateFormat.Hm(), edgeLabelPlacement: EdgeLabelPlacement.shift),
-        primaryYAxis: CategoryAxis(edgeLabelPlacement: EdgeLabelPlacement.shift,
-        ),
-        series: <LineSeries<Map<String, dynamic>, DateTime>>[
-          LineSeries<Map<String, dynamic>, DateTime>(
-            dataSource: sleepData,
-            xValueMapper: (data, _) => (data['dateTime']),
-            yValueMapper: (data, _) => data['level'],
-            dataLabelSettings: DataLabelSettings(isVisible: true, alignment: ChartAlignment.near),
-          ),
+        primaryYAxis: CategoryAxis(
+            edgeLabelPlacement: EdgeLabelPlacement.shift,
+            majorTickLines: const MajorTickLines(size: 4),
+            title: AxisTitle(text: 'Sleep Phases')),
+        series: <StepLineSeries<Map<String, dynamic>, DateTime>>[
+          StepLineSeries<Map<String, dynamic>, DateTime>(
+              dataSource: sleepData,
+              color: Color.fromRGBO(121, 108, 192, 1),
+              xValueMapper: (data, _) => (data['dateTime']),
+              yValueMapper: (data, _) => data['level'],
+              dataLabelSettings: DataLabelSettings(
+                isVisible: true,
+                alignment: ChartAlignment.near,
+                labelAlignment: ChartDataLabelAlignment.bottom,
+                useSeriesColor: true,
+                // labelPadding: 4,
+                textStyle:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                // builder: (dynamic data, dynamic point, dynamic series,
+                //     int pointIndex, int seriesIndex) {
+                //   String label = '';
+                //   if (data['level'] == 1) {
+                //     label = 'wake';
+                //   } else if (data['level'] == 2) {
+                //     label = 'REM';
+                //   } else if (data['level'] == 3) {
+                //     label = 'Light';
+                //   } else if (data['level'] == 4) {
+                //     label = 'Deep';
+                //   }
+                  // return Container(
+                  //   width: 20,
+                  //   height: 20,
+                  //   decoration: BoxDecoration(
+                  //     color: Color.fromRGBO(121, 108, 192, 1),
+                  //     borderRadius: BorderRadius.circular(4),
+                  //   ),
+                  //   alignment: Alignment.center,
+                  //   child: Text(data['level'].toString()),
+                  // );
+                //},
+              )),
         ],
       ),
     );
