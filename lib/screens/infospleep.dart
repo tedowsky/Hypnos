@@ -13,6 +13,7 @@ import 'package:hypnos/databases/entities/entities.dart' as db;
 import 'package:provider/provider.dart';
 import 'package:hypnos/widgets/linechart.dart';
 import 'package:hypnos/widgets/sleepchart.dart';
+import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Infosleep extends StatefulWidget {
@@ -119,6 +120,7 @@ class _InfosleepState extends State<Infosleep> {
               return IconButton(
                   onPressed: () async {
                     result = db.heartRatesDao.findHeartRatesbyDate(start, end);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => DatabaseList()));
                     print('$result');
                     print('ciao');
                   },
