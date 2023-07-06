@@ -62,6 +62,11 @@ class _InfosleepState extends State<Infosleep> {
       String timeString = '$hours hours $remainingMinutes minutes';
        // Output: 2 hours 15 minutes
       List phases = dataProvider.dataListsleep; 
+      if (sleep == null || phases.isEmpty) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
       print('ciao');
 
       List<Map<String, dynamic>> mappedData = phases.map((data) {
@@ -140,12 +145,50 @@ class _InfosleepState extends State<Infosleep> {
               Text('Your Sleep'),
 
               SizedBox(
-                height: 450,
+                height: 500,
                 width: 1000,
                    
                 child: SleepChartWidget(
                       sleepData: mappedData,
                     ),),
+
+                SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 20,
+                height: 20,
+                color: Color.fromRGBO(131, 190, 200, 1),
+              ),
+              SizedBox(width: 5),
+              Text('Wake'),
+              SizedBox(width: 15),
+              Container(
+                width: 20,
+                height: 20,
+                color: Color.fromRGBO(193, 85, 101, 1),
+              ),
+              SizedBox(width: 5),
+              Text('REM'),
+              SizedBox(width: 15),
+              Container(
+                width: 20,
+                height: 20,
+                color: Color.fromRGBO(186, 186, 130, 1),
+              ),
+              SizedBox(width: 5),
+              Text('Light'),
+              SizedBox(width: 15),
+              Container(
+                width: 20,
+                height: 20,
+                color: Color.fromRGBO(54, 74, 186, 1),
+              ),
+              SizedBox(width: 5),
+              Text('Deep'),
+            ],
+          ),
                     // SleepChartWidget(
                     //   faseName: 'Deep',
                     //   faseDuration: 90,
@@ -229,7 +272,7 @@ class _InfosleepState extends State<Infosleep> {
                         xValueMapper: (sleepfases data, _) => data.fasename,
                         yValueMapper: (sleepfases data, _) => data.faseduration,
                         dataLabelSettings: DataLabelSettings(isVisible: true),
-                        maximumValue: 400)
+                        maximumValue: 300)
                   ],
                 ),
               ),

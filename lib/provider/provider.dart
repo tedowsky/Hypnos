@@ -5,11 +5,22 @@ import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:intl/intl.dart';
 
+import '../services/algoritmo.dart';
+
 
 
 // this is the change notifier. it will manage all the logic of the home page: fetching the correct data from the database
 // and on startup fetching the data from the online services
 class HomeProvider extends ChangeNotifier {
+
+  int _age = 0;
+
+  int get age => _age;
+
+  void setAge(int newAge) {
+    _age = newAge;
+    notifyListeners();
+  }
   // data to be used by the UI
   late List<HR> heartRates;
   final AppDatabase db;
@@ -86,7 +97,19 @@ class HomeProvider extends ChangeNotifier {
   }
 
 
+  int rem = 120;
+  int deep = 180;
+  int light = 240;
+  int wake = 60;
+  int duration = 480;
+  int efficiency = 1;
 
+  double goodSleepIndex = 0.0;
+
+  void calculateGSI() {
+    goodSleepIndex = calculateGoodSleepIndex(rem, deep, light, wake, duration, efficiency);
+    notifyListeners();
+  }
 
 
    Future<void> refresh() async {
