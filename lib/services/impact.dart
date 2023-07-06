@@ -1,4 +1,6 @@
-import 'package:hypnos/databases/entities/entities.dart';
+// import 'package:hypnos/databases/entities/entities.dart';
+// ignore_for_file: await_only_futures
+
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
@@ -113,7 +115,6 @@ class ImpactService {
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -135,48 +136,42 @@ class ImpactService {
     return r.data['data'][0]['username'];
   }
 
-  Future<List<HR>> getDataFromDay(DateTime startTime) async {
-    await updateBearer();
-    Response r = await _dio.get(
-      '/data/v1/heart_rate/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
-      // 'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
-    Map<String, dynamic> responseData = r.data['data'];
-    List<dynamic> dataList = responseData['data'];
+  // Future<List<HR>> getDataFromDay(DateTime startTime) async {
+  //   await updateBearer();
+  //   Response r = await _dio.get(
+  //     '/data/v1/heart_rate/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+  //     // 'data/v1/heart_rate/patients/${prefs.impactUsername}/daterange/start_date/${DateFormat('y-M-d').format(startTime)}/end_date/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
+  //   Map<String, dynamic> responseData = r.data['data'];
+  //   List<dynamic> dataList = responseData['data'];
 
-    List<HR> hr = [];
-    String? day = responseData['date'];
-    for (var dataday in dataList) {
-      String? hour = dataday['time'];
-      String? datetime = '${day}T$hour';
-      DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));        HR hrnew = HR(null, dataday['value'], timestamp);
-      if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
-        hr.add(hrnew);
-      }
-    }
+  //   List<HR> hr = [];
+  //   String? day = responseData['date'];
+  //   for (var dataday in dataList) {
+  //     String? hour = dataday['time'];
+  //     String? datetime = '${day}T$hour';
+  //     DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));        HR hrnew = HR(null, dataday['value'], timestamp);
+  //     if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
+  //       hr.add(hrnew);
+  //     }
+  //   }
     
-    var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
-     return hrlist;
-  }
+  //   var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+  //    return hrlist;
+  // }
   
   Future<List<dynamic>> getSleepData(DateTime startTime) async {
     await updateBearer();
     Response rSleep = await _dio.get(
       '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
-    print('ciao');
-
     Map<String, dynamic> respsleep = rSleep.data['data'];
     List<dynamic> quasisleep = respsleep['data'];
-    Map<String, dynamic> Listsleep = quasisleep[0];
-    List<dynamic> firstNineElements = Listsleep.values.take(10).toList();
-    //List<Sleep> sleepList = firstNineElements.map((element) => element as Sleep).toList();
-    
-
-    print('ciao');
+    Map<String, dynamic> sleepList = quasisleep[0];
+    List<dynamic> firstNineElements = sleepList.values.take(10).toList();
     return firstNineElements;
     }
 
-  DateTime _truncateSeconds(DateTime input) {
-    return DateTime(
-        input.year, input.month, input.day, input.hour, input.minute);
-  }
+  // DateTime _truncateSeconds(DateTime input) {
+  //   return DateTime(
+  //       input.year, input.month, input.day, input.hour, input.minute);
+  // }
 }

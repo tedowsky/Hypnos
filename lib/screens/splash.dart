@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
+import 'package:hypnos/screens/info.dart';
 import 'package:hypnos/screens/login_page.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
@@ -20,9 +20,9 @@ class Splash extends StatelessWidget {
         .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
   } //_toLoginPage
 
-  void _toHomePage(BuildContext context) {
+  void _toInfoPage(BuildContext context) {
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: ((context) => const HomePage())));
+        .pushReplacement(MaterialPageRoute(builder: ((context) => const InfoPage())));
   } //_toHomePage
 
   void _toImpactPage(BuildContext context) {
@@ -48,7 +48,7 @@ class Splash extends StatelessWidget {
       if (responseAccessToken || refreshAccessToken) {
         
         Future.delayed(
-              const Duration(seconds: 1), () => _toHomePage(context));
+              const Duration(seconds: 1), () => _toInfoPage(context));
       } else {
         Future.delayed(
             const Duration(seconds: 1), () => _toImpactPage(context));

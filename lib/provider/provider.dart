@@ -2,31 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/services/impact.dart';
+import 'package:intl/intl.dart';
 
-
-
-// this is the change notifier. it will manage all the logic of the home page: fetching the correct data from the database
-// and on startup fetching the data from the online services
 class HomeProvider extends ChangeNotifier {
 
-  int _age = 0;
-
-  int get age => _age;
-
-  void setAge(int newAge) {
-    _age = newAge;
-    notifyListeners();
-  }
-
-  // data to be used by the UI
-  late List<HR> heartRates;
+  late List<Sleep> sleep;
   final AppDatabase db;
-  
-  List _sleep = []; // Dati ottenuti dalle richieste
-  List get dataList => _sleep;
-
+  int _eff = 0;
+  int get eff => _eff;
   // data fetched from external services or db
-  late List<HR> _heartRates;
+  late List<dynamic> _sleep;
 
   // selected day of data to be shown
   DateTime showDate = DateTime.now().subtract(const Duration(days: 2));
@@ -35,13 +20,13 @@ class HomeProvider extends ChangeNotifier {
   final ImpactService impactService;
 
   bool doneInit = false;
+  
+  
 
   HomeProvider(this.impactService, this.db) {
     _init();
-    print('ciao');
   }
   
-  //constructor of provider which manages the fetching of all data from the servers and then notifies the ui to build
   Future<void> _init() async {
     await _fetchAndCalculate();
     getDataOfDay(showDate);
@@ -56,8 +41,7 @@ class HomeProvider extends ChangeNotifier {
     }
     return data.last.dateTime;
   }
-
-  // method to fetch all data and calculate 
+ 
   Future<void> _fetchAndCalculate() async {
     lastFetch = await _getLastFetch() ??
         DateTime.now().subtract(const Duration(days: 3));
@@ -65,17 +49,21 @@ class HomeProvider extends ChangeNotifier {
     if (lastFetch.day == DateTime.now().subtract(const Duration(days: 2)).day) {
       return;
     }
-    _heartRates = await impactService.getDataFromDay(lastFetch);
-    for (var element in _heartRates) {
-      db.heartRatesDao.insertHeartRate(element);
-    } // db add to the table
+    _sleep = await impactService.getSleepData(DateTime.now().subtract(const Duration(days: 2))); 
+    calculateEff();
 
-     List sleepData = await impactService.getSleepData(DateTime.now());
-
-    // Update _sleep with the new data
-     _sleep = sleepData;
-     notifyListeners();
-
+    await db.sleepDao.insertSleep(
+      Sleep(
+        null, 
+        DateFormat('MM-dd').parse(_sleep[0]),
+        DateFormat('MM-dd HH:mm:ss').parse(_sleep[1]),
+        DateFormat('MM-dd HH:mm:ss').parse(_sleep[2]),
+        _eff
+      )
+    );  
+    print('ciao') ;
+     
+    notifyListeners();
   }
 
    Future<void> refresh() async {
@@ -92,21 +80,19 @@ class HomeProvider extends ChangeNotifier {
         firstDay?.dateTime != null && showDate.isBefore(firstDay!.dateTime)) return;
         
     this.showDate = showDate;
-    heartRates = await db.heartRatesDao.findHeartRatesbyDate(
-        DateUtils.dateOnly(showDate),
-        DateTime(showDate.year, showDate.month, showDate.day, 23, 59));
+    sleep = await db.sleepDao.findSleepbyDate(DateUtils.dateOnly(showDate),DateTime(showDate.year, showDate.month, showDate.day, 23, 59));
 
-    // after selecting all data we notify all consumers to rebuild
     notifyListeners();
   }
 
-// we need to update data every time we refresh with the last values
-void updateDataList(List newSleep) {
-    _sleep = newSleep;
-    notifyListeners();
-    // ignore: avoid_print
-    print('ciao');   
+void calculateEff() {
+  if (_sleep.length >= 9) {
+    double effRatio = _sleep[5] / _sleep[8];
+    _eff = (effRatio * 100).toInt();
+  } else {
+    _eff = 0;
   }
+}
 
 String millisecondsToTime(double duration) {
   int seconds = (duration / 1000).truncate();

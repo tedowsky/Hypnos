@@ -64,6 +64,9 @@ class Preferences {
   String? get password => _getFromDisk('codice');
   set password(String? newpassword) => _saveToDisk("codice", newpassword);
 
+  // List<dynamic>? get sleepData => _getFromDisk('sleep');
+  // set sleepData(List<dynamic>? newsleepData) => _saveToDisk("sleep", newsleepData);
+
   String? get impactUsername => _getFromDisk('impactUsername');
   set impactUsername(String? newImpactUsername) =>
       _saveToDisk("impactUsername", newImpactUsername);

@@ -22,7 +22,7 @@ class CalendarPage extends StatefulWidget {
   final String title;
 
   @override
-  _CalendarState createState() => _CalendarState();
+  State<CalendarPage> createState() => _CalendarState();
 }
 
 class _CalendarState extends State<CalendarPage> {

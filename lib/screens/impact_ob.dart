@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:hypnos/screens/info.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
 
@@ -156,7 +159,6 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                             passwordController.text, context);
                         if (!validation) {
                         // if not correct show message
-                        // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             backgroundColor: Colors.red,
@@ -166,11 +168,12 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                             duration: Duration(seconds: 2),
                           ));
                         } else {
-                          // ignore: use_build_context_synchronously
                           await Provider.of<ImpactService>(context, listen: false).getPatient();
+                          
+                          
+                          // var prefs = Provider.of<Preferences>(context, listen: false);
+                          // prefs.sleepData = await Provider.of<ImpactService>(context, listen: false).getSleepData(DateTime.now());
 
-                          print('ciao');
-                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context)
                         ..removeCurrentSnackBar()
                         ..showSnackBar(const SnackBar(content: Text('Authorization successful')));

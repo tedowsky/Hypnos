@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:intl/intl.dart';
@@ -117,7 +115,6 @@ class ImpactService {
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }

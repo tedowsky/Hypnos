@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hypnos/components/my_button.dart';
 import 'package:hypnos/components/my_textfield.dart';
 import 'package:hypnos/screens/impact_ob.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:hypnos/screens/info.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:hypnos/components/square_tile.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,40 +20,31 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
 
-  final emailTextbox = MyTextField(
-                hintText: 'Email',
-                obscureText: false,
-              );
-  final passwordTextbox = MyTextField(
-                //controller: password,
-                hintText: 'Password',
-                obscureText: true,
-              );
+  final emailTextbox = MyTextField(hintText: 'Email', obscureText: false,);
+  final passwordTextbox = MyTextField(hintText: 'Password',obscureText: true,);
 
-  @override
-  void initState() {
-    super.initState();
-    //Check if the user is already logged in before rendering the login page
-    _checkLogin();
-  }//initState
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _checkLogin();
+  // }
 
-  void _checkLogin() async {
-    //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
-    final sp = await SharedPreferences.getInstance();
-    if(sp.getString('Email') != null){
-      //If 'username is set, push the HomePage
-       // ignore: use_build_context_synchronously        
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
-    }//if
-  }//_checkLogin
+  // void _checkLogin() async {
+  //   //Get the SharedPreference instance and check if the value of the 'username' filed is set or not
+  //   final sp = await SharedPreferences.getInstance();
+  //   if(sp.getString('Email') != null){
+  //     //If 'username is set, push the HomePage
+  //      // ignore: use_build_context_synchronously        
+  //     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
+  //   }//if
+  // }//_checkLogin
+
   void login() {
-    // Check if the credentials are correct
     if (emailTextbox.controller.text == 'myapp@email.com' && passwordTextbox.controller.text == 'target4.7') {
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) =>  const ImpactOnboardingPage()),
-      );
+      var prefs = Provider.of<Preferences>(context, listen: false);
+      prefs.username = emailTextbox.controller.text;
+      prefs.password = passwordTextbox.controller.text ;
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>  const ImpactOnboardingPage()),);
     } else {
       showDialog(
         context: context,
@@ -98,17 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // username textfield
-              emailTextbox,
+              const SizedBox(height: 40), 
+              emailTextbox, // username textfield
               const SizedBox(height: 10),
-          
-              // password textfield
-              passwordTextbox,
-
+              passwordTextbox, // password textfield
               const SizedBox(height: 10),
-
               // forgot password?
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -125,7 +111,9 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               // sign in button
               MyButton(
-                onTap: login,// InfoPage()
+                onTap: login,
+
+                
               ),
               const SizedBox(height: 50),
               Padding(
