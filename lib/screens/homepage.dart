@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/widgets/GSIchart.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:hypnos/screens/infospleep.dart';
@@ -153,6 +154,14 @@ class _HomeState extends State<HomePage> {
                   ),
                 ),
               ),
+            ),
+            SizedBox(
+            height: 25,
+            ),
+            SizedBox(
+              height: 300,
+              width: 500,
+              child: GSIChart(gsi: 3)
             ),
             Align(
               alignment: Alignment.center,

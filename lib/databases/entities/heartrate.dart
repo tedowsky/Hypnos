@@ -12,8 +12,8 @@ class HR {
   final int value;
 
   //When the meal occured
-  final DateTime dateTime;
+  final DateTime dateT;
 
   //Default constructor
-  HR(this.id, this.value, this.dateTime);
+  HR(this.id, this.value, this.dateT);
 } //HeartRates

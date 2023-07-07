@@ -16,6 +16,7 @@ class HomeProvider extends ChangeNotifier {
   int _age = 0;
 
   int get age => _age;
+  late List<Sleep> calldb;
 
   void setAge(int newAge) {
     _age = newAge;
@@ -38,6 +39,7 @@ class HomeProvider extends ChangeNotifier {
 
    List _sleep = []; // Dati ottenuti dalle richieste
   List get dataListsleep => _sleep; 
+  
 
   // selected day of data to be shown
   DateTime showDate = DateTime.now().subtract(const Duration(days: 2));
@@ -55,6 +57,8 @@ class HomeProvider extends ChangeNotifier {
   Future<void> _init() async {
     await _fetchAndCalculate();
     getDataOfDay(showDate);
+    getCalendarDay(showDate);
+
     doneInit = true;
     notifyListeners();
   }
@@ -133,6 +137,25 @@ class HomeProvider extends ChangeNotifier {
     // after selecting all data we notify all consumers to rebuild
     notifyListeners();
   }
+
+   Future<void> getCalendarDay(DateTime showDate) async {
+    // check if the day we want to show has data
+   // check if the day we want to show has data
+    var firstDay = await db.sleepDao.findFirstDayInDb();
+    var lastDay = await db.sleepDao.findLastDayInDb();
+    if (lastDay?.dateTime != null && showDate.isAfter(lastDay!.dateTime) ||
+        firstDay?.dateTime != null && showDate.isBefore(firstDay!.dateTime)) return;
+        
+    this.showDate = showDate;
+    calldb = await db.sleepDao.findSleepbyDate(DateUtils.dateOnly(showDate),DateTime(showDate.year, showDate.month, showDate.day, 23, 59));
+    print('$calldb');
+    print('ciao');
+    notifyListeners();
+    
+  }
+
+
+
 
   void updateDataListhr(List<HR> newhr) {
     line_hr = newhr;

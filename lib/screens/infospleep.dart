@@ -3,6 +3,8 @@ import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:hypnos/databases/entities/sleep.dart';
 import 'package:hypnos/provider/provider.dart';
+import 'package:hypnos/screens/drawer/sleepchartinfo.dart';
+import 'package:hypnos/screens/drawer/phases_info.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:hypnos/widgets/bargraph/bar_graph.dart';
@@ -24,7 +26,6 @@ class Infosleep extends StatefulWidget {
 }
 
 class _InfosleepState extends State<Infosleep> {
-
   @override
   void initState() {
     super.initState();
@@ -48,8 +49,9 @@ class _InfosleepState extends State<Infosleep> {
     //   lazy: false,
     //   builder: (context, child) =>
     return Consumer<HomeProvider>(builder: (context, dataProvider, child) {
+      //SECONDO GRAFICO --> TORTA
       Sleep sleep = dataProvider.datasleep;
-           
+
       DateTime start = sleep.startTime;
       DateTime end = sleep.endTime;
       int rem = sleep.rem;
@@ -57,18 +59,13 @@ class _InfosleepState extends State<Infosleep> {
       int light = sleep.light;
       int wake = sleep.wake;
       int total = rem + deep + light + wake;
-      int hours = total ~/ 60; // Divide by 60 to get the number of hours
-      int remainingMinutes = total % 60; // Use the modulo operator to get the remaining minutes
+      int hours = total ~/ 60;
+      int remainingMinutes = total % 60;
 
       String timeString = '$hours hours $remainingMinutes minutes';
-       // Output: 2 hours 15 minutes
-      List phases = dataProvider.dataListsleep; 
-      if (sleep == null || phases.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-      print('ciao');
+
+      // PRIMO GRAFICO --> STEPLINE
+      List phases = dataProvider.dataListsleep;
 
       List<Map<String, dynamic>> mappedData = phases.map((data) {
         DateFormat hourformat = DateFormat("MM-dd HH:mm:ss");
@@ -96,16 +93,15 @@ class _InfosleepState extends State<Infosleep> {
         };
       }).toList();
 
+      print('ciao');
 
-    print('ciao');
+      final List<sleepfases> chartData = [
+        sleepfases('rem', rem, 180),
+        sleepfases('deep', deep, 150),
+        sleepfases('light', light, 300),
+        sleepfases('wake', wake, 60),
+      ];
 
-    final List<sleepfases> chartData = [
-      sleepfases('rem', rem, 180),
-      sleepfases('deep', deep, 150),
-      sleepfases('light', light, 300),
-      sleepfases('wake', wake, 60),
-    ];
-    
       return Scaffold(
         backgroundColor: Colors.grey[300],
         appBar: AppBar(
@@ -120,7 +116,8 @@ class _InfosleepState extends State<Infosleep> {
               return IconButton(
                   onPressed: () async {
                     result = db.heartRatesDao.findHeartRatesbyDate(start, end);
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => DatabaseList()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => DatabaseList()));
                     print('$result');
                     print('ciao');
                   },
@@ -129,177 +126,180 @@ class _InfosleepState extends State<Infosleep> {
           ],
         ),
         body: //Padding(
-          //padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
-          //child: 
-          ListView(
-            children: [
-              // SizedBox(
-              //   height: 80,
-              //   width: 300,
-              //   child: MyBarGraph(
-              //    sleepstages: sleepstages,
-              //   ),
-              // ),
-              const SizedBox(
-                height: 25,
-              ),
+            //padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
+            //child:
+            ListView(
+          children: [
+            // SizedBox(
+            //   height: 80,
+            //   width: 300,
+            //   child: MyBarGraph(
+            //    sleepstages: sleepstages,
+            //   ),
+            // ),
+            const SizedBox(
+              height: 25,
+            ),
 
-              Text('Your Sleep'),
+            Text('Your Sleep'),
 
-              SizedBox(
-                height: 500,
-                width: 1000,
-                   
-                child: SleepChartWidget(
-                      sleepData: mappedData,
-                    ),),
+            SizedBox(
+              height: 500,
+              width: 1000,
+              child: SleepChartWidget(
+                sleepData: mappedData,
+              ),
+            ),
 
-                SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 20,
-                height: 20,
-                color: Color.fromRGBO(131, 190, 200, 1),
-              ),
-              SizedBox(width: 5),
-              Text('Wake'),
-              SizedBox(width: 15),
-              Container(
-                width: 20,
-                height: 20,
-                color: Color.fromRGBO(193, 85, 101, 1),
-              ),
-              SizedBox(width: 5),
-              Text('REM'),
-              SizedBox(width: 15),
-              Container(
-                width: 20,
-                height: 20,
-                color: Color.fromRGBO(186, 186, 130, 1),
-              ),
-              SizedBox(width: 5),
-              Text('Light'),
-              SizedBox(width: 15),
-              Container(
-                width: 20,
-                height: 20,
-                color: Color.fromRGBO(54, 74, 186, 1),
-              ),
-              SizedBox(width: 5),
-              Text('Deep'),
-            ],
-          ),
-                    // SleepChartWidget(
-                    //   faseName: 'Deep',
-                    //   faseDuration: 90,
-                    //   maximumValue: 150,
-                    //   color: Colors.orange,
-                    // ),
-                    // SleepChartWidget(
-                    //   faseName: 'Light',
-                    //   faseDuration: 180,
-                    //   maximumValue: 250,
-                    //   color: _getFaseColor('Light'),
-                    // ),
-                    // SleepChartWidget(
-                    //   faseName: 'Wake',
-                    //   faseDuration: 60,
-                    //   maximumValue: 100,
-                    //   color: _getFaseColor('Wake'),
-                    // ),
-                  
-                
-              
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Color.fromRGBO(131, 190, 200, 1),
+                ),
+                SizedBox(width: 5),
+                Text('Wake'),
+                SizedBox(width: 15),
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Color.fromRGBO(193, 85, 101, 1),
+                ),
+                SizedBox(width: 5),
+                Text('REM'),
+                SizedBox(width: 15),
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Color.fromRGBO(186, 186, 130, 1),
+                ),
+                SizedBox(width: 5),
+                Text('Light'),
+                SizedBox(width: 15),
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Color.fromRGBO(54, 74, 186, 1),
+                ),
+                SizedBox(width: 5),
+                Text('Deep'),
+              ],
+            ),
 
-              const SizedBox(
-                height: 25,
-              ),
+            const SizedBox(
+              height: 25,
+            ),
 
-              Text('Your Sleep'),
-              SizedBox(
-                height: 450,
-                width: 1200,
-                child: SfCircularChart(
-                  tooltipBehavior: TooltipBehavior(
-                    enable: true,
-                    format: 'point.y min',
-                  ),
-                  title:
-                      ChartTitle(text: 'Yesterday, you slept \n $hours hours and $remainingMinutes minutes, \n of which:'),
-                  legend: Legend(
-                    position: LegendPosition.top,
-                      isVisible: true,
-                      overflowMode: LegendItemOverflowMode.wrap,
-                      textStyle: TextStyle(fontSize: 20),
-                       ),
-                    series: <CircularSeries>[
-                    DoughnutSeries<sleepfases, String>(
-                        dataSource: chartData,
-                        xValueMapper: (sleepfases data, _) => data.fasename,
-                        yValueMapper: (sleepfases data, _) => data.faseduration,
-                        dataLabelMapper: (sleepfases data, _) =>
-                        '${(data.faseduration/total*100).toStringAsFixed(2)} %',
-                        dataLabelSettings: DataLabelSettings(
+            Text('Your Sleep'),
+            SizedBox(
+              height: 450,
+              width: 1200,
+              child: SfCircularChart(
+                tooltipBehavior: TooltipBehavior(
+                  enable: true,
+                  format: 'point.y min',
+                ),
+                title: ChartTitle(
+                    text:
+                        'Yesterday, you slept \n $hours hours and $remainingMinutes minutes, \n of which:'),
+                legend: Legend(
+                  position: LegendPosition.top,
+                  isVisible: true,
+                  overflowMode: LegendItemOverflowMode.wrap,
+                  textStyle: TextStyle(fontSize: 20),
+                ),
+                series: <CircularSeries>[
+                  DoughnutSeries<sleepfases, String>(
+                      dataSource: chartData,
+                      xValueMapper: (sleepfases data, _) => data.fasename,
+                      yValueMapper: (sleepfases data, _) => data.faseduration,
+                      dataLabelMapper: (sleepfases data, _) =>
+                          '${(data.faseduration / total * 100).toStringAsFixed(2)} %',
+                      dataLabelSettings: DataLabelSettings(
                           isVisible: true,
                           labelPosition: ChartDataLabelPosition.outside,
-                          labelIntersectAction: LabelIntersectAction.none
-                          ))
-                  ],
-                   
+                          labelIntersectAction: LabelIntersectAction.none))
+                ],
+              ),
+            ),
+
+            const SizedBox(
+              height: 25,
+            ), 
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PhasesInfo(),
+                          ));
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
+              ),
+              child: Text(
+                'Learn More About the Phases',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
                 ),
               ),
+            ),
 
-              const SizedBox(
-                height: 25,
+            SizedBox(height: 25),
+
+
+            SizedBox(
+              height: 400,
+              width: 1000,
+              // Aggiungi qui il tuo widget o contenuto desiderato
+              child: Consumer<HomeProvider>(
+                  builder: (context, HomeProvider, child) {
+                return LineChartWidget();
+              }),
+            ),
+            SizedBox(height: 25),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SleepChartInfoPage(),
+                          ));
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
               ),
-
-              Text('Your Sleep'),
-              SizedBox(
-                height: 300,
-                width: 500,
-                child: SfCircularChart(
-                  title:
-                      ChartTitle(text: 'Yesterday, you slept \n ${(total/60).toStringAsFixed(2)} hours  \n of which:'),
-                  legend: Legend(
-                      isVisible: true,
-                      overflowMode: LegendItemOverflowMode.wrap),
-                  tooltipBehavior: TooltipBehavior(
-                    enable: true,
-                  ),
-                  series: <CircularSeries>[
-                    RadialBarSeries<sleepfases, String>(
-                        dataSource: chartData,
-                        xValueMapper: (sleepfases data, _) => data.fasename,
-                        yValueMapper: (sleepfases data, _) => data.faseduration,
-                        dataLabelSettings: DataLabelSettings(isVisible: true),
-                        maximumValue: 300)
-                  ],
+              child: Text(
+                'Learn More',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
                 ),
               ),
+            ),
 
-              const SizedBox(
-                height: 25,
-              ),
+            SizedBox(height: 25),
 
-              SizedBox(
-                height: 400,
-                width: 1000,
-                // Aggiungi qui il tuo widget o contenuto desiderato
-                child: Consumer<HomeProvider>(
-                    builder: (context, HomeProvider, child) {
-                  return LineChartWidget();
-                }),
-              )
+            // Consumer<HomeProvider>(
+            //     builder: (context, value, child) =>
+            //         CustomPlot(data: _parseData(value.heartRates)))
+            //         // Aggiungi altri widget o contenuto
+          ],
+        ),
 
-              // Consumer<HomeProvider>(
-              //     builder: (context, value, child) =>
-              //         CustomPlot(data: _parseData(value.heartRates)))
-              //         // Aggiungi altri widget o contenuto
-            ],
-          ),
-       // ),
+        // ),
       );
     });
   }
@@ -316,32 +316,28 @@ class _InfosleepState extends State<Infosleep> {
 //   }
 // }
 
-Color _getFaseColor(String faseName) {
-    switch (faseName) {
-      case 'REM':
-        return Colors.blue;
-      case 'Deep':
-        return Colors.orange;
-      case 'Light':
-        return Colors.green;
-      case 'Wake':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
+// Color _getFaseColor(String faseName) {
+//     switch (faseName) {
+//       case 'REM':
+//         return Colors.blue;
+//       case 'Deep':
+//         return Colors.orange;
+//       case 'Light':
+//         return Colors.green;
+//       case 'Wake':
+//         return Colors.red;
+//       default:
+//         return Colors.grey;
+//     }
+//   }
   List<Map<String, dynamic>> _parseData(List<db.HR> data) {
     return data
         .map(
-          (e) => {
-            'date': DateFormat('HH:mm').format(e.dateTime),
-            'points': e.value
-          },
+          (e) =>
+              {'date': DateFormat('HH:mm').format(e.dateT), 'points': e.value},
         )
         .toList();
   }
-
-
 }
 
 class sleepfases {

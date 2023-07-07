@@ -4,7 +4,7 @@ import 'package:hypnos/databases/entities/sleep.dart';
 
 @dao
 abstract class SleepDao {
-  //Query #0: SELECT -> this allows to obtain all the entries of the HR table of a certain date
+  //Query #0: SELECT -> this allows to obtain all the entries of the Sleep table of a certain date
   @Query('SELECT * FROM Sleep WHERE dateTime between :startTime and :endTime ORDER BY dateTime ASC')
   Future<List<Sleep>> findSleepbyDate(DateTime startTime, DateTime endTime);
 

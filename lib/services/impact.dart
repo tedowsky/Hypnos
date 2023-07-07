@@ -154,13 +154,13 @@ class ImpactService {
         String? datetime = '${day}T$hour';
         DateTime timestamp = _truncateSeconds(DateTime.parse(datetime));
         HR hrnew = HR(null, dataday['value'], timestamp);
-        if (!hr.any((e) => e.dateTime.isAtSameMomentAs(hrnew.dateTime))) {
+        if (!hr.any((e) => e.dateT.isAtSameMomentAs(hrnew.dateT))) {
           hr.add(hrnew);
         }
       }
    // }
     
-    var hrlist = hr.toList()..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    var hrlist = hr.toList()..sort((a, b) => a.dateT.compareTo(b.dateT));
      return hrlist;
 
     

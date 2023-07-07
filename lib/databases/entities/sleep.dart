@@ -14,6 +14,10 @@ class Sleep {
 
   final DateTime endTime;
 
+  final int minAsleep;
+
+  final int timeInBed;
+
   final int rem;
 
   final int deep;
@@ -22,6 +26,7 @@ class Sleep {
 
   final int wake;
 
+
   //Default constructor
-  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light, this.wake);
+  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.minAsleep, this.timeInBed, this.rem, this.deep, this.light, this.wake);
 } //Sleep

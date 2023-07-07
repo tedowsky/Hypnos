@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/calendar.dart';
+import 'package:hypnos/screens/drawer/aboutyoursleep.dart';
+import 'package:hypnos/screens/drawer/algorithm_info.dart';
+import 'package:hypnos/screens/drawer/hypnos_info.dart';
 import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
@@ -14,6 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
 import 'package:hypnos/provider/provider.dart';
+import 'package:hypnos/screens/drawer/algorithm_info.dart';
+import 'package:hypnos/screens/drawer/hypnos_info.dart';
+
 
 
 class InfoPage extends StatefulWidget {
@@ -53,9 +60,7 @@ class _InfoPage extends State<InfoPage> {
       case 1:
         return const HomePage();
       case 2:
-        return const CalendarPage(
-          title: '',
-        );
+        return const CalendarPage();
       default:
         return const HomePage();
     }
@@ -97,22 +102,34 @@ class _InfoPage extends State<InfoPage> {
                 onTap: () => _toLoginPage(context),
               ),
               ListTile(
-                  leading: const Icon(Icons.bed),
-                  title: const Text("Sleeping Information"),
-                  onTap: () {}
+                  leading: const Icon(MdiIcons.information),
+                  title: const Text("About Hypos"),
+                  onTap: () {
+                     Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => HypnosInfo(),
+                          ));
+                  }
 
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep())),
 
                   ),
               ListTile(
-                leading: const Icon(Icons.calendar_month),
-                title: const Text("Calendar"),
-                onTap: () {},
+                leading: const Icon(MdiIcons.help),
+                title: const Text("What's the the GSI"),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AlgorithmInfo(),
+                          ));
+                },
               ),
               ListTile(
-                leading: const Icon(Icons.query_stats),
-                title: const Text("Statistics"),
-                onTap: () {},
+                leading: const Icon(MdiIcons.bed),
+                title: const Text("About Sleep"),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AboutSleep(),
+                          ));
+                },
               ),
             ],
           ),
@@ -279,6 +296,8 @@ class _InfoPage extends State<InfoPage> {
               String dateTimeStr = basesleep[0];
               String startTimeStr = basesleep[1];
               String endTimeStr = basesleep[2];
+              int timeAsleep = basesleep[5];
+              int timeInBed = basesleep[8];
               int remCount = summarylevelsleep["rem_summary"]["minutes"];
               int deepCount = summarylevelsleep["deep_summary"]["minutes"];
               int lightCount = summarylevelsleep["light_summary"]["minutes"];
@@ -301,6 +320,8 @@ class _InfoPage extends State<InfoPage> {
                  dateTime,
                  startTime,
                  endTime,
+                 timeAsleep,
+                 timeInBed,
                  remCount,
                  deepCount,
                  lightCount,

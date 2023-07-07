@@ -30,8 +30,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           return CircularProgressIndicator(); // Mostra un indicatore di caricamento o un widget alternativo mentre si attendono i dati
 
         }
-        DateTime minX = hert.first.dateTime;
-        DateTime maxX = hert.last.dateTime;
+        DateTime minX = hert.first.dateT;
+        DateTime maxX = hert.last.dateT;
 
         // Trova il valore minimo e massimo per l'asse X (DateTime)
             // String sleepDatamin = sleep[1];
@@ -74,6 +74,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 List<FlSpot> convertToFlSpots(List<HR> hert) {
   return hert
       .map((hert) => FlSpot(
-          hert.dateTime.millisecondsSinceEpoch.toDouble(), hert.value.toDouble()))
+          hert.dateT.millisecondsSinceEpoch.toDouble(), hert.value.toDouble()))
       .toList();
 }
