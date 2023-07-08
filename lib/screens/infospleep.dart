@@ -127,7 +127,6 @@ class _InfosleepState extends State<Infosleep> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => DatabaseList()));
                     print('$result');
-                    print('ciao');
                   },
                   icon: const Icon(MdiIcons.databaseRefreshOutline));
             })
