@@ -8,6 +8,9 @@ abstract class SleepDao {
   @Query('SELECT * FROM Sleep WHERE dateTime between :startTime and :endTime ORDER BY dateTime ASC')
   Future<List<Sleep>> findSleepbyDate(DateTime startTime, DateTime endTime);
 
+  @Query('SELECT * FROM Sleep WHERE dateTime =:targetDateTime')
+  Future<Sleep?> findSleepByDateTime(DateTime targetDateTime);
+
   //Query #1: SELECT -> this allows to obtain all the entries of the Sleep table
   @Query('SELECT * FROM Sleep')
   Future<List<Sleep>> findAllSleep();

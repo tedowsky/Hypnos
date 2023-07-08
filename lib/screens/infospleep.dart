@@ -38,7 +38,11 @@ class _InfosleepState extends State<Infosleep> {
   // var rem = [];
   // List sleepstages = [];
 
-  Future<List<HR>>? result;
+  Future<List<Sleep>>? result;
+  late Sleep? data;
+  late DateTime dateTime;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +119,11 @@ class _InfosleepState extends State<Infosleep> {
             Consumer<AppDatabase>(builder: (context, db, child) {
               return IconButton(
                   onPressed: () async {
-                    result = db.heartRatesDao.findHeartRatesbyDate(start, end);
+                    data = await Provider.of<HomeProvider>(context,listen: false).getLastDay();
+                    
+                  DateTime? dateTime = data?.dateTime;
+
+
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => DatabaseList()));
                     print('$result');
@@ -364,6 +372,8 @@ class _InfosleepState extends State<Infosleep> {
         )
         .toList();
   }
+
+
 }
 
 class sleepfases {
@@ -372,3 +382,4 @@ class sleepfases {
   final int faseduration;
   final int maximumduration;
 }
+

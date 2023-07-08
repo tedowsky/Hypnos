@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/entities.dart';
@@ -63,13 +62,19 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<DateTime?> _getLastFetch() async {
-    var data = await db.sleepDao.findAllSleep();
-    if (data.isEmpty) {
-      return null;
-    }
-    return data.last.dateTime;
+
+   Future<Sleep?> getselectedDay(DateTime selectedDay) async {
+    var databasedata = await db.sleepDao.findSleepByDateTime(selectedDay);
+    
+    return databasedata;
   }
+
+    Future<Sleep?> getLastDay() async {
+    var ultimo = await db.sleepDao.findLastDayInDb();
+   
+    return ultimo;
+  }
+
 
   // method to fetch all data and calculate the exposure
   Future<void> _fetchAndCalculate() async {
@@ -177,6 +182,8 @@ class HomeProvider extends ChangeNotifier {
     db.sleepDao.insertSleep(_sleepdb);
     
   }
+
+
 
 }
 DateTime _truncateSeconds(DateTime input) {

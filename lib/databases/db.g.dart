@@ -271,6 +271,23 @@ class _$SleepDao extends SleepDao {
   }
 
   @override
+  Future<Sleep?> findSleepByDateTime(DateTime targetDateTime) async {
+    return _queryAdapter.query('SELECT * FROM Sleep WHERE dateTime =?1',
+        mapper: (Map<String, Object?> row) => Sleep(
+            row['id'] as int?,
+            _dateTimeConverter.decode(row['dateTime'] as int),
+            _dateTimeConverter.decode(row['startTime'] as int),
+            _dateTimeConverter.decode(row['endTime'] as int),
+            row['minAsleep'] as int,
+            row['timeInBed'] as int,
+            row['rem'] as int,
+            row['deep'] as int,
+            row['light'] as int,
+            row['wake'] as int),
+        arguments: [_dateTimeConverter.encode(targetDateTime)]);
+  }
+
+  @override
   Future<List<Sleep>> findAllSleep() async {
     return _queryAdapter.queryList('SELECT * FROM Sleep',
         mapper: (Map<String, Object?> row) => Sleep(

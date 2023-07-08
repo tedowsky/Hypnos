@@ -44,6 +44,7 @@ class _InfoPage extends State<InfoPage> {
   List<dynamic> basesleep = [];
   Map<String, dynamic> summarylevelsleep = {};
   List<dynamic> levelsleep = [];
+  late Sleep? data;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -182,9 +183,10 @@ class _InfoPage extends State<InfoPage> {
               dataProvider.updateSleep(sleepfordb);
 
               dataProvider.updateDataListsleep(levelsleep);
+              
+              data = await Provider.of<HomeProvider>(context,listen: false).getLastDay();
 
               print('ciao');
-              
 
               for(var element in hr){
                await Provider.of<AppDatabase>(context, listen: false)
@@ -303,15 +305,15 @@ class _InfoPage extends State<InfoPage> {
               int lightCount = summarylevelsleep["light_summary"]["minutes"];
               int wakeCount = summarylevelsleep["wake_summary"]["minutes"];
 
-              DateFormat format = DateFormat("MM-dd");
-              DateFormat hourformat = DateFormat("MM-dd HH:mm:ss");
+              String dateTimeWithYearStr = "2023-$dateTimeStr";
+              String startTimeWithYearStr = "2023-$startTimeStr";
+              String endTimeWithYearStr = "2023-$endTimeStr";
+              DateFormat format = DateFormat("yyyy-MM-dd");
+              DateFormat hourformat = DateFormat("yyyy-MM-dd HH:mm:ss");
+              DateTime dateTime = format.parse(dateTimeWithYearStr);
+              DateTime startTime = hourformat.parse(startTimeWithYearStr);
+              DateTime endTime = hourformat.parse(endTimeWithYearStr);
 
-
-
-              DateTime dateTime = format.parse(dateTimeStr);
-              //dateTime = DateTime(dateTime.year + (DateTime.now().year - 1970), dateTime.month, dateTime.day);
-              DateTime startTime = hourformat.parse(startTimeStr);
-              DateTime endTime = hourformat.parse(endTimeStr);
               print('ciao');
                // Converti la stringa in un oggetto TimeOfDay
                final int? id = null;
