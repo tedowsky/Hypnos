@@ -141,12 +141,31 @@ class _InfosleepState extends State<Infosleep> {
               height: 25,
             ),
 
-            Text('Your Sleep'),
+            Column(mainAxisAlignment: 
+            MainAxisAlignment.center, children: [
+              Text(
+                'Discover your sleep phases: \n',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Go through your sleep cycles',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 156, 100, 166),
+                  fontSize: 16.0,
+                  
+                ),
+              ),
+              ],),
 
             SizedBox(
               height: 500,
               width: 1000,
               child: SleepChartWidget(
+                
                 sleepData: mappedData,
               ),
             ),
@@ -193,18 +212,76 @@ class _InfosleepState extends State<Infosleep> {
               height: 25,
             ),
 
-            Text('Your Sleep'),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                'Click here to know how to read the chart',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                ),
+              ),
+
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SleepChartInfoPage()),
+                );
+              },
+              icon: Icon(
+                Icons.info,
+                color: Colors.black,
+              ),
+            ),]),
+
+            const SizedBox(
+              height: 25,
+            ),
+
+            Column(mainAxisAlignment: 
+            MainAxisAlignment.center, children: [
+              Text(
+                'Yesterday, you slept',
+                style: TextStyle(
+                  color:  Color.fromARGB(255, 156, 100, 166),
+                  fontSize: 16.0,
+                  
+                ),
+              ),
+              Text(
+                '$hours hours and $remainingMinutes minutes,',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 156, 100, 166),
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold                  
+                ),
+              ),
+              Text(
+                'of which:',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 156, 100, 166),
+                  fontSize: 16.0,
+                  
+                ),
+              ),
+
+              ],),
+
+            const SizedBox(
+              height: 25,
+            ),
+
+            
             SizedBox(
-              height: 450,
-              width: 1200,
+              height: 400,
+              width: 1000,
               child: SfCircularChart(
                 tooltipBehavior: TooltipBehavior(
                   enable: true,
                   format: 'point.y min',
                 ),
-                title: ChartTitle(
-                    text:
-                        'Yesterday, you slept \n $hours hours and $remainingMinutes minutes, \n of which:'),
+                // title: ChartTitle(
+                //     text:
+                //         'Yesterday, you slept \n $hours hours and $remainingMinutes minutes, \n of which:'),
                 legend: Legend(
                   position: LegendPosition.top,
                   isVisible: true,
@@ -229,73 +306,47 @@ class _InfosleepState extends State<Infosleep> {
             const SizedBox(
               height: 25,
             ), 
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PhasesInfo(),
-                          ));
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 12.0),
-              ),
-              child: Text(
-                'Learn More About the Phases',
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                'Click here to discover the phase balance',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 16.0,
                 ),
               ),
-            ),
 
-            SizedBox(height: 25),
-
-
-            SizedBox(
-              height: 400,
-              width: 1000,
-              // Aggiungi qui il tuo widget o contenuto desiderato
-              child: Consumer<HomeProvider>(
-                  builder: (context, HomeProvider, child) {
-                return LineChartWidget();
-              }),
-            ),
-            SizedBox(height: 25),
-
-            ElevatedButton(
+            IconButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SleepChartInfoPage(),
-                          ));
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => PhasesInfo()),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 12.0),
+              icon: Icon(
+                Icons.info,
+                color: Colors.black,
               ),
-              child: Text(
-                'Learn More',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
+            ),]),
+
+            // const SizedBox(
+            //   height: 25,
+            // ),
+
+
+
+            // SizedBox(
+            //   height: 400,
+            //   width: 1000,
+            //   // Aggiungi qui il tuo widget o contenuto desiderato
+            //   child: Consumer<HomeProvider>(
+            //       builder: (context, HomeProvider, child) {
+            //     return LineChartWidget();
+            //   }),
+            // ),
+
 
             SizedBox(height: 25),
+            
 
-            // Consumer<HomeProvider>(
-            //     builder: (context, value, child) =>
-            //         CustomPlot(data: _parseData(value.heartRates)))
-            //         // Aggiungi altri widget o contenuto
           ],
         ),
 
@@ -304,32 +355,7 @@ class _InfosleepState extends State<Infosleep> {
     });
   }
 
-//   void updateSleepStages() async {
-//     summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
-//         .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
-//     deep = summarylevelsleep['deep_summary']['minutes'];
-//     wake = summarylevelsleep['wake_summary']['minutes'];
-//     light = summarylevelsleep['light_summary']['minutes'];
-//     rem = summarylevelsleep['rem_summary']['minutes'];
-//     sleepstages = [rem, deep, light];
-//     setState(() {}); // Aggiungi questo per aggiornare il widget
-//   }
-// }
 
-// Color _getFaseColor(String faseName) {
-//     switch (faseName) {
-//       case 'REM':
-//         return Colors.blue;
-//       case 'Deep':
-//         return Colors.orange;
-//       case 'Light':
-//         return Colors.green;
-//       case 'Wake':
-//         return Colors.red;
-//       default:
-//         return Colors.grey;
-//     }
-//   }
   List<Map<String, dynamic>> _parseData(List<db.HR> data) {
     return data
         .map(

@@ -19,9 +19,10 @@ class SleepChartWidget extends StatelessWidget {
             enableDoubleTapZooming: true,
             enablePanning: true,
             zoomMode: ZoomMode.x),
-        legend: Legend(isVisible: true,
-        //title: LegendTitle(text: 'W = wake \n R = REM \n D = Deep \n L = Light')
-        ),
+            
+        // legend: Legend(isVisible: true,
+        // //title: LegendTitle(text: 'W = wake \n R = REM \n D = Deep \n L = Light')
+        // ),
         primaryXAxis: DateTimeAxis(
           dateFormat: DateFormat.Hm(),
           edgeLabelPlacement: EdgeLabelPlacement.shift,

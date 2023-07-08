@@ -71,40 +71,41 @@ class SleepChartInfoPage extends StatelessWidget {
             ),
              const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Durata dei cicli del sonno:',
+              title: 'Sleep Cycle Duration:',
               description:
-                  'Un ciclo completo del sonno dura in media da 90 a 120 minuti e si ripete più volte durante la notte. Durante ogni ciclo, il cervello attraversa diverse fasi del sonno, inclusi periodi di sonno leggero, sonno profondo e sonno REM.',
+                  'A complete sleep cycle lasts an average of 90 to 120 minutes and repeats multiple times throughout the night. During each cycle, the brain goes through different sleep stages, including periods of light sleep, deep sleep, and REM sleep.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Distribuzione delle fasi del sonno:',
+              title: 'Distribution of Sleep Stages:',
               description:
-                  'Durante la prima metà della notte, i cicli del sonno tendono ad avere una maggiore quantità di sonno profondo. Nella seconda metà della notte, i cicli del sonno sono caratterizzati da una maggiore presenza di sonno REM. Questa distribuzione riflette un modello di sonno tipico e sano.',
+                  'During the first half of the night, sleep cycles tend to have a higher amount of deep sleep. In the second half of the night, sleep cycles are characterized by a higher presence of REM sleep. This distribution reflects a typical and healthy sleep pattern.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Sonno leggero:',
+              title: 'Light Sleep:',
               description:
-                  'Il sonno leggero rappresenta la fase di transizione tra il sonno profondo e il sonno REM. Durante questa fase, il corpo e il cervello si rilassano e si preparano per il sonno profondo e il sonno REM successivi.',
+                  'Light sleep represents the transitional phase between deep sleep and REM sleep. During this phase, the body and brain relax and prepare for the subsequent deep sleep and REM sleep.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Sonno profondo:',
+              title: 'Deep Sleep:',
               description:
-                  'Il sonno profondo è una fase di sonno rigenerante e riparatore. Durante questa fase, il corpo si rilassa completamente, la pressione sanguigna diminuisce e il sistema immunitario si rafforza. Il sonno profondo è importante per il recupero fisico e mentale.',
+                  'Deep sleep is a restorative and reparative sleep phase. During this phase, the body fully relaxes, blood pressure decreases, and the immune system strengthens. Deep sleep is important for physical and mental recovery.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Pattern di sonno sano:',
+              title: 'Healthy Sleep Patterns:',
               description:
-                  'Un buon pattern di sonno sano comprende una quantità adeguata di sonno profondo e sonno REM. È consigliabile avere cicli di sonno completi durante la notte, senza interruzioni significative. Inoltre, un sonno di qualità si caratterizza per una sensazione di freschezza e riposo al risveglio, senza eccessiva sonnolenza diurna.',
+                  'A healthy sleep pattern includes an adequate amount of deep sleep and REM sleep. It is advisable to have complete sleep cycles throughout the night without significant interruptions. Additionally, quality sleep is characterized by a feeling of freshness and restfulness upon waking up, without excessive daytime sleepiness.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
-              title: 'Consistenza del sonno:',
+              title: 'Consistency of Sleep:',
               description:
-                  'Mantenere una routine di sonno regolare è fondamentale per favorire un buon sonno. Andare a letto e svegliarsi alla stessa ora ogni giorno può aiutare a sincronizzare il ritmo circadiano e migliorare la qualità del sonno.',
+                  'Maintaining a regular sleep routine is essential for promoting good sleep. Going to bed and waking up at the same time every day can help synchronize the circadian rhythm and improve sleep quality.',
             ),
+
           ],
         ),
       ),
