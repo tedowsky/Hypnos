@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hypnos/databases/db.dart';
-import 'package:hypnos/databases/entities/heartrate.dart';
 import 'package:hypnos/databases/entities/sleep.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/drawer/sleepchartinfo.dart';
 import 'package:hypnos/screens/drawer/phases_info.dart';
-import 'package:hypnos/services/impact.dart';
-import 'package:hypnos/utils/shared_preferences.dart';
-import 'package:hypnos/widgets/bargraph/bar_graph.dart';
-import 'package:hypnos/widgets/custom_plot.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/databases/entities/entities.dart' as db;
+import 'package:hypnos/databases/entities/sleep.dart' as db;
 import 'package:provider/provider.dart';
-import 'package:hypnos/widgets/linechart.dart';
 import 'package:hypnos/widgets/sleepchart.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -39,19 +33,12 @@ class _InfosleepState extends State<Infosleep> {
   // List sleepstages = [];
 
   Future<List<Sleep>>? result;
-  late Sleep? data;
-  late DateTime dateTime;
 
 
 
   @override
   Widget build(BuildContext context) {
-    // return ChangeNotifierProvider<HomeProvider>(
-    //   create: (context) => HomeProvider(
-    //       ImpactService(Provider.of<Preferences>(context, listen: false)),
-    //       Provider.of<AppDatabase>(context, listen: false)),
-    //   lazy: false,
-    //   builder: (context, child) =>
+
     return Consumer<HomeProvider>(builder: (context, dataProvider, child) {
       //SECONDO GRAFICO --> TORTA
       Sleep sleep = dataProvider.datasleep;
@@ -119,10 +106,6 @@ class _InfosleepState extends State<Infosleep> {
             Consumer<AppDatabase>(builder: (context, db, child) {
               return IconButton(
                   onPressed: () async {
-                    data = await Provider.of<HomeProvider>(context,listen: false).getLastDay();
-                    
-                  DateTime? dateTime = data?.dateTime;
-
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => DatabaseList()));
@@ -132,18 +115,10 @@ class _InfosleepState extends State<Infosleep> {
             })
           ],
         ),
-        body: //Padding(
-            //padding: const EdgeInsets.fromLTRB(25, 150, 25, 10),
-            //child:
+        body: 
             ListView(
           children: [
-            // SizedBox(
-            //   height: 80,
-            //   width: 300,
-            //   child: MyBarGraph(
-            //    sleepstages: sleepstages,
-            //   ),
-            // ),
+
             const SizedBox(
               height: 25,
             ),
@@ -334,22 +309,6 @@ class _InfosleepState extends State<Infosleep> {
               ),
             ),]),
 
-            // const SizedBox(
-            //   height: 25,
-            // ),
-
-
-
-            // SizedBox(
-            //   height: 400,
-            //   width: 1000,
-            //   // Aggiungi qui il tuo widget o contenuto desiderato
-            //   child: Consumer<HomeProvider>(
-            //       builder: (context, HomeProvider, child) {
-            //     return LineChartWidget();
-            //   }),
-            // ),
-
 
             SizedBox(height: 25),
             
@@ -360,16 +319,6 @@ class _InfosleepState extends State<Infosleep> {
         // ),
       );
     });
-  }
-
-
-  List<Map<String, dynamic>> _parseData(List<db.HR> data) {
-    return data
-        .map(
-          (e) =>
-              {'date': DateFormat('HH:mm').format(e.dateT), 'points': e.value},
-        )
-        .toList();
   }
 
 

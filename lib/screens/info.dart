@@ -8,7 +8,6 @@ import 'package:hypnos/screens/homepage.dart';
 import 'package:hypnos/screens/impact_ob.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
-import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,10 +15,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/databases/db.dart';
-import 'package:hypnos/databases/entities/entities.dart';
-import 'package:hypnos/provider/provider.dart';
-import 'package:hypnos/screens/drawer/algorithm_info.dart';
-import 'package:hypnos/screens/drawer/hypnos_info.dart';
+import 'package:hypnos/databases/entities/sleep.dart';
+
 
 
 
@@ -40,11 +37,12 @@ class _InfoPage extends State<InfoPage> {
   }
 
   int _selIdx = 0;
-  List<HR> hr = [];
   List<dynamic> basesleep = [];
   Map<String, dynamic> summarylevelsleep = {};
   List<dynamic> levelsleep = [];
   late Sleep? data;
+  bool done = false;
+  DateTime date = DateTime.now().toLocal().toLocal();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -72,12 +70,7 @@ class _InfoPage extends State<InfoPage> {
 
     var dataProvider = Provider.of<HomeProvider>(context, listen: false);
 
-    // return ChangeNotifierProvider<HomeProvider>(
-    //   create: (context) => HomeProvider(
-    //       ImpactService(Provider.of<Preferences>(context, listen: false)),
-    //       Provider.of<AppDatabase>(context, listen: false)),
-    //   lazy: false,
-    //   builder: (context, child)
+
     return 
       Scaffold(
       // --- DRAWER ---
@@ -152,13 +145,7 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              await Provider.of<ImpactService>(context, listen: false)
-                            .getPatient();
-              List<HR> hr = await Provider.of<ImpactService>(context, listen: false)
-                            .getDataFromDay(DateTime.now());
-
-              dataProvider.updateDataListhr(hr);
-
+             
               basesleep = await Provider.of<ImpactService>(context, listen: false)
                             .getbaseSleepData(DateTime.now().subtract(const Duration(days: 1)));
                             
@@ -170,64 +157,28 @@ class _InfoPage extends State<InfoPage> {
               levelsleep = await Provider.of<ImpactService>(context, listen: false)
                             .getlevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
 
-              //  Sleep(this.id, this.dateTime, this.startTime, this.endTime, this.rem, this.deep, this.light);
-              // basesleep[0] = this.dateTime; //basesleep[1] This.startTime; //basesleep[2] = this.endTime;
-              // basesleep[4] = minutestofallAsleep; // basesleep[7] = minutesAfterWakeup (minutes spent in bed after Wakeup)
-              // basesleep[6] = minutes awake during the sleep entry
-              // summarysleep["rem_summary"]["count"] = this.rem
-              // summarysleep["deep_summary"]["count"] = this.deep
-              // summarysleep["light_summary"]["count"] = this.light
-              // summarysleep["wake_summary"]["count"] = this.wake
-
+              
               Sleep sleepfordb = await getSleepData();
-              dataProvider.updateSleep(sleepfordb);
+              
+               DateTime currentDate = DateTime.now().toLocal().toLocal();
+
+              if (currentDate.day == date.day) {
+                // Esegui l'operazione solo se è un nuovo giorno
+                date = currentDate;
+
+                // Aggiorna i dati nel database
+                dataProvider.updateSleep(sleepfordb);
+
+                done = true;
+              }
 
               dataProvider.updateDataListsleep(levelsleep);
-              
-              data = await Provider.of<HomeProvider>(context,listen: false).getLastDay();
 
-              print('ciao');
-
-              for(var element in hr){
-               await Provider.of<AppDatabase>(context, listen: false)
-               .heartRatesDao
-               .insertHeartRate(
-                element);}
-
-               await Provider.of<HomeProvider>(context, listen: false).Mettili;
 
               print('ciao');
 
 
             },
-
-            //   final sp = await SharedPreferences.getInstance();
-            //   final String? token = sp.getString('access');
-            //   if (token == null)
-            //   {
-            //     final message = 'DataRetrieval failed: re-do Login';
-            //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const InfoPage()));
-            //   ScaffoldMessenger.of(context)
-            //   ..removeCurrentSnackBar()
-            //   ..showSnackBar(SnackBar(content: Text(message)));
-            //   }
-            //   else {
-            //     List<HR>? result = await service.requestData();
-            //   final message = 'DataRetrieval successful';
-            //   ScaffoldMessenger.of(context)
-            //   ..removeCurrentSnackBar()
-            //   ..showSnackBar(SnackBar(content: Text(message)));
-            //   print('Ciao');
-            //   }
-
-            //   //  final dbRepository = Provider.of<DatabaseRepository>(context, listen: false);
-            //   //   final List<HeartRate>? heartRateList = result!.cast<HeartRate>(); // La tua lista di istanze di HeartRate
-
-            //   // for (final heartRate in heartRateList!) {
-            //   // await dbRepository.insertHR(heartRate);
-            //   // }
-
-            // },
             icon: const Icon(Icons.token),
           ),
           IconButton(
