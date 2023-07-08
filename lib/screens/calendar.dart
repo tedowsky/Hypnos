@@ -31,15 +31,6 @@ class _CalendarState extends State<CalendarPage> {
         return Scaffold(
           body: Column(
             children: [
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    //data =  await Provider.of<HomeProvider>(context,listen: false).getDatabase();
-                    print('ciao');
-                  }, 
-                  child: const Text('db'),
-                ),
-              ),
               TableCalendar(
                 firstDay: DateTime.utc(2022, 10, 5),
                 lastDay: DateTime.utc(2025, 3, 14),
@@ -88,7 +79,8 @@ class _CalendarState extends State<CalendarPage> {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
                     });
-                    data =  await Provider.of<HomeProvider>(context,listen: false).getselectedDay(selectedDay);
+                    
+                    data =  await Provider.of<HomeProvider>(context,listen: false).getselectedDay(DateTime.parse(selectedDay.toString().split("Z")[0]));
                     print('ciao');
                   }
 
@@ -108,9 +100,8 @@ class _CalendarState extends State<CalendarPage> {
                 },
               ),
               const SizedBox(height: 25),
-              const Expanded(
-                child: Text(''),
-              ),
+              
+
             ],
           ),
         );
