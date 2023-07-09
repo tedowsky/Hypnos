@@ -33,7 +33,8 @@ class AlgorithmInfo extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             const Text(
-              'The GoodSleepIndex (GSI) algorithm calculates sleep quality based on parameters such as sleep duration, distribution of sleep phases, and sleep efficiency.',
+              'The GoodSleepIndex (GSI) algorithm calculates sleep quality based on parameters such as sleep duration, distribution of sleep phases, and sleep efficiency.\n'
+              'All this variables are in some way dependent but show different infos about your sleep.',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -72,8 +73,7 @@ class AlgorithmInfo extends StatelessWidget {
             const SizedBox(height: 8.0),
             _buildAlgorithmItem(
               title: 'Sleep Duration',
-              description:
-                  'Total duration of sleep in hours.',
+              description: 'Total duration of sleep in hours.',
             ),
             const SizedBox(height: 8.0),
             _buildAlgorithmItem(
@@ -104,13 +104,19 @@ class AlgorithmInfo extends StatelessWidget {
             _buildAlgorithmStep(
               number: '3',
               description:
-                  'Determine the "Suggested Duration" based on sleep duration (1 if within the recommended range, 0 otherwise).',
+                  'Determine the "duration mark" based on sleep duration (1, 0.5 if within the recommended range, 0.25 or -0.25 otherwise).',
             ),
             const SizedBox(height: 8.0),
             _buildAlgorithmStep(
               number: '4',
               description:
-                  'Calculate the final GSI by combining the base GSI, scores from Step 2, and the suggested duration (resulting in a score ranging from 0 to 5).',
+                  'Determine the "efficency mark" based on the sleep efficency (a good mark is gained only if the sleep had an high efficency)',
+            ),
+            const SizedBox(height: 8.0),
+            _buildAlgorithmStep(
+              number: '5',
+              description:
+                  'Calculate the final GSI by combining the base GSI, scores from Step 2,the suggested duration and the efficency (resulting in a score ranging from 0 to 5).',
             ),
             const SizedBox(height: 16.0),
             const Text(
@@ -208,28 +214,28 @@ class AlgorithmInfo extends StatelessWidget {
     );
   }
 
-Widget _buildInterpretationItem({
-  required String scoreRange,
-  required String interpretation,
-}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'Score Range: $scoreRange',
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+  Widget _buildInterpretationItem({
+    required String scoreRange,
+    required String interpretation,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Score Range: $scoreRange',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      const SizedBox(height: 4.0),
-      Text(
-        interpretation,
-        style: const TextStyle(
-          fontSize: 14,
+        const SizedBox(height: 4.0),
+        Text(
+          interpretation,
+          style: const TextStyle(
+            fontSize: 14,
+          ),
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 }

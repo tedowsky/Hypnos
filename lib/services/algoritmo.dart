@@ -48,13 +48,13 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
     // if sleep between 7 and 9 hours
     durationMark = 1;
   } else if (durationInMinutes > 390 && durationInMinutes < 570) {
-    // if sleep between 7 and 9 hours
+    // if sleep between 6 and 7 or 9 and 10 hours
     durationMark = 0.5;
   } else if (durationInMinutes > 360 && durationInMinutes < 600) {
-    // if sleep between 7 and 9 hours
+    // if sleep between 5 and 6 or 10 and 11 hours
     durationMark = 0.25;
   } else {
-    durationMark = -0.5;
+    durationMark = -0.25;
   }
 
   double efficencyMark = 0;
