@@ -17,12 +17,8 @@ import 'package:provider/provider.dart';
 import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/sleep.dart';
 
-
-
-
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
-
 
   static const routeDisplayname = 'InfoPage';
 
@@ -67,12 +63,9 @@ class _InfoPage extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-
     var dataProvider = Provider.of<HomeProvider>(context, listen: false);
 
-
-    return 
-      Scaffold(
+    return Scaffold(
       // --- DRAWER ---
       drawer: Drawer(
         backgroundColor: const Color.fromARGB(255, 144, 111, 160),
@@ -99,9 +92,9 @@ class _InfoPage extends State<InfoPage> {
                   leading: const Icon(MdiIcons.information),
                   title: const Text("About Hypos"),
                   onTap: () {
-                     Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => HypnosInfo(),
-                          ));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HypnosInfo(),
+                    ));
                   }
 
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep())),
@@ -112,8 +105,8 @@ class _InfoPage extends State<InfoPage> {
                 title: const Text("What's the the GSI"),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AlgorithmInfo(),
-                          ));
+                    builder: (context) => AlgorithmInfo(),
+                  ));
                 },
               ),
               ListTile(
@@ -121,8 +114,8 @@ class _InfoPage extends State<InfoPage> {
                 title: const Text("About Sleep"),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AboutSleep(),
-                          ));
+                    builder: (context) => AboutSleep(),
+                  ));
                 },
               ),
             ],
@@ -145,39 +138,23 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-             
-              basesleep = await Provider.of<ImpactService>(context, listen: false)
-                            .getbaseSleepData(DateTime.now().subtract(const Duration(days: 1)));
-                            
+              basesleep =
+                  await Provider.of<ImpactService>(context, listen: false)
+                      .getbaseSleepData(
+                          DateTime.now().subtract(const Duration(days: 1)));
+
               dataProvider.updateDataListsleep(basesleep);
 
-              summarylevelsleep = await Provider.of<ImpactService>(context, listen: false)
-                            .getsummarylevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
-              
-              levelsleep = await Provider.of<ImpactService>(context, listen: false)
-                            .getlevelsSleepData(DateTime.now().subtract(const Duration(days: 1)));
+              summarylevelsleep =
+                  await Provider.of<ImpactService>(context, listen: false)
+                      .getsummarylevelsSleepData(
+                          DateTime.now().subtract(const Duration(days: 1)));
 
-              
               Sleep sleepfordb = await getSleepData();
-              
-               DateTime currentDate = DateTime.now().toLocal().toLocal();
 
-              if (currentDate.day == date.day) {
-                // Esegui l'operazione solo se è un nuovo giorno
-                date = currentDate;
-
-                // Aggiorna i dati nel database
-                dataProvider.updateSleep(sleepfordb);
-
-                done = true;
-              }
-
-              dataProvider.updateDataListsleep(levelsleep);
-
+              dataProvider.updateSleep(sleepfordb);
 
               print('ciao');
-
-
             },
             icon: const Icon(Icons.token),
           ),
@@ -244,52 +221,40 @@ class _InfoPage extends State<InfoPage> {
         MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()));
   }
 
- Future<Sleep> getSleepData() async{ 
+  Future<Sleep> getSleepData() async {
+    String dateTimeStr = basesleep[0];
+    String startTimeStr = basesleep[1];
+    String endTimeStr = basesleep[2];
+    int timeAsleep = basesleep[5];
+    int timeInBed = basesleep[8];
+    int remCount = summarylevelsleep["rem_summary"]["minutes"];
+    int deepCount = summarylevelsleep["deep_summary"]["minutes"];
+    int lightCount = summarylevelsleep["light_summary"]["minutes"];
+    int wakeCount = summarylevelsleep["wake_summary"]["minutes"];
 
-              String dateTimeStr = basesleep[0];
-              String startTimeStr = basesleep[1];
-              String endTimeStr = basesleep[2];
-              int timeAsleep = basesleep[5];
-              int timeInBed = basesleep[8];
-              int remCount = summarylevelsleep["rem_summary"]["minutes"];
-              int deepCount = summarylevelsleep["deep_summary"]["minutes"];
-              int lightCount = summarylevelsleep["light_summary"]["minutes"];
-              int wakeCount = summarylevelsleep["wake_summary"]["minutes"];
+    String dateTimeWithYearStr = "2023-$dateTimeStr";
+    String startTimeWithYearStr = "2023-$startTimeStr";
+    String endTimeWithYearStr = "2023-$endTimeStr";
+    DateFormat format = DateFormat("yyyy-MM-dd");
+    DateFormat hourformat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateTime dateTime = format.parse(dateTimeWithYearStr);
+    DateTime startTime = hourformat.parse(startTimeWithYearStr);
+    DateTime endTime = hourformat.parse(endTimeWithYearStr);
 
-              String dateTimeWithYearStr = "2023-$dateTimeStr";
-              String startTimeWithYearStr = "2023-$startTimeStr";
-              String endTimeWithYearStr = "2023-$endTimeStr";
-              DateFormat format = DateFormat("yyyy-MM-dd");
-              DateFormat hourformat = DateFormat("yyyy-MM-dd HH:mm:ss");
-              DateTime dateTime = format.parse(dateTimeWithYearStr);
-              DateTime startTime = hourformat.parse(startTimeWithYearStr);
-              DateTime endTime = hourformat.parse(endTimeWithYearStr);
-
-              print('ciao');
-               // Converti la stringa in un oggetto TimeOfDay
-               final int? id = null;
-               Sleep sleep = Sleep(
-                 id, // Inserisci l'id appropriato
-                 dateTime,
-                 startTime,
-                 endTime,
-                 timeAsleep,
-                 timeInBed,
-                 remCount,
-                 deepCount,
-                 lightCount,
-                 wakeCount
-               );
- return sleep;
- }
-
-
-
-
-
-
-
-
+    print('ciao');
+    // Converti la stringa in un oggetto TimeOfDay
+    final int? id = null;
+    Sleep sleep = Sleep(
+        id, // Inserisci l'id appropriato
+        dateTime,
+        startTime,
+        endTime,
+        timeAsleep,
+        timeInBed,
+        remCount,
+        deepCount,
+        lightCount,
+        wakeCount);
+    return sleep;
+  }
 }
-
-

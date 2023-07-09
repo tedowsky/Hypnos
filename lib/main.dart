@@ -29,12 +29,13 @@ class MyApp extends StatelessWidget {
               Provider.of<Preferences>(context, listen: false),
             ),
           ),
-          ChangeNotifierProvider<HomeProvider>(create: (context) => HomeProvider(
-            Provider.of<ImpactService>(context, listen: false),
-            Provider.of<AppDatabase>(context, listen: false),
-          )),
+          ChangeNotifierProvider<HomeProvider>(
+              create: (context) => HomeProvider(
+                    Provider.of<ImpactService>(context, listen: false),
+                    Provider.of<AppDatabase>(context, listen: false),
+                  )),
         ],
-        child:  MaterialApp(
+        child: MaterialApp(
           title: 'Hypnos',
           theme: ThemeData(
             primarySwatch: Colors.blue,
