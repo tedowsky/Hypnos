@@ -138,6 +138,8 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
+
+              ///////////////////// DATI DATABASE //////////////////////////////
               basesleep =
                   await Provider.of<ImpactService>(context, listen: false)
                       .getbaseSleepData(
@@ -153,6 +155,19 @@ class _InfoPage extends State<InfoPage> {
               Sleep sleepfordb = await getSleepData();
 
               dataProvider.updateSleep(sleepfordb);
+
+              //////////////////////////////////////////////////////////////////
+
+              ///////////////////////// GRAFICO A STEPLINE /////////////////////////////////////
+              levelsleep =
+                  await Provider.of<ImpactService>(context, listen: false)
+                      .getlevelsSleepData(
+                          DateTime.now().subtract(const Duration(days: 1)));
+
+              dataProvider.updateDataListsleep(levelsleep);
+              ////////////////////////////////////////////////////////////////////////////////////
+
+
 
               print('ciao');
             },

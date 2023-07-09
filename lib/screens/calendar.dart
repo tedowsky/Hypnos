@@ -79,21 +79,6 @@ class _CalendarState extends State<CalendarPage> {
                   data = await Provider.of<HomeProvider>(context, listen: false)
                       .getselectedDay(
                           DateTime.parse(selectedDay.toString().split("Z")[0]));
-                  DateTime? startTime = data?.startTime;
-                  DateTime? endTime = data?.endTime;
-
-                  if (startTime != null && endTime != null) {
-                    Duration sleepDuration = endTime.difference(startTime);
-
-                    int hours = sleepDuration.inHours;
-                    int minutes = sleepDuration.inMinutes.remainder(60);
-                    int seconds = sleepDuration.inSeconds.remainder(60);
-
-                    String sleepDurationString =
-                        'You slept: $hours hours, $minutes minutes, $seconds seconds';
-
-                    print(sleepDurationString);
-                  }
 
                   print('ciao');
                 }
@@ -116,25 +101,27 @@ class _CalendarState extends State<CalendarPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                    'How you slept the ${DateFormat('MM/dd').format(data!.dateTime)}:'
-                    '\n',
+                if (data != null)
+                  Text(
+                      'How you slept the ${DateFormat('MM/dd').format(data!.dateTime)}:'
+                      '\n',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 156, 100, 166),
+                        fontSize: 16.0,
+                      )),
+                if (data != null)
+                  Text(
+                    'Felt asleep at: ${DateFormat('HH:mm').format(data!.startTime)}'
+                    '\nWoke up at: ${DateFormat('HH:mm').format(data!.endTime)}'
+                    '\nSlept in total: ${(data!.endTime.difference(data!.startTime)).inHours ?? Duration.zero} h'
+                    ' and ${(data!.endTime.difference(data!.startTime)).inMinutes.remainder(60) ?? Duration.zero} m'
+                    '\nGSI: ${calculateGoodSleepIndex(data!.rem, data!.deep, data!.light, data!.wake, (data!.endTime.difference(data!.startTime)), data!.minAsleep / data!.timeInBed)}',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 156, 100, 166),
-                      fontSize: 16.0,
-                    )),
-                Text(
-                  'Felt asleep at: ${DateFormat('HH:mm').format(data!.startTime)}'
-                  '\nWoke up at: ${DateFormat('HH:mm').format(data!.endTime)}'
-                  '\nSlept in total: ${(data!.endTime.difference(data!.startTime)).inHours ?? Duration.zero} h'
-                  ' and ${(data!.endTime.difference(data!.startTime)).inMinutes.remainder(60) ?? Duration.zero} m'
-                  '\nGSI: ${calculateGoodSleepIndex(data!.rem, data!.deep, data!.light, data!.wake, (data!.endTime.difference(data!.startTime)), data!.minAsleep / data!.timeInBed)}',
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+                      color: Colors.purple,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
               ],
             ),
           ],

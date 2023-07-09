@@ -34,11 +34,8 @@ class _InfosleepState extends State<Infosleep> {
 
   Future<List<Sleep>>? result;
 
-
-
   @override
   Widget build(BuildContext context) {
-
     return Consumer<HomeProvider>(builder: (context, dataProvider, child) {
       //SECONDO GRAFICO --> TORTA
       Sleep sleep = dataProvider.datasleep;
@@ -106,7 +103,6 @@ class _InfosleepState extends State<Infosleep> {
             Consumer<AppDatabase>(builder: (context, db, child) {
               return IconButton(
                   onPressed: () async {
-
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => DatabaseList()));
                     print('$result');
@@ -115,43 +111,38 @@ class _InfosleepState extends State<Infosleep> {
             })
           ],
         ),
-        body: 
-            ListView(
+        body: ListView(
           children: [
-
             const SizedBox(
               height: 25,
             ),
-
-            Column(mainAxisAlignment: 
-            MainAxisAlignment.center, children: [
-              Text(
-                'Discover your sleep phases: \n',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Discover your sleep phases: \n',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(
-                'Go through your sleep cycles',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 156, 100, 166),
-                  fontSize: 16.0,
-                  
+                Text(
+                  'Go through your sleep cycles',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 156, 100, 166),
+                    fontSize: 16.0,
+                  ),
                 ),
-              ),
-              ],),
-
+              ],
+            ),
             SizedBox(
               height: 500,
               width: 1000,
               child: SleepChartWidget(
-                
                 sleepData: mappedData,
               ),
             ),
-
             SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -189,11 +180,9 @@ class _InfosleepState extends State<Infosleep> {
                 Text('Deep'),
               ],
             ),
-
             const SizedBox(
               height: 25,
             ),
-
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 'Click here to know how to read the chart',
@@ -202,57 +191,51 @@ class _InfosleepState extends State<Infosleep> {
                   fontSize: 16.0,
                 ),
               ),
-
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SleepChartInfoPage()),
-                );
-              },
-              icon: Icon(
-                Icons.info,
-                color: Colors.black,
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => SleepChartInfoPage()),
+                  );
+                },
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
               ),
-            ),]),
-
+            ]),
             const SizedBox(
               height: 25,
             ),
-
-            Column(mainAxisAlignment: 
-            MainAxisAlignment.center, children: [
-              Text(
-                'Yesterday, you slept',
-                style: TextStyle(
-                  color:  Color.fromARGB(255, 156, 100, 166),
-                  fontSize: 16.0,
-                  
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Yesterday, you slept',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 156, 100, 166),
+                    fontSize: 16.0,
+                  ),
                 ),
-              ),
-              Text(
-                '$hours hours and $remainingMinutes minutes,',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 156, 100, 166),
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold                  
+                Text(
+                  '$hours hours and $remainingMinutes minutes,',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 156, 100, 166),
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-              Text(
-                'of which:',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 156, 100, 166),
-                  fontSize: 16.0,
-                  
+                Text(
+                  'of which:',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 156, 100, 166),
+                    fontSize: 16.0,
+                  ),
                 ),
-              ),
-
-              ],),
-
+              ],
+            ),
             const SizedBox(
               height: 25,
             ),
-
-            
             SizedBox(
               height: 400,
               width: 1000,
@@ -284,10 +267,9 @@ class _InfosleepState extends State<Infosleep> {
                 ],
               ),
             ),
-
             const SizedBox(
               height: 25,
-            ), 
+            ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 'Click here to discover the phase balance',
@@ -296,23 +278,19 @@ class _InfosleepState extends State<Infosleep> {
                   fontSize: 16.0,
                 ),
               ),
-
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => PhasesInfo()),
-                );
-              },
-              icon: Icon(
-                Icons.info,
-                color: Colors.black,
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PhasesInfo()),
+                  );
+                },
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
               ),
-            ),]),
-
-
+            ]),
             SizedBox(height: 25),
-            
-
           ],
         ),
 
@@ -320,8 +298,6 @@ class _InfosleepState extends State<Infosleep> {
       );
     });
   }
-
-
 }
 
 class sleepfases {
@@ -330,4 +306,3 @@ class sleepfases {
   final int faseduration;
   final int maximumduration;
 }
-

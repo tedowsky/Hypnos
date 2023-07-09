@@ -43,14 +43,34 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
     deepScore = 0.45;
   }
 
+  double durationMark = 0;
+  if (durationInMinutes >= 420 && durationInMinutes <= 540) {
+    // if sleep between 7 and 9 hours
+    durationMark = 1;
+  } else if (durationInMinutes > 390 && durationInMinutes < 570) {
+    // if sleep between 7 and 9 hours
+    durationMark = 0.5;
+  } else if (durationInMinutes > 360 && durationInMinutes < 600) {
+    // if sleep between 7 and 9 hours
+    durationMark = 0.25;
+  } else {
+    durationMark = -0.5;
+  }
+
+  double efficencyMark = 0;
+  if (efficiency >= 0.95) {
+    efficencyMark = 1;
+  } else if (efficiency >= 0.85 && efficiency < 0.95) {
+    efficencyMark = 0.75;
+  } else if (efficiency >= 0.75 && efficiency < 0.85) {
+    efficencyMark = 0.5;
+  } else {
+    efficencyMark = 0;
+  }
+
   // Calcolo del GSI finale
-  double finalGSI = (baseGSI * (remScore + deepScore)) +
-      ((durationInMinutes >= 7 && durationInMinutes <= 9)
-              ? 1.0
-              : ((durationInMinutes > 6 && durationInMinutes < 10)
-                  ? 0.0
-                  : -1.0)) *
-          efficiency;
+  double finalGSI =
+      ((baseGSI * (remScore + deepScore)) + durationMark) + efficencyMark;
 
   // Limita il valore finale tra 0 e 5
   finalGSI = finalGSI.clamp(0.0, 5.0);
