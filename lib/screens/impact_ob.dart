@@ -3,12 +3,10 @@ import 'package:hypnos/screens/info.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
 
-
-
 class ImpactOnboardingPage extends StatefulWidget {
   const ImpactOnboardingPage({Key? key}) : super(key: key);
-  
-    static const routename = 'ImpactOnboardingPage';
+
+  static const routename = 'ImpactOnboardingPage';
 
   @override
   State<ImpactOnboardingPage> createState() => _ImpactOnboardingState();
@@ -19,7 +17,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  
+
   void _showPassword() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -36,14 +34,14 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE4DFD4),
+      backgroundColor: const Color.fromARGB(255, 144, 111, 160),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Form(
+        child: SingleChildScrollView(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Image.asset('assets/impact_logo.png'),
+              Image.asset('assets/login/impact_logo.png'),
               const Text('Please authorize to use our app',
                   style: TextStyle(
                     fontSize: 16,
@@ -68,22 +66,22 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                   return null;
                 },
                 controller: userController,
-                cursorColor: const Color(0xFF83AA99),
+                cursorColor: const Color.fromARGB(255, 255, 255, 255),
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Colors.black87,
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
                     Icons.person,
-                    color: Color(0xFF89453C),
+                    color: Colors.black87,
                   ),
                   hintText: 'Username',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle: const TextStyle(color: Colors.black87),
                 ),
               ),
               const SizedBox(
@@ -106,20 +104,20 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                   return null;
                 },
                 controller: passwordController,
-                cursorColor: const Color(0xFF83AA99),
+                cursorColor: const Color.fromARGB(255, 255, 255, 255),
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Color(0xFF89453C),
+                      color: Colors.black87,
                     ),
                   ),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   prefixIcon: const Icon(
                     Icons.lock,
-                    color: Color(0xFF89453C),
+                    color: Colors.black87,
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -127,17 +125,21 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                       _passwordVisible
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      color: Colors.grey,
+                      color: Colors.black87,
                     ),
                     onPressed: () {
                       _showPassword();
                     },
                   ),
                   hintText: 'Password',
-                  hintStyle: const TextStyle(color: Color(0xFF89453C)),
+                  hintStyle: const TextStyle(
+                    color: Colors.black87,
+                  ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 30,
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -147,7 +149,6 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                       bool? validation = await _loginImpact(userController.text,
                           passwordController.text, context);
                       if (!validation) {
-                        // if not correct show message
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
@@ -158,16 +159,17 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                           duration: Duration(seconds: 2),
                         ));
                       } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(const SnackBar(content: Text('Authorization successful')));
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context)
+                          ..removeCurrentSnackBar()
+                          ..showSnackBar(const SnackBar(
+                              content: Text('Authorization successful')));
 
-                         Future.delayed(
-                              const Duration(milliseconds: 300),
-                              () => Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const InfoPage())));
+                        Future.delayed(
+                            const Duration(milliseconds: 300),
+                            () => Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const InfoPage())));
                       }
                     },
                     style: ButtonStyle(
@@ -179,7 +181,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                             const EdgeInsets.symmetric(
                                 horizontal: 80, vertical: 12)),
                         foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
+                            MaterialStateProperty.all<Color>(Colors.black87),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFF89453C))),
                     child: const Text('Authorize'),
@@ -193,33 +195,3 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
     );
   }
 }
-
-
-  // void login() async{
-  //   // Check if the credentials are correct
-  //   if (usernameTextbox.controller.text == Impact.username && codiceTextbox.controller.text == Impact.password) {
-  //     final sp = await SharedPreferences.getInstance();
-  //     sp.setString('username', usernameTextbox.controller.text);
-  //     sp.setString('codice', codiceTextbox.controller.text);
-  //     _toInfo(context);
-  //   } else {
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: const Text('Authentication Error'),
-  //           content: const Text('Invalid username or password.'),
-  //           actions: [
-  //             TextButton(
-  //               child: const Text('OK'),
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
- 

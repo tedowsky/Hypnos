@@ -61,11 +61,19 @@ class Preferences {
   String? get username => _getFromDisk('username');
   set username(String? newusername) => _saveToDisk("username", newusername);
 
-  String? get password => _getFromDisk('codice');
-  set password(String? newpassword) => _saveToDisk("codice", newpassword);
+  String? get password => _getFromDisk('password');
+  set password(String? newpassword) => _saveToDisk("password", newpassword);
 
   String? get impactUsername => _getFromDisk('impactUsername');
-  set impactUsername(String? newImpactUsername) =>
-      _saveToDisk("impactUsername", newImpactUsername);
+  set impactUsername(String? newImpactUsername) => _saveToDisk("impactUsername", newImpactUsername);
+  
+  int? get age => _getFromDisk('age');
+  set age(int? newage) => _saveToDisk("age", newage);
+
+  int? get gender => _getFromDisk('gender');
+  set gender(int? newgender) => _saveToDisk("gender", newgender);
+
+  int? get weight => _getFromDisk('weight');
+  set weight(int? newweight) => _saveToDisk("weight", newweight);
   
 }

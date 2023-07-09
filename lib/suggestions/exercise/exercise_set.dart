@@ -12,5 +12,4 @@ class ExerciseSet {
     required this.color,
     required this.imgUrl,
   });
-
 }

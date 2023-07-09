@@ -69,7 +69,7 @@ class SleepChartInfoPage extends StatelessWidget {
               description:
                   'REM sleep stages typically occur towards the latter part of the sleep session. You may notice a concentration of REM sleep towards the end of the chart.',
             ),
-             const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             _buildInfoItem(
               title: 'Sleep Cycle Duration:',
               description:
@@ -105,7 +105,6 @@ class SleepChartInfoPage extends StatelessWidget {
               description:
                   'Maintaining a regular sleep routine is essential for promoting good sleep. Going to bed and waking up at the same time every day can help synchronize the circadian rhythm and improve sleep quality.',
             ),
-
           ],
         ),
       ),

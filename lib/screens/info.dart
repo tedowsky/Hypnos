@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/calendar.dart';
@@ -5,16 +6,17 @@ import 'package:hypnos/screens/drawer/aboutyoursleep.dart';
 import 'package:hypnos/screens/drawer/algorithm_info.dart';
 import 'package:hypnos/screens/drawer/hypnos_info.dart';
 import 'package:hypnos/screens/homepage.dart';
-import 'package:hypnos/screens/impact_ob.dart';
+import 'package:hypnos/screens/login_page.dart';
 import 'package:hypnos/screens/tips.dart';
 import 'package:hypnos/screens/profilepage.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/databases/entities/sleep.dart';
+import 'package:sqlite_viewer/sqlite_viewer.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
@@ -39,6 +41,7 @@ class _InfoPage extends State<InfoPage> {
   bool done = false;
   DateTime? lastUpdateDate;
   DateTime currentDate = DateTime.now().toLocal().toLocal();
+  bool upload = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -51,10 +54,12 @@ class _InfoPage extends State<InfoPage> {
   }) {
     switch (index) {
       case 0:
-        return const TipsPage();
-      case 1:
         return const HomePage();
+      case 1:
+        return const ProfilePage();
       case 2:
+        return const TipsPage();
+      case 3:
         return const CalendarPage();
       default:
         return const HomePage();
@@ -84,40 +89,48 @@ class _InfoPage extends State<InfoPage> {
                 color: Colors.black87,
               ),
               ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () => _toLoginPage(context),
-              ),
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    bool reset = await Preferences().resetSettings();
+                    if (reset) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const LoginPage()));
+                    }
+                  }),
               ListTile(
                   leading: const Icon(MdiIcons.information),
                   title: const Text("About Hypos"),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HypnosInfo(),
+                      builder: (context) => const HypnosInfo(),
                     ));
-                  }
-
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const infosleep())),
-
-                  ),
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.help),
-                title: const Text("What's the the GSI"),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AlgorithmInfo(),
-                  ));
-                },
-              ),
+                  leading: const Icon(MdiIcons.help),
+                  title: const Text("What's the the GSI"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AlgorithmInfo(),
+                    ));
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.bed),
-                title: const Text("About Sleep"),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AboutSleep(),
-                  ));
-                },
-              ),
+                  leading: const Icon(MdiIcons.bed),
+                  title: const Text("About Sleep"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AboutSleep(),
+                    ));
+                  }),
+              ListTile(
+                  leading: const Icon(MdiIcons.database),
+                  title: const Text("Database"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const DatabaseList()));
+                  }),
             ],
           ),
         ),
@@ -138,6 +151,7 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
+              upload = !upload;
               ///////////////////// DATI DATABASE //////////////////////////////
               basesleep =
                   await Provider.of<ImpactService>(context, listen: false)
@@ -175,16 +189,7 @@ class _InfoPage extends State<InfoPage> {
 
               print('ciao');
             },
-            icon: const Icon(Icons.token),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (context) => const ProfilePage()));
-            },
-            icon: const Icon(Icons.account_circle),
-            iconSize: 35,
+            icon: const Icon(Icons.refresh_outlined),
           ),
         ],
       ),
@@ -193,7 +198,22 @@ class _InfoPage extends State<InfoPage> {
       backgroundColor: const Color(0xFFE4DFD4),
 
       // --- BODY ---
-      body: _selectPage(index: _selIdx),
+      body: upload
+          ? _selectPage(index: _selIdx)
+          : const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text('Click the button to discover\n'
+                      '           your sleep infos'),
+                ],
+              ),
+            ),
 
       // --- BOTTOM_NAVIGATIO_BAR ---
       bottomNavigationBar: Container(
@@ -209,12 +229,16 @@ class _InfoPage extends State<InfoPage> {
             padding: const EdgeInsets.all(10),
             tabs: const [
               GButton(
-                icon: Icons.sports_gymnastics,
-                text: 'Suggested Tips',
-              ),
-              GButton(
                 icon: Icons.home,
                 text: 'Home',
+              ),
+              GButton(
+                icon: Icons.account_circle,
+                text: 'User Profile',
+              ),
+              GButton(
+                icon: Icons.sports_gymnastics,
+                text: 'Suggested Tips',
               ),
               GButton(
                 icon: Icons.calendar_month,
@@ -227,17 +251,6 @@ class _InfoPage extends State<InfoPage> {
         ),
       ),
     );
-  }
-
-  // ---  _toLoginPage  ---
-  void _toLoginPage(BuildContext context) async {
-    final sp = await SharedPreferences.getInstance();
-    sp.remove('username');
-    // ignore: use_build_context_synchronously
-    Navigator.pop(context);
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const ImpactOnboardingPage()));
   }
 
   Future<Sleep> getSleepData() async {
@@ -261,6 +274,7 @@ class _InfoPage extends State<InfoPage> {
     DateTime endTime = hourformat.parse(endTimeWithYearStr);
 
     print('ciao');
+
     // Converti la stringa in un oggetto TimeOfDay
     final int? id = null;
     Sleep sleep = Sleep(

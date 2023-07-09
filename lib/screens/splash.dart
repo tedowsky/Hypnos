@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 
-
-
 class Splash extends StatelessWidget {
   static const route = '/splash/';
   static const routeDisplayName = 'SplashPage';
@@ -16,21 +14,21 @@ class Splash extends StatelessWidget {
 
   // // Method for navigation SplashPage -> LoginPage
   void _toLoginPage(BuildContext context) {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) =>  const LoginPage()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()));
   } //_toLoginPage
 
   void _toHomePage(BuildContext context) {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: ((context) => const HomePage())));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: ((context) => const HomePage())));
   } //_toHomePage
 
   void _toImpactPage(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => const ImpactOnboardingPage())));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: ((context) => const ImpactOnboardingPage())));
   }
 
-   void _checkAuth(BuildContext context) async {
+  void _checkAuth(BuildContext context) async {
     var prefs = Provider.of<Preferences>(context, listen: false);
     String? username = prefs.username;
     String? password = prefs.password;
@@ -41,14 +39,12 @@ class Splash extends StatelessWidget {
     } else {
       ImpactService service =
           Provider.of<ImpactService>(context, listen: false);
-      bool responseAccessToken =  service.checkSavedToken();
+      bool responseAccessToken = service.checkSavedToken();
       bool refreshAccessToken = service.checkSavedToken(refresh: true);
 
       // if we have a valid token for impact, proceed
       if (responseAccessToken || refreshAccessToken) {
-        
-        Future.delayed(
-              const Duration(seconds: 1), () => _toHomePage(context));
+        Future.delayed(const Duration(seconds: 1), () => _toHomePage(context));
       } else {
         Future.delayed(
             const Duration(seconds: 1), () => _toImpactPage(context));
@@ -75,7 +71,8 @@ class Splash extends StatelessWidget {
             Center(
               child: CircularProgressIndicator(
                 strokeWidth: 4,
-                valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 127, 60, 137)),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 127, 60, 137)),
               ),
             ),
           ],
