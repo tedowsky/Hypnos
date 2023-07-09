@@ -73,7 +73,7 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
       ((baseGSI * (remScore + deepScore)) + durationMark) + efficencyMark;
 
   // Limita il valore finale tra 0 e 5
-  finalGSI = finalGSI.clamp(0.0, 5.0);
+  finalGSI = finalGSI.clamp(0.00, 5.00);
 
   return finalGSI;
 }
