@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hypnos/services/impact.dart';
 import 'package:provider/provider.dart';
-import 'package:hypnos/databases/db.dart';
 import 'package:hypnos/databases/entities/sleep.dart';
 
 class InfoPage extends StatefulWidget {
@@ -38,7 +37,8 @@ class _InfoPage extends State<InfoPage> {
   List<dynamic> levelsleep = [];
   late Sleep? data;
   bool done = false;
-  DateTime date = DateTime.now().toLocal().toLocal();
+  DateTime? lastUpdateDate;
+  DateTime currentDate = DateTime.now().toLocal().toLocal();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -138,7 +138,6 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-
               ///////////////////// DATI DATABASE //////////////////////////////
               basesleep =
                   await Provider.of<ImpactService>(context, listen: false)
@@ -154,7 +153,14 @@ class _InfoPage extends State<InfoPage> {
 
               Sleep sleepfordb = await getSleepData();
 
-              dataProvider.updateSleep(sleepfordb);
+              if (lastUpdateDate == null ||
+                  lastUpdateDate!.day != currentDate.day) {
+                // Esegui l'operazione solo se è un nuovo giorno
+                lastUpdateDate = currentDate;
+
+                // Aggiorna i dati nel database
+                dataProvider.updateSleep(sleepfordb);
+              }
 
               //////////////////////////////////////////////////////////////////
 
@@ -166,8 +172,6 @@ class _InfoPage extends State<InfoPage> {
 
               dataProvider.updateDataListsleep(levelsleep);
               ////////////////////////////////////////////////////////////////////////////////////
-
-
 
               print('ciao');
             },

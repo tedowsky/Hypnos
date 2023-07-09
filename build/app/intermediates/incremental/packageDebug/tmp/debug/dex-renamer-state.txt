@@ -1,4 +1,4 @@
-#Sun Jul 09 18:20:12 CEST 2023
+#Sun Jul 09 19:33:34 CEST 2023
 base.0=C\:\\Users\\User\\Desktop\\Hypnos-ted-master\\Hypnos- Copia\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
