@@ -6,7 +6,6 @@ import 'package:hypnos/screens/drawer/sleepchartinfo.dart';
 import 'package:hypnos/screens/drawer/phases_info.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:hypnos/databases/entities/sleep.dart' as db;
 import 'package:provider/provider.dart';
 import 'package:hypnos/widgets/sleepchart.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
