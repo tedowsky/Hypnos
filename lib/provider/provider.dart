@@ -74,11 +74,18 @@ class HomeProvider extends ChangeNotifier {
     print('ciao');
   }
 
-  void updateSleep(Sleep newsleep) {
+  void updateSleep(Sleep newsleep) async {
     _sleepdb = newsleep;
     notifyListeners();
     print('ciao');
-    db.sleepDao.insertSleep(_sleepdb);
+    Sleep? LastDay = await db.sleepDao.findLastDayInDb();
+    if (LastDay?.dateTime == _sleepdb.dateTime) {
+      return null;
+    } else {
+      db.sleepDao.insertSleep(_sleepdb);
+    }
+
+    print('ciao');
   }
 
   DateTime _truncateSeconds(DateTime input) {

@@ -312,27 +312,31 @@ class _HomeState extends State<HomePage> {
                               const SizedBox(
                                 width: 40,
                               ),
-                              CircularPercentIndicator(
-                                radius: 60.0,
-                                lineWidth: 10.0,
-                                percent:
-                                    (sleep.endTime.difference(sleep.startTime))
-                                            .inMinutes /
-                                        (goal(Provider.of<Preferences>(context,
-                                                    listen: false)
-                                                .age) *
-                                            60),
-                                animation: true,
-                                animationDuration: 1200,
-                                center: Text(
-                                  '${(sleep.endTime.difference(sleep.startTime)).inHours} h '
-                                  '${(sleep.endTime.difference(sleep.startTime)).inMinutes.remainder(60)} m',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 18.0),
+                              if (Provider.of<Preferences>(context,
+                                          listen: false)
+                                      .age !=
+                                  null)
+                                CircularPercentIndicator(
+                                  radius: 60.0,
+                                  lineWidth: 10.0,
+                                  percent: (sleep.endTime
+                                              .difference(sleep.startTime))
+                                          .inMinutes /
+                                      (goal(Provider.of<Preferences>(context,
+                                                  listen: false)
+                                              .age) *
+                                          60),
+                                  animation: true,
+                                  animationDuration: 1200,
+                                  center: Text(
+                                    '${(sleep.endTime.difference(sleep.startTime)).inHours} h '
+                                    '${(sleep.endTime.difference(sleep.startTime)).inMinutes.remainder(60)} m',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 18.0),
+                                  ),
+                                  progressColor: Colors.green,
                                 ),
-                                progressColor: Colors.green,
-                              ),
                             ],
                           ),
                         ],
@@ -537,7 +541,7 @@ class _HomeState extends State<HomePage> {
     } else if (gsi >= 3.5 && gsi < 4.5) {
       return 'Your GSI is good, you should follow 2 meditations audio & 1 physical exercise, to have the perfect sleep';
     } else if (gsi >= 2.5 && gsi < 3.5) {
-      return 'You GSI is discret, you should follow 2 meditations audio & 2 physical exercise in order to get a better sleep';
+      return 'Your GSI is discret, you should follow 2 meditations audio & 2 physical exercise in order to get a better sleep';
     } else if (gsi >= 1.5 && gsi < 2.5) {
       return 'Your GSI is bad, you should follow 2 meditations audio & 3 physical exercise to get a better sleep';
     } else {

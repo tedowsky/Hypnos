@@ -39,8 +39,6 @@ class _InfoPage extends State<InfoPage> {
   List<dynamic> levelsleep = [];
   late Sleep? data;
   bool done = false;
-  DateTime? lastUpdateDate;
-  DateTime currentDate = DateTime.now().toLocal().toLocal();
   bool upload = false;
 
   void _onItemTapped(int index) {
@@ -167,14 +165,8 @@ class _InfoPage extends State<InfoPage> {
 
               Sleep sleepfordb = await getSleepData();
 
-              if (lastUpdateDate == null ||
-                  lastUpdateDate!.day != currentDate.day) {
-                // Esegui l'operazione solo se è un nuovo giorno
-                lastUpdateDate = currentDate;
-
-                // Aggiorna i dati nel database
-                dataProvider.updateSleep(sleepfordb);
-              }
+              // Aggiorna i dati nel database
+              dataProvider.updateSleep(sleepfordb);
 
               //////////////////////////////////////////////////////////////////
 
@@ -276,18 +268,8 @@ class _InfoPage extends State<InfoPage> {
     print('ciao');
 
     // Converti la stringa in un oggetto TimeOfDay
-    final int? id = null;
-    Sleep sleep = Sleep(
-        id, // Inserisci l'id appropriato
-        dateTime,
-        startTime,
-        endTime,
-        timeAsleep,
-        timeInBed,
-        remCount,
-        deepCount,
-        lightCount,
-        wakeCount);
+    Sleep sleep = Sleep(dateTime, startTime, endTime, timeAsleep, timeInBed,
+        remCount, deepCount, lightCount, wakeCount);
     return sleep;
   }
 }

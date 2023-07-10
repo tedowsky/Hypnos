@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sleep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `dateTime` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `minAsleep` INTEGER NOT NULL, `timeInBed` INTEGER NOT NULL, `rem` INTEGER NOT NULL, `deep` INTEGER NOT NULL, `light` INTEGER NOT NULL, `wake` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Sleep` (`dateTime` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `minAsleep` INTEGER NOT NULL, `timeInBed` INTEGER NOT NULL, `rem` INTEGER NOT NULL, `deep` INTEGER NOT NULL, `light` INTEGER NOT NULL, `wake` INTEGER NOT NULL, PRIMARY KEY (`dateTime`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -108,7 +108,6 @@ class _$SleepDao extends SleepDao {
             database,
             'Sleep',
             (Sleep item) => <String, Object?>{
-                  'id': item.id,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'startTime': _dateTimeConverter.encode(item.startTime),
                   'endTime': _dateTimeConverter.encode(item.endTime),
@@ -122,9 +121,8 @@ class _$SleepDao extends SleepDao {
         _sleepUpdateAdapter = UpdateAdapter(
             database,
             'Sleep',
-            ['id'],
+            ['dateTime'],
             (Sleep item) => <String, Object?>{
-                  'id': item.id,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'startTime': _dateTimeConverter.encode(item.startTime),
                   'endTime': _dateTimeConverter.encode(item.endTime),
@@ -138,9 +136,8 @@ class _$SleepDao extends SleepDao {
         _sleepDeletionAdapter = DeletionAdapter(
             database,
             'Sleep',
-            ['id'],
+            ['dateTime'],
             (Sleep item) => <String, Object?>{
-                  'id': item.id,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'startTime': _dateTimeConverter.encode(item.startTime),
                   'endTime': _dateTimeConverter.encode(item.endTime),
@@ -171,7 +168,7 @@ class _$SleepDao extends SleepDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Sleep WHERE dateTime between ?1 and ?2 ORDER BY dateTime ASC',
-        mapper: (Map<String, Object?> row) => Sleep(row['id'] as int?, _dateTimeConverter.decode(row['dateTime'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['minAsleep'] as int, row['timeInBed'] as int, row['rem'] as int, row['deep'] as int, row['light'] as int, row['wake'] as int),
+        mapper: (Map<String, Object?> row) => Sleep(_dateTimeConverter.decode(row['dateTime'] as int), _dateTimeConverter.decode(row['startTime'] as int), _dateTimeConverter.decode(row['endTime'] as int), row['minAsleep'] as int, row['timeInBed'] as int, row['rem'] as int, row['deep'] as int, row['light'] as int, row['wake'] as int),
         arguments: [
           _dateTimeConverter.encode(startTime),
           _dateTimeConverter.encode(endTime)
@@ -182,7 +179,6 @@ class _$SleepDao extends SleepDao {
   Future<Sleep?> findSleepByDateTime(DateTime targetDateTime) async {
     return _queryAdapter.query('SELECT * FROM Sleep WHERE dateTime =?1',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
             _dateTimeConverter.decode(row['dateTime'] as int),
             _dateTimeConverter.decode(row['startTime'] as int),
             _dateTimeConverter.decode(row['endTime'] as int),
@@ -199,7 +195,6 @@ class _$SleepDao extends SleepDao {
   Future<List<Sleep>> findAllSleep() async {
     return _queryAdapter.queryList('SELECT * FROM Sleep',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
             _dateTimeConverter.decode(row['dateTime'] as int),
             _dateTimeConverter.decode(row['startTime'] as int),
             _dateTimeConverter.decode(row['endTime'] as int),
@@ -216,7 +211,6 @@ class _$SleepDao extends SleepDao {
     return _queryAdapter.query(
         'SELECT * FROM Sleep ORDER BY dateTime ASC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
             _dateTimeConverter.decode(row['dateTime'] as int),
             _dateTimeConverter.decode(row['startTime'] as int),
             _dateTimeConverter.decode(row['endTime'] as int),
@@ -233,7 +227,6 @@ class _$SleepDao extends SleepDao {
     return _queryAdapter.query(
         'SELECT * FROM Sleep ORDER BY dateTime DESC LIMIT 1',
         mapper: (Map<String, Object?> row) => Sleep(
-            row['id'] as int?,
             _dateTimeConverter.decode(row['dateTime'] as int),
             _dateTimeConverter.decode(row['startTime'] as int),
             _dateTimeConverter.decode(row['endTime'] as int),
