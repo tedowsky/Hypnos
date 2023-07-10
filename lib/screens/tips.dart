@@ -14,8 +14,9 @@ class TipsPage extends StatefulWidget {
 }
 
 class _TipsPageState extends State<TipsPage> {
-  List<String> labels = ['Maditation', 'Exercises'];
-  List<String> texts = ['Catching your thoughts :', 'Exercise of the day :'];
+ 
+  List<String> labels = ['Maditation','Exercises'];
+  List<String> texts = ['Catching your thoughts :','Exercise of the day :'];
   int _tabTextIndexSelected = 0;
 
   void _onTips(int index) {
@@ -43,40 +44,41 @@ class _TipsPageState extends State<TipsPage> {
       backgroundColor: const Color(0xFFE4DFD4),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 50)),
-            FlutterToggleTab(
-              width: 90,
-              borderRadius: 30,
-              height: 50,
-              selectedIndex: _tabTextIndexSelected,
-              selectedBackgroundColors: const [Colors.blue, Colors.blueAccent],
-              selectedTextStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 50)),
+                  FlutterToggleTab(
+                    width: 90,
+                    borderRadius: 30,
+                    height: 50,
+                    selectedIndex: _tabTextIndexSelected,
+                    selectedBackgroundColors: const [Colors.blue, Colors.blueAccent],
+                    selectedTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    unSelectedTextStyle: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500
+                    ),
+                    labels: labels,
+                    selectedLabelIndex:_onTips,
+                    isScroll: false,
+                  ),
+                  const SizedBox(height: 45),
+                  Text(
+                  texts[_tabTextIndexSelected],
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                  const SizedBox(height: 8),
+                  _selectLabel(index: _tabTextIndexSelected),
+                ],
               ),
-              unSelectedTextStyle: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500),
-              labels: labels,
-              selectedLabelIndex: _onTips,
-              isScroll: false,
-            ),
-            const SizedBox(height: 45),
-            Text(
-              texts[_tabTextIndexSelected],
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-            const SizedBox(height: 8),
-            _selectLabel(index: _tabTextIndexSelected),
-          ],
-        ),
       ),
-    );
+    ); 
   }
 
   Widget buildWorkouts() {
@@ -91,6 +93,7 @@ class _TipsPageState extends State<TipsPage> {
   }
 
   Widget buildMeditation() {
-    return const Meditation();
+    return  Meditation();
   }
+
 }

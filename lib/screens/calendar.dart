@@ -106,58 +106,58 @@ class _CalendarState extends State<CalendarPage> {
                     Text(
                         'How you slept the ${DateFormat('MM/dd').format(data!.dateTime)}:'
                         '\n',
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 156, 100, 166),
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 156, 100, 166),
                           fontSize: 16.0,
                         )),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (data != null) // Aggiunge spazio tra i widget
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(MdiIcons.bedClock,
+                        const Icon(MdiIcons.bedClock,
                             color: Colors.purple), // Esempio di icona
-                        SizedBox(
+                        const SizedBox(
                             width: 5), // Aggiunge spazio tra l'icona e il testo
                         Text(
                           'Fell asleep at: ${DateFormat('HH:mm').format(data!.startTime)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.purple,
                             fontSize: 20.0,
                           ),
                         ),
                       ],
                     ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (data != null) // Aggiunge spazio tra i widget
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(MdiIcons.sunClock,
+                        const Icon(MdiIcons.sunClock,
                             color: Colors.purple), // Esempio di icona
-                        SizedBox(
+                        const SizedBox(
                             width: 5), // Aggiunge spazio tra l'icona e il testo
                         Text(
                           'Woke up at: ${DateFormat('HH:mm').format(data!.endTime)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.purple,
                             fontSize: 20.0,
                           ),
                         ),
                       ],
                     ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (data != null) // Aggiunge spazio tra i widget
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Esempio di icona
-                        SizedBox(
+                        const SizedBox(
                             width: 5), // Aggiunge spazio tra l'icona e il testo
                         Text(
                           'Slept in total: ${(data!.endTime.difference(data!.startTime)).inHours} h'
                           ' and ${(data!.endTime.difference(data!.startTime)).inMinutes.remainder(60)} m\n',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.purple,
                             fontSize: 20.0,
                           ),
@@ -165,7 +165,7 @@ class _CalendarState extends State<CalendarPage> {
                       ],
                     ),
                   if (data != null)
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -177,7 +177,7 @@ class _CalendarState extends State<CalendarPage> {
                         ),
                       ],
                     ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   if (data != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -187,21 +187,21 @@ class _CalendarState extends State<CalendarPage> {
                           children: [
                             Text(
                               'REM: ${(data!.rem / (data!.endTime.difference(data!.startTime)).inMinutes * 100).toStringAsFixed(2)}%',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromRGBO(193, 85, 101, 1),
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18),
                             ),
                           ],
                         ),
-                        SizedBox(width: 20), // Spazio tra le fasi
+                        const SizedBox(width: 20), // Spazio tra le fasi
 
                         // DEEP
                         Row(
                           children: [
                             Text(
                               'DEEP: ${(data!.deep / (data!.endTime.difference(data!.startTime)).inMinutes * 100).toStringAsFixed(2)}%',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromRGBO(54, 74, 186, 1),
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18),
@@ -214,28 +214,28 @@ class _CalendarState extends State<CalendarPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
 
                         // LIGHT
                         Row(
                           children: [
                             Text(
                               'LIGHT: ${(data!.light / (data!.endTime.difference(data!.startTime)).inMinutes * 100).toStringAsFixed(2)}%',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromRGBO(186, 186, 130, 1),
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18),
                             ),
                           ],
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
 
                         // WAKE
                         Row(
                           children: [
                             Text(
                               'WAKE: ${(data!.wake / (data!.endTime.difference(data!.startTime)).inMinutes * 100).toStringAsFixed(2)}%',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromRGBO(131, 190, 200, 1),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 18),
@@ -244,18 +244,18 @@ class _CalendarState extends State<CalendarPage> {
                         ),
                       ],
                     ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (data != null) // Aggiunge spazio tra i widget
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(MdiIcons.checkboxMultipleBlankCircle,
+                        const Icon(MdiIcons.checkboxMultipleBlankCircle,
                             color: Colors.purple), // Esempio di icona
-                        SizedBox(
+                        const SizedBox(
                             width: 5), // Aggiunge spazio tra l'icona e il testo
                         Text(
                           'GSI: ${calculateGoodSleepIndex(data!.rem, data!.deep, data!.light, data!.wake, (data!.endTime.difference(data!.startTime)), data!.minAsleep / data!.timeInBed)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.purple,
                             fontWeight: FontWeight.w500,
                             fontSize: 20.0,

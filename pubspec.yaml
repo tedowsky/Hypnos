@@ -50,7 +50,9 @@ dependencies:
   syncfusion_flutter_charts: ^22.1.36
   sqlite_viewer: ^1.0.5
   syncfusion_flutter_gauges:
-  table_calendar: ^3.0.9 
+  table_calendar: ^3.0.9
+  flutter_analog_clock: ^1.0.3
+  flutter_launcher_icons: ^0.13.1
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -72,8 +74,16 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/Logo.png"
+  adaptive_icons_background: "#ffffff"
+
 # The following section is specific to Flutter packages.
 flutter:
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -86,6 +96,7 @@ flutter:
     - assets/info/
     - assets/exercise/
     - assets/icons/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

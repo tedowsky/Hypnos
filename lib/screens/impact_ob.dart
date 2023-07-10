@@ -1,12 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:hypnos/screens/drawer/consent.dart';
 import 'package:hypnos/screens/info.dart';
+import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:hypnos/services/impact.dart';
 
+
+
 class ImpactOnboardingPage extends StatefulWidget {
   const ImpactOnboardingPage({Key? key}) : super(key: key);
-
-  static const routename = 'ImpactOnboardingPage';
+  
+    static const routename = 'ImpactOnboardingPage';
 
   @override
   State<ImpactOnboardingPage> createState() => _ImpactOnboardingState();
@@ -17,7 +23,7 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  
   void _showPassword() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -132,14 +138,10 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                     },
                   ),
                   hintText: 'Password',
-                  hintStyle: const TextStyle(
-                    color: Colors.black87,
-                  ),
+                  hintStyle: const TextStyle(color: Colors.black87,),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30,),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -149,27 +151,33 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
                       bool? validation = await _loginImpact(userController.text,
                           passwordController.text, context);
                       if (!validation) {
-                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.all(8),
-                          content: Text('Wrong Credentials'),
-                          duration: Duration(seconds: 2),
-                        ));
+                              backgroundColor: Colors.red,
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.all(8),
+                              content: Text('Wrong Credentials'),
+                              duration: Duration(seconds: 2),
+                            ));
                       } else {
-                        // ignore: use_build_context_synchronously
+                        await Provider.of<ImpactService>(context, listen: false)
+                            .getPatient();
+                            
+                            Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const ConsentPage()));
                         ScaffoldMessenger.of(context)
                           ..removeCurrentSnackBar()
                           ..showSnackBar(const SnackBar(
                               content: Text('Authorization successful')));
 
-                        Future.delayed(
+
+                              Future.delayed(
                             const Duration(milliseconds: 300),
                             () => Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => const InfoPage())));
+
                       }
                     },
                     style: ButtonStyle(
@@ -195,3 +203,4 @@ class _ImpactOnboardingState extends State<ImpactOnboardingPage> {
     );
   }
 }
+ 

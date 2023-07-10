@@ -5,11 +5,11 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class SleepChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> sleepData;
 
-  SleepChartWidget({required this.sleepData});
+  const SleepChartWidget({super.key, required this.sleepData});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 300,
       child: SfCartesianChart(
         // plotAreaBackgroundColor: 
@@ -64,19 +64,19 @@ class SleepChartWidget extends StatelessWidget {
           StepLineSeries<Map<String, dynamic>, DateTime>(
               dataSource: sleepData,
               name: 'Sleep Phases',
-              color: Color.fromRGBO(121, 108, 192, 1),
+              color: const Color.fromRGBO(121, 108, 192, 1),
               
               xValueMapper: (data, _) => (data['dateTime']),
               yValueMapper: (data, _) => data['level'],
               pointColorMapper: (data, _) {
               if (data['level'] == 1) {
-                return Color.fromRGBO(131, 190, 200, 1);
+                return const Color.fromRGBO(131, 190, 200, 1);
               } else if (data['level'] == 2) {
-                return Color.fromRGBO(193, 85, 101, 1);
+                return const Color.fromRGBO(193, 85, 101, 1);
               } else if (data['level'] == 3) {
-                return Color.fromRGBO(186, 186, 130, 1);
+                return const Color.fromRGBO(186, 186, 130, 1);
               } else if (data['level'] == 4) {
-                return Color.fromRGBO(54, 74, 186, 1);
+                return const Color.fromRGBO(54, 74, 186, 1);
               }
               return Colors.transparent;
             },
@@ -88,7 +88,7 @@ class SleepChartWidget extends StatelessWidget {
                 useSeriesColor: true,
                 // labelPadding: 4,
                 textStyle:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 builder: (dynamic data, dynamic point, dynamic series,
                     int pointIndex, int seriesIndex) {
                   String label = '';
@@ -105,13 +105,13 @@ class SleepChartWidget extends StatelessWidget {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(121, 108, 192, 1),
+                      color: const Color.fromRGBO(121, 108, 192, 1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       label,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   );
                 },

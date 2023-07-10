@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 class ExerciseSetWidget extends StatefulWidget {
   final ExerciseSet exerciseSet;
 
-  const ExerciseSetWidget({
-    super.key,
+  const ExerciseSetWidget({super.key, 
     required this.exerciseSet,
   });
 
@@ -18,45 +17,43 @@ class _ExerciseSetWidgetState extends State<ExerciseSetWidget> {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: () {
-          setState(() {
-            isChecked = !isChecked;
-          });
-        },
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(25),
-              width: 400,
-              height: 100,
-              decoration: BoxDecoration(
-                color: widget.exerciseSet.color,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  Checkbox(
-                    activeColor: Colors.black,
-                    value: isChecked,
-                    onChanged: (value) {
-                      setState(() {
-                        isChecked = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(flex: 2, child: buildText()),
-                  Expanded(child: Image.asset(widget.exerciseSet.imgUrl))
-                ],
-              ),
+    onTap: () {
+    setState(() {
+      isChecked = !isChecked;
+    });
+  },
+    child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(25),
+            width: 400,
+            height: 100,
+            decoration: BoxDecoration(
+              color: widget.exerciseSet.color,
+              borderRadius: BorderRadius.circular(20),
             ),
-          ],
-        ),
-      );
-
-  Widget buildText() {
+            child: Row(
+              children: [
+                Checkbox(
+                  activeColor: Colors.black,
+                  value: isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      isChecked = value!;
+                    });
+                  },
+                ),
+                const SizedBox(width: 20,),
+                Expanded(flex: 2, child: buildText()),
+                Expanded(child: Image.asset(widget.exerciseSet.imgUrl))
+              ],
+            ),
+          ),
+        ],
+      ),
+  );
+  
+  Widget buildText() {   
     int series = 3;
     String text = '${widget.exerciseSet.noOfReps} Rep x $series Series';
     return Column(
@@ -65,17 +62,10 @@ class _ExerciseSetWidgetState extends State<ExerciseSetWidget> {
       children: [
         Text(
           widget.exerciseSet.exercise,
-          style: const TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-            fontStyle: FontStyle.normal,
-          ),
+          style: const TextStyle(fontWeight:FontWeight.w900, fontSize: 20,fontStyle:FontStyle.normal,),
         ),
         const SizedBox(height: 10),
-        Text(
-          text,
-          style: const TextStyle(fontStyle: FontStyle.italic),
-        ),
+        Text(text, style:const TextStyle(fontStyle: FontStyle.italic ),),
       ],
     );
   }

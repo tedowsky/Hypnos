@@ -57,7 +57,7 @@ class HomeProvider extends ChangeNotifier {
   int deep = 180;
   int light = 240;
   int wake = 60;
-  Duration duration = Duration(hours: 8, minutes: 30);
+  Duration duration = const Duration(hours: 8, minutes: 30);
   double efficiency = 1;
 
   double goodSleepIndex = 0.0;
@@ -74,12 +74,12 @@ class HomeProvider extends ChangeNotifier {
     print('ciao');
   }
 
-  void updateSleep(Sleep newsleep) async {
+   void updateSleep(Sleep newsleep) async {
     _sleepdb = newsleep;
     notifyListeners();
     print('ciao');
-    Sleep? LastDay = await db.sleepDao.findLastDayInDb();
-    if (LastDay?.dateTime == _sleepdb.dateTime) {
+    Sleep? lastDay = await db.sleepDao.findLastDayInDb();
+    if (lastDay?.dateTime == _sleepdb.dateTime) {
       return null;
     } else {
       db.sleepDao.insertSleep(_sleepdb);

@@ -8,9 +8,6 @@ class Preferences {
 
   late SharedPreferences _pref;
 
-  Future<bool> resetSettings() async {
-    return _pref.clear();
-  }
 
   //helper method to manage default values of preferences without the need to call the specific getType method of SharedPreferences
   dynamic _getFromDisk(String key, {dynamic defaultVal}) {
@@ -75,5 +72,8 @@ class Preferences {
 
   int? get weight => _getFromDisk('weight');
   set weight(int? newweight) => _saveToDisk("weight", newweight);
+
+  bool? get consent => _getFromDisk('consent');
+  set consent(bool? newconsent) => _saveToDisk("consent", newconsent);
   
 }

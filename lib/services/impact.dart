@@ -6,10 +6,14 @@ import 'package:hypnos/utils/shared_preferences.dart';
 
 class ImpactService {
   ImpactService(this.prefs) {
+
+    
     updateBearer();
+
   }
 
   Preferences prefs;
+  
 
   final Dio _dio = Dio(BaseOptions(baseUrl: ServerImpact.backendBaseUrl));
 
@@ -67,7 +71,8 @@ class ImpactService {
   // make the call to get the tokens
   Future<bool> getTokens(String username, String password) async {
     try {
-      Response response = await _dio.post('${ServerImpact.authServerUrl}token/',
+      Response response = await _dio.post(
+          '${ServerImpact.authServerUrl}token/',
           data: {'username': username, 'password': password},
           options: Options(
               contentType: 'application/json',
@@ -132,58 +137,63 @@ class ImpactService {
     return r.data['data'][0]['username'];
   }
 
-  Future<List<dynamic>> getbaseSleepData(DateTime startTime) async {
+  
+
+    Future<List<dynamic>> getbaseSleepData(DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+      '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
 
     Map<String, dynamic> respsleep = r_sleep.data['data'];
     List<dynamic> quasisleep = respsleep['data'];
     Map<String, dynamic> Listsleep = quasisleep[0];
     List<dynamic> firstNineElements = Listsleep.values.take(10).toList();
+    //List<Sleep> sleepList = firstNineElements.map((element) => element as Sleep).toList();
+  // L'elemento 11 esiste nella mappa Listleep
+  // Puoi procedere ad accedere ai suoi valori
 
     print('ciao');
     return firstNineElements;
-  }
+    }
 
-  Future<Map<String, dynamic>> getsummarylevelsSleepData(
-      DateTime startTime) async {
+    Future<Map<String, dynamic>> getsummarylevelsSleepData(DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+      '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
 
     Map<String, dynamic> respsleep = r_sleep.data['data'];
     List<dynamic> quasisleep = respsleep['data'];
     Map<String, dynamic> Listsleep = quasisleep[0];
-
-    Map<String, dynamic> levelsummary = Listsleep['levels']['summary'];
-    Map<String, dynamic> deep_summary = levelsummary['deep'];
-    Map<String, dynamic> wake_summary = levelsummary['wake'];
-    Map<String, dynamic> light_summary = levelsummary['light'];
-    Map<String, dynamic> rem_summary = levelsummary['rem'];
+    
+  Map<String, dynamic> levelsummary = Listsleep['levels']['summary'];
+  Map<String, dynamic> deep_summary = levelsummary['deep'];
+  Map<String, dynamic> wake_summary = levelsummary['wake'];
+  Map<String, dynamic> light_summary = levelsummary['light'];
+  Map<String, dynamic> rem_summary = levelsummary['rem'];
 
     print('ciao');
     return {
-      'deep_summary': deep_summary,
-      'wake_summary': wake_summary,
-      'light_summary': light_summary,
-      'rem_summary': rem_summary,
-    };
-  }
+    'deep_summary': deep_summary,
+    'wake_summary': wake_summary,
+    'light_summary': light_summary,
+    'rem_summary': rem_summary,
+  };
+}
 
-  Future<List<dynamic>> getlevelsSleepData(DateTime startTime) async {
+Future<List<dynamic>> getlevelsSleepData(DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+      '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
 
     Map<String, dynamic> respsleep = r_sleep.data['data'];
     List<dynamic> quasisleep = respsleep['data'];
     Map<String, dynamic> Listsleep = quasisleep[0];
-
-    List<dynamic> levels = Listsleep['levels']['data'];
-
-    return levels;
+    
+  List<dynamic> levels = Listsleep['levels']['data']; 
+  
+  return levels;
   }
+
 
   DateTime _truncateSeconds(DateTime input) {
     return DateTime(
