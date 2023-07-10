@@ -9,6 +9,8 @@ class LineChartWidget extends StatelessWidget {
 
   ];
 
+  LineChartWidget({super.key});
+
   @override
   Widget build(BuildContext context) =>  LineChart(
 
@@ -21,14 +23,14 @@ class LineChartWidget extends StatelessWidget {
         LineChartBarData(
           spots: [
             // initial point of the graph
-            FlSpot(0, 3),
-            FlSpot(1, 4),
-            FlSpot(2.3, 5),
-            FlSpot(3.4, 3),
-            FlSpot(4.5, 7),
-            FlSpot(5.6, 2),
-            FlSpot(7, 4),
-            FlSpot(8.9, 1),  
+            const FlSpot(0, 3),
+            const FlSpot(1, 4),
+            const FlSpot(2.3, 5),
+            const FlSpot(3.4, 3),
+            const FlSpot(4.5, 7),
+            const FlSpot(5.6, 2),
+            const FlSpot(7, 4),
+            const FlSpot(8.9, 1),  
           ]
         )
       ]
