@@ -92,6 +92,69 @@ class AboutSleep extends StatelessWidget {
               description:
                   'Invest in a comfortable mattress, pillows, and bedding that suit your preferences.',
             ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'The WHO also provides general recommendations for sleep duration based on age groups. Here are the suggested sleep hours according to the WHO:\n',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const Text(
+              '- Newborns (0-3 months): 14-17 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Infants (4-11 months): 12-16 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Toddlers (1-2 years): 11-14 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Preschoolers (3-4 years): 10-13 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- School-age children (5-13 years): 9-11 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Adolescents (14-17 years): 8-10 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Adults (18-64 years): 7-9 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              '- Older adults (65 years and older): 7-8 hours',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
           ],
         ),
       ),

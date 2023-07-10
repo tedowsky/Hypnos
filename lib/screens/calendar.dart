@@ -82,8 +82,6 @@ class _CalendarState extends State<CalendarPage> {
                         await Provider.of<HomeProvider>(context, listen: false)
                             .getselectedDay(DateTime.parse(
                                 selectedDay.toString().split("Z")[0]));
-
-                    print('ciao');
                   }
                 },
                 selectedDayPredicate: (day) {

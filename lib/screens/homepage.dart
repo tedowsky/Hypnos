@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/databases/entities/sleep.dart';
+import 'package:hypnos/provider/provider.dart';
 import 'package:hypnos/screens/drawer/algorithm_info.dart';
 import 'package:hypnos/screens/drawer/efficiency.dart';
+import 'package:hypnos/services/algoritmo.dart';
 import 'package:hypnos/utils/shared_preferences.dart';
 import 'package:hypnos/widgets/GSIchart.dart';
 import 'package:intl/intl.dart';
@@ -30,101 +33,59 @@ class _HomeState extends State<HomePage> {
     var imagePath = _getImagePath(int.parse(hour));
     var commentPath = _comment(int.parse(hour));
 
-    return Scaffold(
-      // --- COLORE_SFONDO ---
-      backgroundColor: const Color(0xFFE4DFD4),
+    return Consumer<HomeProvider>(builder: (context, dataProvider, child) {
+      Sleep sleep = dataProvider.datasleep;
+      return Scaffold(
+        // --- COLORE_SFONDO ---
+        backgroundColor: const Color(0xFFE4DFD4),
 
-      // --- BODY ---
-      body: ListView(
-        children: [
-          const Row(
-            children: [
-              Icon(MdiIcons.mapMarker),
-              Text(
-                'Padua, Italy',
-                selectionColor: Color.fromARGB(255, 160, 158, 158),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 85,
-            child: Column(
+        // --- BODY ---
+        body: ListView(
+          children: [
+            const Row(
               children: [
-                // SizedBox(
-                //   height: 20,
-                //   width: 20,
-                //   child: Image.asset(imagePath)),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    commentPath,
-                  ),
+                Icon(MdiIcons.mapMarker),
+                Text(
+                  'Padua, Italy',
+                  selectionColor: Color.fromARGB(255, 160, 158, 158),
                 ),
               ],
             ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            borderOnForeground: true,
-            margin: const EdgeInsets.only(
-              top: 10.0,
-              left: 40.0,
-              right: 40.0,
-            ),
-            elevation: 50,
-            shadowColor: Colors.grey[850],
-            color: const Color.fromARGB(255, 144, 111, 160),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+            SizedBox(
+              height: 85,
               child: Column(
                 children: [
-                  ListTile(
-                    trailing: IconButton(
-                      iconSize: 20,
-                      icon: const Icon(
-                        Icons.info_outline,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: const Text(
-                                'It\'s the total amount of time you slept during the night',
-                                selectionColor: Color(0xFFE4DFD4),
-                              ),
-                              actions: [
-                                Center(
-                                  child: TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    titleTextStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black),
-                    title: const Text(
-                      'ACTUAL SLEEP TIME',
-                    ),
-                    leading: const Icon(
-                      Icons.bedtime,
-                      color: Colors.black87,
-                      size: 23,
+                  // SizedBox(
+                  //   height: 20,
+                  //   width: 20,
+                  //   child: Image.asset(imagePath)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      commentPath,
                     ),
                   ),
-                  ListTile(
+                ],
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              borderOnForeground: true,
+              margin: const EdgeInsets.only(
+                top: 10.0,
+                left: 40.0,
+                right: 40.0,
+              ),
+              elevation: 50,
+              shadowColor: Colors.grey[850],
+              color: const Color.fromARGB(255, 144, 111, 160),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ListTile(
                       trailing: IconButton(
                         iconSize: 20,
                         icon: const Icon(
@@ -137,15 +98,17 @@ class _HomeState extends State<HomePage> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 content: const Text(
-                                  'It\'s the total amount of time you were in bed, including the time it took you to fall asleep',
+                                  'It\'s the total amount of time you slept during the night',
                                   selectionColor: Color(0xFFE4DFD4),
                                 ),
                                 actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
+                                  Center(
+                                    child: TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
                                   ),
                                 ],
                               );
@@ -157,233 +120,350 @@ class _HomeState extends State<HomePage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           color: Colors.black),
-                      title: const Text('TIME SPEND IN BED'),
+                      title: const Text(
+                        'ACTUAL SLEEP TIME',
+                      ),
                       leading: const Icon(
-                        Icons.bed,
+                        Icons.bedtime,
                         color: Colors.black87,
                         size: 23,
-                      )),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Divider(
-                    color: Colors.black,
-                    indent: 20,
-                    endIndent: 25,
-                    thickness: 1,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 30,
                       ),
-                      const Text(
-                        'EFFICIENCY',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Color.fromARGB(255, 0, 0, 0)),
-                      ),
-                      IconButton(
-                        iconSize: 20,
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const EfficiencyPage()));
-                        },
-                        icon: const Icon(
-                          Icons.info_outline,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                    ListTile(
+                        trailing: IconButton(
+                          iconSize: 20,
+                          icon: const Icon(
+                            Icons.info_outline,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: const Text(
+                                    'It\'s the total amount of time you were in bed, including the time it took you to fall asleep',
+                                    selectionColor: Color(0xFFE4DFD4),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  LinearPercentIndicator(
-                    alignment: MainAxisAlignment.center,
-                    animation: true,
-                    animationDuration: 1000,
-                    lineHeight: 20.0,
-                    progressColor: const Color.fromARGB(255, 211, 116, 116),
-                    percent: (eff.toDouble()) / 100,
-                    center: Text('$eff%'),
-                    width: 210,
-                    barRadius: const Radius.elliptical(10, 10),
-                  ),
-                  const Column(
-                    children: [
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        ('- Good -'),
-                        selectionColor: Color.fromARGB(226, 117, 9, 9),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const Divider(
-            color: Colors.black,
-            indent: 25,
-            endIndent: 30,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: isCircularIndicatorVisible
-                ? SizedBox(
-                    height: 230,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Duration of sleep last night:',
-                          style: TextStyle(
+                        titleTextStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 15,
+                            color: Colors.black),
+                        title: const Text('TIME SPENT IN BED'),
+                        leading: const Icon(
+                          Icons.bed,
+                          color: Colors.black87,
+                          size: 23,
+                        )),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Divider(
+                      color: Colors.black,
+                      indent: 20,
+                      endIndent: 25,
+                      thickness: 1,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        const Text(
+                          'EFFICIENCY',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                        IconButton(
+                          iconSize: 20,
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const EfficiencyPage()));
+                          },
+                          icon: const Icon(
+                            Icons.info_outline,
                             color: Color.fromARGB(255, 0, 0, 0),
                           ),
                         ),
-                        const SizedBox(
-                          height: 25,
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    LinearPercentIndicator(
+                      alignment: MainAxisAlignment.center,
+                      animation: true,
+                      animationDuration: 1000,
+                      lineHeight: 20.0,
+                      progressColor: const Color.fromARGB(255, 211, 116, 116),
+                      percent: (sleep.minAsleep / sleep.timeInBed),
+                      center: Text(
+                          '${(sleep.minAsleep / sleep.timeInBed * 100).toStringAsFixed(0)}%'),
+                      width: 210,
+                      barRadius: const Radius.elliptical(10, 10),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 5,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                    'Age: ${Provider.of<Preferences>(context, listen: false).age}'),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Row(
-                                  children: [
-                                    Icon(Icons.access_alarm),
-                                    Text('Awake:')
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Row(
-                                  children: [
-                                    Icon(Icons.snooze_rounded),
-                                    Text('Fall to sleep:'),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 35,
-                                ),
-                                const Text('GOAL:'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            CircularPercentIndicator(
-                              radius: 60.0,
-                              lineWidth: 10.0,
-                              percent: 0.7,
-                              animation: true,
-                              animationDuration: 1200,
-                              center: const Text(
-                                'timing',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 15.0),
-                              ),
-                              progressColor: Colors.green,
-                            ),
-                          ],
+                        Text(
+                          (_eff(sleep.minAsleep / sleep.timeInBed)),
+                          selectionColor: Color.fromARGB(226, 117, 9, 9),
                         ),
                       ],
                     ),
-                  )
-                : SizedBox(
-                    height: 200,
-                    width: 300,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 60,
-                            ),
-                            const Text(
-                              'Good Sleep Index',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const AlgorithmInfo(),
-                                ));
-                              },
-                              icon: const Icon(
-                                Icons.info_outline,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        GSIChart(gsi: 3),
-                      ],
-                    )),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                isCircularIndicatorVisible = !isCircularIndicatorVisible;
-              });
-            },
-            icon: const Icon(
-              Icons.swap_horiz,
-              color: Color.fromARGB(255, 0, 0, 0),
+                  ],
+                ),
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Divider(
-            color: Colors.black,
-            indent: 55,
-            endIndent: 60,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Align(
+            const SizedBox(
+              height: 15,
+            ),
+            const Divider(
+              color: Colors.black,
+              indent: 25,
+              endIndent: 30,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: isCircularIndicatorVisible
+                  ? SizedBox(
+                      height: 230,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "About last night:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  if (Provider.of<Preferences>(context,
+                                              listen: false)
+                                          .age !=
+                                      null)
+                                    Text(
+                                        'Age: ${Provider.of<Preferences>(context, listen: false).age}'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.access_alarm),
+                                      Text(
+                                          ' ${DateFormat('HH:mm').format(sleep.endTime)}')
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.snooze_rounded),
+                                      Text(
+                                          ' ${DateFormat('HH:mm').format(sleep.startTime)}'),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 35,
+                                  ),
+                                  if (Provider.of<Preferences>(context,
+                                              listen: false)
+                                          .age !=
+                                      null)
+                                    Text('GOAL:\n'
+                                        '  ${goal(Provider.of<Preferences>(context, listen: false).age)} h'),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              CircularPercentIndicator(
+                                radius: 60.0,
+                                lineWidth: 10.0,
+                                percent:
+                                    (sleep.endTime.difference(sleep.startTime))
+                                            .inMinutes /
+                                        (goal(Provider.of<Preferences>(context,
+                                                    listen: false)
+                                                .age) *
+                                            60),
+                                animation: true,
+                                animationDuration: 1200,
+                                center: Text(
+                                  '${(sleep.endTime.difference(sleep.startTime)).inHours} h '
+                                  '${(sleep.endTime.difference(sleep.startTime)).inMinutes.remainder(60)} m',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 18.0),
+                                ),
+                                progressColor: Colors.green,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : SizedBox(
+                      height: 200,
+                      width: 300,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 60,
+                              ),
+                              const Text(
+                                'Good Sleep Index',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                              IconButton(
+                                iconSize: 20,
+                                icon: const Icon(
+                                  MdiIcons.humanFemaleDance,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text(
+                                          gsisuggestions(
+                                              calculateGoodSleepIndex(
+                                                  sleep.rem,
+                                                  sleep.deep,
+                                                  sleep.light,
+                                                  sleep.wake,
+                                                  (sleep.endTime.difference(
+                                                      sleep.startTime)),
+                                                  sleep.minAsleep /
+                                                      sleep.timeInBed)),
+                                          selectionColor: Color(0xFFE4DFD4),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('OK'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GSIChart(
+                              gsi: calculateGoodSleepIndex(
+                                  sleep.rem,
+                                  sleep.deep,
+                                  sleep.light,
+                                  sleep.wake,
+                                  (sleep.endTime.difference(sleep.startTime)),
+                                  sleep.minAsleep / sleep.timeInBed)),
+                        ],
+                      )),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isCircularIndicatorVisible = !isCircularIndicatorVisible;
+                });
+              },
+              icon: const Icon(
+                Icons.swap_horiz,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Divider(
+              color: Colors.black,
+              indent: 55,
+              endIndent: 60,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Align(
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Infosleep())),
-                child: const Text('Details'),
-              )),
-        ],
-      ),
-    );
+                child: const Text(
+                  'Discover More',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Color.fromARGB(255, 127, 89,
+                          146)), // Imposta il colore di sfondo viola
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Imposta il bordo arrotondato con un raggio di 10
+                    ),
+                  ),
+                  minimumSize: MaterialStateProperty.all<Size>(
+                    Size(150,
+                        45), // Imposta la dimensione minima del bottone a 200 di larghezza e 60 di altezza
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
+      );
+    });
   }
 
   // --- SWITCH_IM<AGES ---
@@ -407,11 +487,37 @@ class _HomeState extends State<HomePage> {
     }
   }
 
-  String _eff(int eff) {
-    if (eff / 100 >= 0.85) {
+  String _eff(double eff) {
+    if (eff >= 0.95) {
+      return '- Very Good -';
+    } else if (eff >= 0.85 && eff < 0.95) {
       return '- Good -';
+    } else if (eff >= 0.75 && eff < 0.85) {
+      return '- Bad -';
     } else {
-      return '- Not Good -';
+      return '- Very Bad -';
+    }
+  }
+
+  int goal(int? age) {
+    if (age! < 17) {
+      return 8;
+    } else {
+      return 7;
+    }
+  }
+
+  String gsisuggestions(double gsi) {
+    if (gsi >= 4.5) {
+      return '- 1 meditation audio -';
+    } else if (gsi >= 3.5 && gsi < 4.5) {
+      return '- 2 meditations audio & 1 physical exercise -';
+    } else if (gsi >= 2.5 && gsi < 3.5) {
+      return '- 2 meditations audio & 2 physical exercise -';
+    } else if (gsi >= 1.5 && gsi < 2.5) {
+      return '- 2 meditations audio & 3 physical exercise -';
+    } else {
+      return '- 3 meditations audio & 4 or more physical exercise -';
     }
   }
 }

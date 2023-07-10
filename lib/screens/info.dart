@@ -189,7 +189,7 @@ class _InfoPage extends State<InfoPage> {
 
               print('ciao');
             },
-            icon: const Icon(Icons.refresh_outlined),
+            icon: const Icon(MdiIcons.power),
           ),
         ],
       ),
