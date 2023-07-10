@@ -265,6 +265,7 @@ class _CalendarState extends State<CalendarPage> {
                     ),
                 ],
               ),
+              const SizedBox(height: 20)
             ],
           ),
         ),

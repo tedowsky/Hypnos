@@ -369,23 +369,47 @@ class _HomeState extends State<HomePage> {
                                       return AlertDialog(
                                         content: Text(
                                           gsisuggestions(
-                                              calculateGoodSleepIndex(
-                                                  sleep.rem,
-                                                  sleep.deep,
-                                                  sleep.light,
-                                                  sleep.wake,
-                                                  (sleep.endTime.difference(
-                                                      sleep.startTime)),
-                                                  sleep.minAsleep /
-                                                      sleep.timeInBed)),
+                                            calculateGoodSleepIndex(
+                                                sleep.rem,
+                                                sleep.deep,
+                                                sleep.light,
+                                                sleep.wake,
+                                                (sleep.endTime.difference(
+                                                    sleep.startTime)),
+                                                sleep.minAsleep /
+                                                    sleep.timeInBed),
+                                          ),
                                           selectionColor: Color(0xFFE4DFD4),
                                         ),
                                         actions: [
-                                          TextButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text('About the GSI'),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                        MdiIcons.information),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const AlgorithmInfo(),
+                                                      ));
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              TextButton(
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       );
@@ -509,15 +533,15 @@ class _HomeState extends State<HomePage> {
 
   String gsisuggestions(double gsi) {
     if (gsi >= 4.5) {
-      return '- 1 meditation audio -';
+      return 'Your GSI is very good, anyway 1 meditation audio is suggested';
     } else if (gsi >= 3.5 && gsi < 4.5) {
-      return '- 2 meditations audio & 1 physical exercise -';
+      return 'Your GSI is good, you should follow 2 meditations audio & 1 physical exercise, to have the perfect sleep';
     } else if (gsi >= 2.5 && gsi < 3.5) {
-      return '- 2 meditations audio & 2 physical exercise -';
+      return 'You GSI is discret, you should follow 2 meditations audio & 2 physical exercise in order to get a better sleep';
     } else if (gsi >= 1.5 && gsi < 2.5) {
-      return '- 2 meditations audio & 3 physical exercise -';
+      return 'Your GSI is bad, you should follow 2 meditations audio & 3 physical exercise to get a better sleep';
     } else {
-      return '- 3 meditations audio & 4 or more physical exercise -';
+      return 'Your GSI is very bad, you should follow 3 meditations audio & 4 or more physical exercise to sleep better';
     }
   }
 }
