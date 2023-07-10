@@ -10,7 +10,6 @@ class LoginPage extends StatefulWidget {
 
   static const routename = 'LoginPage';
   // text editing controllers
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -24,6 +23,14 @@ class _LoginPageState extends State<LoginPage> {
     //controller: password,
     hintText: 'Password',
     obscureText: true,
+  );
+
+  //final username = TextEditingController();
+  //final password = TextEditingController();
+
+  final usernameTextbox = MyTextField(
+    hintText: 'Username',
+    obscureText: false,
   );
 
   @override
