@@ -4,7 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 class GSIChart extends StatelessWidget {
   final double gsi;
 
-  GSIChart({required this.gsi});
+  const GSIChart({super.key, required this.gsi});
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +14,17 @@ class GSIChart extends StatelessWidget {
       } else if (gsi <= 2.5) {
         return Colors.orange;
       } else if (gsi <= 3.5) {
-        return Color.fromARGB(255, 201, 201, 99);
+        return const Color.fromARGB(255, 201, 201, 99);
       } else if (gsi <= 4.5) {
         return Colors.blue;
       } else {
         return Colors.green;
       }
     }
+
     return CircularPercentIndicator(
-      radius: 90.0,
-      lineWidth: 15.0,
+      radius: 70.0,
+      lineWidth: 10.0,
       percent: gsi / 5,
       center: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +37,7 @@ class GSIChart extends StatelessWidget {
               color: getColor(gsi),
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             'GSI',
             style: TextStyle(
