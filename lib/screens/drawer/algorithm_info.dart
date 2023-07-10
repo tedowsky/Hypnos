@@ -104,7 +104,7 @@ class AlgorithmInfo extends StatelessWidget {
             _buildAlgorithmStep(
               number: '3',
               description:
-                  'Determine the "duration mark" based on sleep duration (1, 0.5 if within the recommended range, 0.25 or -0.25 otherwise).',
+                  'Determine the "duration mark" based on sleep duration (close to 1 if within the recommended range, close to zero or less than zero otherwise).',
             ),
             const SizedBox(height: 8.0),
             _buildAlgorithmStep(

@@ -11,9 +11,13 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
   double baseGSI = 0;
   if (phaseBalance <= 30) {
     baseGSI = 3.0;
-  } else if (phaseBalance > 30 && phaseBalance <= 40) {
+  } else if (phaseBalance > 30 && phaseBalance <= 35) {
+    baseGSI = 2.5;
+  } else if (phaseBalance > 35 && phaseBalance <= 40) {
     baseGSI = 2.0;
-  } else if (phaseBalance > 40 && phaseBalance <= 50) {
+  } else if (phaseBalance > 40 && phaseBalance <= 45) {
+    baseGSI = 1.5;
+  } else {
     baseGSI = 1.0;
   }
 
@@ -28,7 +32,7 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
   } else if (rem > 10 && rem <= 15) {
     remScore = 0.3;
   } else if (rem > 15 && rem <= 20) {
-    remScore = rem * 0.4;
+    remScore = 0.4;
   }
 
   // Calcolo del Deep Score
