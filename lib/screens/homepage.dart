@@ -334,13 +334,15 @@ class _HomeState extends State<HomePage> {
                                   CircularPercentIndicator(
                                     radius: 60.0,
                                     lineWidth: 10.0,
-                                    percent: (sleep.endTime
-                                                .difference(sleep.startTime))
-                                            .inMinutes /
-                                        (goal(Provider.of<Preferences>(context,
-                                                    listen: false)
-                                                .age) *
-                                            60),
+                                    percent: ((sleep.endTime.difference(
+                                                    sleep.startTime))
+                                                .inMinutes /
+                                            (goal(Provider.of<Preferences>(
+                                                        context,
+                                                        listen: false)
+                                                    .age) *
+                                                60))
+                                        .clamp(0.0, 1.0),
                                     animation: true,
                                     animationDuration: 1200,
                                     center: Text(

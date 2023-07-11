@@ -135,18 +135,14 @@ class ImpactService {
   Future<List<dynamic>?> getbaseSleepData(DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
 
-    if (r_sleep.data['data'] != null &&
-        r_sleep.data['data'] is List &&
-        r_sleep.data['data'].isNotEmpty) {
+    if (r_sleep.data['data'] != null && r_sleep.data['data'].isNotEmpty) {
       List<dynamic> quasisleep = r_sleep.data['data']['data'];
       Map<String, dynamic> Listsleep = quasisleep[0];
       List<dynamic> firstNineElements = Listsleep.values.take(10).toList();
-      print('ciao');
       return firstNineElements;
     } else {
-      print('ciao');
       return null;
     }
   }
@@ -155,11 +151,10 @@ class ImpactService {
       DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
 
-    if (r_sleep.data['data'] != null &&
-        r_sleep.data['data'] is List &&
-        r_sleep.data['data'].isNotEmpty) {
+    print('ciao');
+    if (r_sleep.data['data'] != null && r_sleep.data['data'].isNotEmpty) {
       Map<String, dynamic> respsleep = r_sleep.data['data'];
       List<dynamic> quasisleep = respsleep['data'];
       Map<String, dynamic> Listsleep = quasisleep[0];
@@ -169,7 +164,6 @@ class ImpactService {
       Map<String, dynamic> wake_summary = levelsummary['wake'];
       Map<String, dynamic> light_summary = levelsummary['light'];
       Map<String, dynamic> rem_summary = levelsummary['rem'];
-      print('ciao');
       return {
         'deep_summary': deep_summary,
         'wake_summary': wake_summary,
@@ -177,8 +171,6 @@ class ImpactService {
         'rem_summary': rem_summary,
       };
     } else {
-      print('ciao');
-
       return null;
     }
   }
@@ -186,11 +178,9 @@ class ImpactService {
   Future<List<dynamic>?> getlevelsSleepData(DateTime startTime) async {
     await updateBearer();
     Response r_sleep = await _dio.get(
-        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 2)))}/');
+        '/data/v1/sleep/patients/Jpefaq6m58/day/${DateFormat('y-M-d').format(DateTime.now().subtract(const Duration(days: 1)))}/');
 
-    if (r_sleep.data['data'] != null &&
-        r_sleep.data['data'] is List &&
-        r_sleep.data['data'].isNotEmpty) {
+    if (r_sleep.data['data'] != null && r_sleep.data['data'].isNotEmpty) {
       Map<String, dynamic> respsleep = r_sleep.data['data'];
       List<dynamic> quasisleep = respsleep['data'];
       Map<String, dynamic> Listsleep = quasisleep[0];

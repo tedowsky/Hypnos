@@ -71,7 +71,6 @@ class HomeProvider extends ChangeNotifier {
   void updateDataListsleep(List? newsleep) {
     _sleep = newsleep;
     notifyListeners();
-    print('ciao');
   }
 
   void updateSleep(Sleep? newsleep) async {

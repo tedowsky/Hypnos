@@ -194,7 +194,7 @@ class _InfosleepState extends State<Infosleep> {
                 ),
                 if (sleep != null)
                   Text(
-                    '${sleep.endTime.difference(sleep.dateTime).inMinutes / 60} hours and ${sleep.endTime.difference(sleep.dateTime).inMinutes % 60} minutes',
+                    '${(sleep.endTime.difference(sleep.startTime).inHours)} hours and ${sleep.endTime.difference(sleep.startTime).inMinutes.remainder(60)} minutes',
                     style: const TextStyle(
                         color: Color.fromARGB(255, 156, 100, 166),
                         fontSize: 20.0,
