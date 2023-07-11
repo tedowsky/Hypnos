@@ -565,11 +565,11 @@ class _HomeState extends State<HomePage> {
     } else if (gsi >= 3.5 && gsi < 4.5) {
       return 'Your GSI is good, you should follow 2 meditations audio & 1 physical exercise, to have the perfect sleep';
     } else if (gsi >= 2.5 && gsi < 3.5) {
-      return 'You GSI is discret, you should follow 2 meditations audio & 2 physical exercise in order to get a better sleep';
+      return 'Your GSI is discret, you should follow 2 meditations audio & 2 physical exercise in order to get a better sleep';
     } else if (gsi >= 1.5 && gsi < 2.5) {
-      return 'Your GSI is bad, you should follow 2 meditations audio & 3 physical exercise to get a better sleep';
+      return 'Your GSI is bad. The GSI scrore is strongly influenced by the phase balance, this means that your DEEP and REM phase were shorter than reccomented. This might be caused by stress or anxiety, because of this you should follow 2 meditations audio & 3 physical exercise to get a better sleep';
     } else {
-      return 'Your GSI is very bad, you should follow 3 meditations audio & 4 or more physical exercise to sleep better';
+      return 'Your GSI is very bad. The GSI scrore is strongly influenced by the phase balance, this means that your DEEP and REM phase were shorter than reccomented. This might be caused by stress or anxiety, because of this you should follow 3 meditations audio & 4 or more physical exercise to sleep better';
     }
   }
 }
