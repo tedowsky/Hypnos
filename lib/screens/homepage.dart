@@ -545,9 +545,9 @@ class _HomeState extends State<HomePage> {
     } else if (eff >= 0.85 && eff < 0.95) {
       return '- Good -';
     } else if (eff >= 0.75 && eff < 0.85) {
-      return '- Bad -';
+      return '- Discrete -';
     } else {
-      return '- Very Bad -';
+      return '- Bad -';
     }
   }
 
