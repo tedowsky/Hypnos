@@ -23,11 +23,11 @@ class HomeProvider extends ChangeNotifier {
   late Sleep sleepdb;
 
   // data fetched from external services or db
-  late Sleep _sleepdb;
-  Sleep get datasleep => _sleepdb;
+  late Sleep? _sleepdb;
+  Sleep? get datasleep => _sleepdb;
 
-  List _sleep = []; // Dati ottenuti dalle richieste
-  List get dataListsleep => _sleep;
+  List? _sleep = []; // Dati ottenuti dalle richieste
+  List? get dataListsleep => _sleep;
 
   final ImpactService impactService;
 
@@ -68,24 +68,23 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDataListsleep(List newsleep) {
+  void updateDataListsleep(List? newsleep) {
     _sleep = newsleep;
     notifyListeners();
     print('ciao');
   }
 
-   void updateSleep(Sleep newsleep) async {
+  void updateSleep(Sleep? newsleep) async {
     _sleepdb = newsleep;
     notifyListeners();
-    print('ciao');
-    Sleep? lastDay = await db.sleepDao.findLastDayInDb();
-    if (lastDay?.dateTime == _sleepdb.dateTime) {
-      return null;
-    } else {
-      db.sleepDao.insertSleep(_sleepdb);
+    if (_sleepdb != null) {
+      Sleep? lastDay = await db.sleepDao.findLastDayInDb();
+      if (lastDay?.dateTime == _sleepdb!.dateTime) {
+        return null;
+      } else {
+        db.sleepDao.insertSleep(_sleepdb!);
+      }
     }
-
-    print('ciao');
   }
 
   DateTime _truncateSeconds(DateTime input) {

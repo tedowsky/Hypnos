@@ -19,10 +19,8 @@ import 'package:hypnos/databases/entities/sleep.dart';
 import 'package:sqlite_viewer/sqlite_viewer.dart';
 import 'package:flutter_analog_clock/flutter_analog_clock.dart';
 
-
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
-
 
   static const routeDisplayname = 'InfoPage';
 
@@ -37,9 +35,9 @@ class _InfoPage extends State<InfoPage> {
   }
 
   int _selIdx = 0;
-  List<dynamic> basesleep = [];
-  Map<String, dynamic> summarylevelsleep = {};
-  List<dynamic> levelsleep = [];
+  List<dynamic>? basesleep;
+  Map<String, dynamic>? summarylevelsleep;
+  List<dynamic>? levelsleep;
   late Sleep? data;
   bool upload = false;
 
@@ -68,12 +66,9 @@ class _InfoPage extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-
     var dataProvider = Provider.of<HomeProvider>(context, listen: false);
 
-
-    return 
-      Scaffold(
+    return Scaffold(
       // --- DRAWER ---
       drawer: Drawer(
         backgroundColor: const Color.fromARGB(255, 144, 111, 160),
@@ -82,75 +77,87 @@ class _InfoPage extends State<InfoPage> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              const SizedBox(height: 20,),
-              const Text('MyApp',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'MyApp',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Column(
-                  children: [
-                    SizedBox(
-                      height: 137,
-                      child: AnalogClock(
-                        hourHandColor: Colors.black,
-                        minuteHandColor: Colors.black,
-                        secondHandColor: Colors.red,
-                        dateTime: DateTime.now(),
-                      ),
-                    ),         
-                  ],
-                ),
-                const SizedBox(height: 20,),
+                children: [
+                  SizedBox(
+                    height: 137,
+                    child: AnalogClock(
+                      hourHandColor: Colors.black,
+                      minuteHandColor: Colors.black,
+                      secondHandColor: Colors.red,
+                      dateTime: DateTime.now(),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               const Divider(
                 color: Colors.black87,
               ),
               ListTile(
-                leading: const Icon(Icons.logout,color: Color.fromARGB(255, 7, 87, 152),),
-                title: const Text('Logout'),
-                onTap: ()  {
-                  var prefs = Provider.of<Preferences>(context, listen: false); 
-                  prefs.age=null;
-                  prefs.gender=null;
-                  prefs.weight=null;
-                  prefs.impactAccessToken='';
-                  prefs.impactRefreshToken='';
-                  prefs.impactUsername='';
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Color.fromARGB(255, 7, 87, 152),
+                  ),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    var prefs =
+                        Provider.of<Preferences>(context, listen: false);
+                    prefs.age = null;
+                    prefs.gender = null;
+                    prefs.weight = null;
+                    prefs.impactAccessToken = '';
+                    prefs.impactRefreshToken = '';
+                    prefs.impactUsername = '';
 
-                  Navigator.push(context, MaterialPageRoute(builder: (_) =>  const LoginPage()));    
-                }
-              ),
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const LoginPage()));
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.information),
-                title: const Text("About Hypos"),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>  const HypnosInfo(),
-                  ));
-                }
-              ),
+                  leading: const Icon(MdiIcons.information),
+                  title: const Text("About Hypos"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const HypnosInfo(),
+                    ));
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.help),
-                title: const Text("What's the the GSI"),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AlgorithmInfo(),
-                  ));
-                }
-              ),
+                  leading: const Icon(MdiIcons.help),
+                  title: const Text("What's the the GSI"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AlgorithmInfo(),
+                    ));
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.bed),
-                title: const Text("About Sleep"),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AboutSleep(),
-                  ));
-                }
-              ),
+                  leading: const Icon(MdiIcons.bed),
+                  title: const Text("About Sleep"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AboutSleep(),
+                    ));
+                  }),
               ListTile(
-                leading: const Icon(MdiIcons.database),
-                title: const Text("Database"),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const  DatabaseList()));
-                }
-              ),
+                  leading: const Icon(MdiIcons.database),
+                  title: const Text("Database"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const DatabaseList()));
+                  }),
             ],
           ),
         ),
@@ -171,30 +178,26 @@ class _InfoPage extends State<InfoPage> {
         actions: [
           IconButton(
             onPressed: () async {
-
               upload = true;
               ///////////////////// DATI DATABASE //////////////////////////////
               basesleep =
-                  await Provider.of<ImpactService>(context, listen: false)
+                  (await Provider.of<ImpactService>(context, listen: false)
                       .getbaseSleepData(
-                          DateTime.now().subtract(const Duration(days: 1)));
+                          DateTime.now().subtract(const Duration(days: 1))));
 
               dataProvider.updateDataListsleep(basesleep);
 
+              print('ciao');
+
               summarylevelsleep =
-                  await Provider.of<ImpactService>(context, listen: false)
+                  (await Provider.of<ImpactService>(context, listen: false)
                       .getsummarylevelsSleepData(
-                          DateTime.now().subtract(const Duration(days: 1)));
+                          DateTime.now().subtract(const Duration(days: 1))));
 
-              Sleep sleepfordb = await getSleepData();
+              Sleep? sleepfordb = await getSleepData();
 
-
-          
-
-                // Aggiorna i dati nel database
-                dataProvider.updateSleep(sleepfordb);
-             
-              
+              // Aggiorna i dati nel database
+              dataProvider.updateSleep(sleepfordb);
 
               //////////////////////////////////////////////////////////////////
 
@@ -206,7 +209,6 @@ class _InfoPage extends State<InfoPage> {
 
               dataProvider.updateDataListsleep(levelsleep);
               ////////////////////////////////////////////////////////////////////////////////////
-
             },
             icon: const Icon(MdiIcons.power),
           ),
@@ -218,18 +220,20 @@ class _InfoPage extends State<InfoPage> {
 
       // --- BODY ---
       body: upload
-        ?_selectPage(index: _selIdx)
-        : const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 15,),
-              Text('Click the PowerButton'),
-            ],
-          ),
-        ),
+          ? _selectPage(index: _selIdx)
+          : const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text('Click the PowerButton'),
+                ],
+              ),
+            ),
 
       // --- BOTTOM_NAVIGATIO_BAR ---
       bottomNavigationBar: Container(
@@ -269,43 +273,41 @@ class _InfoPage extends State<InfoPage> {
     );
   }
 
+  Future<Sleep?> getSleepData() async {
+    if (basesleep != null && summarylevelsleep != null) {
+      String dateTimeStr = basesleep![0];
+      String startTimeStr = basesleep![1];
+      String endTimeStr = basesleep![2];
+      int timeAsleep = basesleep![5];
+      int timeInBed = basesleep![8];
+      int remCount = summarylevelsleep!["rem_summary"]["minutes"];
+      int deepCount = summarylevelsleep!["deep_summary"]["minutes"];
+      int lightCount = summarylevelsleep!["light_summary"]["minutes"];
+      int wakeCount = summarylevelsleep!["wake_summary"]["minutes"];
 
- Future<Sleep> getSleepData() async{ 
+      String dateTimeWithYearStr = "2023-$dateTimeStr";
+      String startTimeWithYearStr = "2023-$startTimeStr";
+      String endTimeWithYearStr = "2023-$endTimeStr";
+      DateFormat format = DateFormat("yyyy-MM-dd");
+      DateFormat hourformat = DateFormat("yyyy-MM-dd HH:mm:ss");
+      DateTime dateTime = format.parse(dateTimeWithYearStr);
+      DateTime startTime = hourformat.parse(startTimeWithYearStr);
+      DateTime endTime = hourformat.parse(endTimeWithYearStr);
 
-              String dateTimeStr = basesleep[0];
-              String startTimeStr = basesleep[1];
-              String endTimeStr = basesleep[2];
-              int timeAsleep = basesleep[5];
-              int timeInBed = basesleep[8];
-              int remCount = summarylevelsleep["rem_summary"]["minutes"];
-              int deepCount = summarylevelsleep["deep_summary"]["minutes"];
-              int lightCount = summarylevelsleep["light_summary"]["minutes"];
-              int wakeCount = summarylevelsleep["wake_summary"]["minutes"];
-
-              String dateTimeWithYearStr = "2023-$dateTimeStr";
-              String startTimeWithYearStr = "2023-$startTimeStr";
-              String endTimeWithYearStr = "2023-$endTimeStr";
-              DateFormat format = DateFormat("yyyy-MM-dd");
-              DateFormat hourformat = DateFormat("yyyy-MM-dd HH:mm:ss");
-              DateTime dateTime = format.parse(dateTimeWithYearStr);
-              DateTime startTime = hourformat.parse(startTimeWithYearStr);
-              DateTime endTime = hourformat.parse(endTimeWithYearStr);
-
-
-               Sleep sleep = Sleep(// Inserisci l'id appropriato
-                 dateTime,
-                 startTime,
-                 endTime,
-                 timeAsleep,
-                 timeInBed,
-                 remCount,
-                 deepCount,
-                 lightCount,
-                 wakeCount
-               );
- return sleep;
- }
-
+      Sleep sleep = Sleep(
+          // Inserisci l'id appropriato
+          dateTime,
+          startTime,
+          endTime,
+          timeAsleep,
+          timeInBed,
+          remCount,
+          deepCount,
+          lightCount,
+          wakeCount);
+      return sleep;
+    } else {
+      return null;
+    }
+  }
 }
-
-
