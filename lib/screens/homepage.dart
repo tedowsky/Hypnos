@@ -96,51 +96,55 @@ class _HomeState extends State<HomePage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    ListTile(
-                      trailing: IconButton(
-                        iconSize: 20,
-                        icon: const Icon(
-                          Icons.info_outline,
-                          color: Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: const Text(
-                                  'It\'s the total amount of time you slept during the night',
-                                  selectionColor: Color(0xFFE4DFD4),
-                                ),
-                                actions: [
-                                  Center(
-                                    child: TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
+                    if (sleep != null)
+                      ListTile(
+                        trailing: IconButton(
+                          iconSize: 20,
+                          icon: const Icon(
+                            Icons.info_outline,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: const Text(
+                                    'It\'s the total amount of time you slept during the night',
+                                    selectionColor: Color(0xFFE4DFD4),
                                   ),
-                                ],
-                              );
-                            },
-                          );
-                        },
+                                  actions: [
+                                    Center(
+                                      child: TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        titleTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black),
+                        title: const Text(
+                          'ACTUAL SLEEP TIME',
+                        ),
+                        leading: const Icon(
+                          Icons.bedtime,
+                          color: Colors.black87,
+                          size: 23,
+                        ),
+                        subtitle: Text(
+                            '${(sleep.minAsleep / 60).toStringAsFixed(0)} h ${sleep.minAsleep % 60} min'),
                       ),
-                      titleTextStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.black),
-                      title: const Text(
-                        'ACTUAL SLEEP TIME',
-                      ),
-                      leading: const Icon(
-                        Icons.bedtime,
-                        color: Colors.black87,
-                        size: 23,
-                      ),
-                    ),
-                    ListTile(
+                    if (sleep != null)
+                      ListTile(
                         trailing: IconButton(
                           iconSize: 20,
                           icon: const Icon(
@@ -178,7 +182,10 @@ class _HomeState extends State<HomePage> {
                           Icons.bed,
                           color: Colors.black87,
                           size: 23,
-                        )),
+                        ),
+                        subtitle: Text(
+                            '${(sleep.timeInBed / 60).toStringAsFixed(0)} h and ${sleep.timeInBed % 60} min'),
+                      ),
                     const SizedBox(
                       height: 5,
                     ),

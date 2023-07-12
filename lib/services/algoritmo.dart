@@ -1,6 +1,8 @@
 double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
     Duration duration, double efficiency) {
   int durationInMinutes = duration.inMinutes;
+  double remperc = rem / durationInMinutes * 100;
+  double deepperc = deep / durationInMinutes * 100;
 
   // Calcolo del Phase Balance
   double phaseBalance =
@@ -23,27 +25,27 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
 
   // Calcolo del Rem Score
   double remScore = 1;
-  if (rem / durationInMinutes * 100 > 20) {
+  if (remperc > 20) {
     remScore = 0.5;
-  } else if (rem >= 0 && rem <= 5) {
+  } else if (remperc >= 0 && remperc <= 5) {
     remScore = 0.1;
-  } else if (rem > 5 && rem <= 10) {
+  } else if (remperc > 5 && remperc <= 10) {
     remScore = 0.2;
-  } else if (rem > 10 && rem <= 15) {
+  } else if (remperc > 10 && remperc <= 15) {
     remScore = 0.3;
-  } else if (rem > 15 && rem <= 20) {
+  } else if (remperc > 15 && remperc <= 20) {
     remScore = 0.4;
   }
 
   // Calcolo del Deep Score
   double deepScore = 1;
-  if (deep > 0.15) {
+  if (deepperc > 0.15) {
     deepScore = 0.5;
-  } else if (deep >= 0 && deep <= 5) {
+  } else if (deepperc >= 0 && deepperc <= 5) {
     deepScore = 0.15;
-  } else if (deep > 5 && deep <= 0.10) {
+  } else if (deepperc > 5 && deepperc <= 0.10) {
     deepScore = 0.3;
-  } else if (deep > 10 && deep <= 0.15) {
+  } else if (deepperc > 10 && deepperc <= 0.15) {
     deepScore = 0.45;
   }
 
