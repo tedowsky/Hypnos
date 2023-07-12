@@ -13,11 +13,11 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
   double baseGSI = 0;
   if (phaseBalance <= 30) {
     baseGSI = 3.0;
-  } else if (phaseBalance > 30 && phaseBalance <= 35) {
+  } else if (phaseBalance > 30 && phaseBalance <= 37) {
     baseGSI = 2.5;
-  } else if (phaseBalance > 35 && phaseBalance <= 40) {
+  } else if (phaseBalance > 37 && phaseBalance <= 45) {
     baseGSI = 2.0;
-  } else if (phaseBalance > 40 && phaseBalance <= 45) {
+  } else if (phaseBalance > 45 && phaseBalance <= 50) {
     baseGSI = 1.5;
   } else {
     baseGSI = 1.0;
@@ -55,12 +55,12 @@ double calculateGoodSleepIndex(int rem, int deep, int light, int wake,
     durationMark = 1;
   } else if (durationInMinutes > 390 && durationInMinutes < 570) {
     // if sleep between 6 and 7 or 9 and 10 hours
-    durationMark = 0.5;
+    durationMark = 0.75;
   } else if (durationInMinutes > 360 && durationInMinutes < 600) {
     // if sleep between 5 and 6 or 10 and 11 hours
-    durationMark = 0.25;
+    durationMark = 0.5;
   } else {
-    durationMark = -0.25;
+    durationMark = 0;
   }
 
   double efficencyMark = 0;
