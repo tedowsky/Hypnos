@@ -8,7 +8,6 @@ class Preferences {
 
   late SharedPreferences _pref;
 
-
   //helper method to manage default values of preferences without the need to call the specific getType method of SharedPreferences
   dynamic _getFromDisk(String key, {dynamic defaultVal}) {
     var value = _pref.get(key);
@@ -62,8 +61,9 @@ class Preferences {
   set password(String? newpassword) => _saveToDisk("password", newpassword);
 
   String? get impactUsername => _getFromDisk('impactUsername');
-  set impactUsername(String? newImpactUsername) => _saveToDisk("impactUsername", newImpactUsername);
-  
+  set impactUsername(String? newImpactUsername) =>
+      _saveToDisk("impactUsername", newImpactUsername);
+
   int? get age => _getFromDisk('age');
   set age(int? newage) => _saveToDisk("age", newage);
 
@@ -72,8 +72,4 @@ class Preferences {
 
   int? get weight => _getFromDisk('weight');
   set weight(int? newweight) => _saveToDisk("weight", newweight);
-
-  bool? get consent => _getFromDisk('consent');
-  set consent(bool? newconsent) => _saveToDisk("consent", newconsent);
-  
 }

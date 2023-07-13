@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hypnos/screens/info.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ConsentPage extends StatelessWidget {
@@ -15,7 +16,7 @@ class ConsentPage extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          'Hypnos requests your consent to use your personal data for these purposes:',
+          'Hypnos requests your consent to use\n your personal data for these purposes:',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -66,10 +67,19 @@ class ConsentPage extends StatelessWidget {
               description:
                   'Your data may be used in an anonymized and aggregated form for research and analysis purposes to improve sleep science and understanding.',
             ),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 25.0),
             ElevatedButton(
               onPressed: () {
-                // Aggiungi qui la logica per registrare il consenso dell'utente
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(
+                      const SnackBar(content: Text('Approved Consent')));
+
+                Future.delayed(
+                    const Duration(milliseconds: 300),
+                    () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => const InfoPage())));
               },
               child: const Text('I Consent'),
               style: ElevatedButton.styleFrom(
